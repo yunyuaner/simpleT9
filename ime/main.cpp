@@ -2,6 +2,7 @@
 #include <QWidget>
 #include <QMainWindow>
 #include "simple.h"
+#include "../data/vocabulary.h"
 
 int main(int argc, char *argv[]) {
     QApplication app(argc, argv);
@@ -12,4 +13,7 @@ int main(int argc, char *argv[]) {
     mainWindow->show();
 
     return app.exec();
+
+    //Vocabulary vocabulary;
+    //vocabulary.init();
 }

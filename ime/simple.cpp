@@ -15,6 +15,7 @@
 #include "keyboard.h"
 #include "pager.h"
 #include "../data/fontlib_zh.h"
+#include "../data/vocabulary.h"
 
 //void messageBox(QString text)
 //{
@@ -246,7 +247,8 @@ ImeWindow::ImeWindow(QWidget *parent) :
     currSelected(0), 
     currPage(0), 
     pageCount(0),
-    pinyinSingleWord_db(hycx::wuhan::simpleT9::init_db())
+    pinyinSingleWord_db(hycx::wuhan::simpleT9::init_db()),
+    pinyinVocabulary_db(new Vocabulary)
 {
     QVBoxLayout *vbox = new QVBoxLayout();
     QHBoxLayout *hbox_upper = new QHBoxLayout();
@@ -294,6 +296,9 @@ ImeWindow::ImeWindow(QWidget *parent) :
     /* Initialize keyboard */
     keyboard = new NonStandardKeyboard;
     keyboard->initializeKeys();
+
+    /* May use lazy-initialization */
+    pinyinVocabulary_db->init();
 }
 
 void ImeWindow::ChnCharLabelHighlight(QLabel *label, bool highlight = true)

@@ -19,6 +19,7 @@
 #include "pager.h"
 #include "key.h"
 #include "keyboard.h"
+#include "../data/vocabulary.h"
 
 class ImeWindow;
 
@@ -105,6 +106,7 @@ private:
     SimplePager pager;
     
     const QHash<QString, QString> *pinyinSingleWord_db;
+    Vocabulary *pinyinVocabulary_db;
     SimpleKeyboard *keyboard;
 };
 
