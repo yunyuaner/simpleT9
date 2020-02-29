@@ -9,7 +9,7 @@
 
 const std::string Vocabulary::dsFile = "./data/ds/pinyin_vocabulary_map.txt";
 
-Vocabulary::Vocabulary() : a_return_cadidate_list(new QVector<QString>)
+Vocabulary::Vocabulary() : a_return_candidate_list(new QVector<QString>)
 {
 
 }
@@ -23,7 +23,7 @@ Vocabulary::~Vocabulary()
         }
     }
 
-    delete a_return_cadidate_list;
+    delete a_return_candidate_list;
 }
 
 void Vocabulary::init()
@@ -78,7 +78,7 @@ QVector<QString> *Vocabulary::search(QString pinyin)
     std::string _pinyin = pinyin.toStdString();
     auto iter = a_expected_map.find(_pinyin);
 
-    a_return_cadidate_list->clear();
+    a_return_candidate_list->clear();
     
     if (iter == a_expected_map.end()) {
         return nullptr;
@@ -86,9 +86,9 @@ QVector<QString> *Vocabulary::search(QString pinyin)
         std::vector<std::string> *_v = a_expected_map[_pinyin];
 
         for (std::string &_s : *_v) {
-            a_return_cadidate_list->append(QString::fromStdString(_s));
+            a_return_candidate_list->append(QString::fromStdString(_s));
         }
 
-        return a_return_cadidate_list;
+        return a_return_candidate_list;
     }
 }

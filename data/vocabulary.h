@@ -21,7 +21,7 @@ public:
 
 private:
     std::unordered_map< std::string, std::vector<std::string> * > a_expected_map;
-    QVector<QString> *a_return_cadidate_list;
+    QVector<QString> *a_return_candidate_list;
 };
 
 #endif /* _VOCABULARY_ */
