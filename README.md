@@ -72,5 +72,5 @@ I'm new to QT and has limited experience in C++, it's a great chance for me to p
     </tr>
   </table>
 </p>
-<p>Screenshoot</p>
+<p><b>Screenshoot</b></p>
 <p><img src="http://yatge.com/simpleT9.png" alt="simpleT9 Screenshoot" /></p>
