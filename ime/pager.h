@@ -35,6 +35,7 @@ public:
     int getCurrPage() const { return currPage; };
     int getCurrPageNatual() const { return (currPage + 1); }
     int getPageCount() const { return pageCount; };
+    int getCharCountOfCurrPage() const;
 
     void reset();
 
@@ -49,6 +50,7 @@ private:
     int currPage;
     int pageCount;
     int chnCharCntPerPage;
+    int lastPageCharCount;
 };
 
 #endif /* _PAGER_H */

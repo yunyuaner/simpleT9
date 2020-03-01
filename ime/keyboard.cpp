@@ -1,4 +1,5 @@
 #include "keyboard.h"
+#include "globals.h"
 
 NonStandardKeyboard::NonStandardKeyboard() : 
     capsLockPressed(false), keyRole(NonStandardKeyboard::KR_Chinese) 
@@ -43,63 +44,69 @@ QString &NonStandardKeyboard::makePinyinDisplayContent()
 QString &NonStandardKeyboard::handleKeyPress(int keyCode)
 {
     SimpleKey *_k;
+    bool keyCodeNotSupported = false;
 
     switch (keyCode) {
     case Qt::Key_0:
-        _k = keys["0"]; break;
+        _k = keys[simpleT9glb::key_0_name]; break;
     
     case Qt::Key_1:
-        _k = keys["1"]; break;
+        _k = keys[simpleT9glb::key_1_name]; break;
     
     case Qt::Key_2:
-        _k = keys["2"]; break;
+        _k = keys[simpleT9glb::key_2_name]; break;
     
     case Qt::Key_3:
-        _k = keys["3"]; break;
+        _k = keys[simpleT9glb::key_3_name]; break;
     
     case Qt::Key_4:
-        _k = keys["4"]; break;
+        _k = keys[simpleT9glb::key_4_name]; break;
     
     case Qt::Key_5:
-        _k = keys["5"]; break;
+        _k = keys[simpleT9glb::key_5_name]; break;
     
     case Qt::Key_6:
-        _k = keys["6"]; break;
+        _k = keys[simpleT9glb::key_6_name]; break;
     
     case Qt::Key_7:
-        _k = keys["7"]; break;
+        _k = keys[simpleT9glb::key_7_name]; break;
     
     case Qt::Key_8:
-        _k = keys["8"]; break;
+        _k = keys[simpleT9glb::key_8_name]; break;
     
     case Qt::Key_9:
-        _k = keys["9"]; break;
+        _k = keys[simpleT9glb::key_9_name]; break;
     
     case Qt::Key_Backspace:
-        _k = keys["Backspace"]; break;
+        _k = keys[simpleT9glb::key_backspace_name]; break;
     
     case Qt::Key_Right:
-        _k = keys["Right"]; break;
+        _k = keys[simpleT9glb::key_right_name]; break;
     
     case Qt::Key_Left:
-        _k = keys["Left"]; break;
+        _k = keys[simpleT9glb::key_left_name]; break;
     
     case Qt::Key_Up:
-        _k = keys["Up"]; break;
+        _k = keys[simpleT9glb::key_up_name]; break;
     
     case Qt::Key_Down:
-        _k = keys["Down"]; break;
+        _k = keys[simpleT9glb::key_down_name]; break;
     
     case Qt::Key_F10:
-        _k = keys["F10"]; 
+        _k = keys[simpleT9glb::key_f10_name]; 
         pinyinDisplay.clear();
         break;
     
     default:
-        throw QException();
+        //throw QException();
+        std::cout << "key - " << QString::number(keyCode, 16).toStdString() << " not supported" << std::endl;
+        keyCodeNotSupported = true;
+
     }
 
-    _k->press();
+    if (!keyCodeNotSupported) {
+        _k->press();
+    }
     
     return makePinyinDisplayContent();
 }
@@ -109,52 +116,79 @@ void NonStandardKeyboard::initializeKeys()
     SimpleKey *a_key;
    
     /* Multi-Purpose Keys, for T9 input method, they're '1' ~ '8' */
-    a_key = new MultiPurposeKey("1", QString("1abc"), this);
+    a_key = new MultiPurposeKey(simpleT9glb::key_1_name, QString("1abc"), this);
     keys.insert(a_key->getKeyName(), a_key);
 
-    a_key = new MultiPurposeKey("2", QString("2def"), this);
+    a_key = new MultiPurposeKey(simpleT9glb::key_2_name, QString("2def"), this);
     keys.insert(a_key->getKeyName(), a_key);
 
-    a_key = new MultiPurposeKey("3", QString("3ghi"), this);
+    a_key = new MultiPurposeKey(simpleT9glb::key_3_name, QString("3ghi"), this);
     keys.insert(a_key->getKeyName(), a_key);
 
-    a_key = new MultiPurposeKey("4", QString("4jkl"), this);
+    a_key = new MultiPurposeKey(simpleT9glb::key_4_name, QString("4jkl"), this);
     keys.insert(a_key->getKeyName(), a_key);
 
-    a_key = new MultiPurposeKey("5", QString("5mno"), this);
+    a_key = new MultiPurposeKey(simpleT9glb::key_5_name, QString("5mno"), this);
     keys.insert(a_key->getKeyName(), a_key);
 
-    a_key = new MultiPurposeKey("6", QString("6pqrs"), this);
+    a_key = new MultiPurposeKey(simpleT9glb::key_6_name, QString("6pqrs"), this);
     keys.insert(a_key->getKeyName(), a_key);
 
-    a_key = new MultiPurposeKey("7", QString("7tuv"), this);
+    a_key = new MultiPurposeKey(simpleT9glb::key_7_name, QString("7tuv"), this);
     keys.insert(a_key->getKeyName(), a_key);
 
-    a_key = new MultiPurposeKey("8", QString("8wxyz"), this);
+    a_key = new MultiPurposeKey(simpleT9glb::key_8_name, QString("8wxyz"), this);
     keys.insert(a_key->getKeyName(), a_key);
 
     /* Functional Keys */
-    a_key = new FunctionKey("9", "'", this);
+    a_key = new FunctionKey(simpleT9glb::key_9_name, "'", this);
     keys.insert(a_key->getKeyName(), a_key);
 
-    a_key = new FunctionKey("0", this);
+    a_key = new FunctionKey(simpleT9glb::key_0_name, this);
     keys.insert(a_key->getKeyName(), a_key);
 
-    a_key = new FunctionKey("Backspace", this);
+    a_key = new FunctionKey(simpleT9glb::key_backspace_name, this);
     keys.insert(a_key->getKeyName(), a_key);
 
-    a_key = new FunctionKey("Right", this);
+    a_key = new FunctionKey(simpleT9glb::key_right_name, this);
     keys.insert(a_key->getKeyName(), a_key);
 
-    a_key = new FunctionKey("Left", this);
+    a_key = new FunctionKey(simpleT9glb::key_left_name, this);
     keys.insert(a_key->getKeyName(), a_key);
 
-    a_key = new FunctionKey("Up", this);
+    a_key = new FunctionKey(simpleT9glb::key_up_name, this);
     keys.insert(a_key->getKeyName(), a_key);
 
-    a_key = new FunctionKey("Down", this);
+    a_key = new FunctionKey(simpleT9glb::key_down_name, this);
     keys.insert(a_key->getKeyName(), a_key);
 
-    a_key = new FunctionKey("F10", this);
+    a_key = new FunctionKey(simpleT9glb::key_f10_name, this);
+    keys.insert(a_key->getKeyName(), a_key);
+    
+    a_key = new FunctionKey(simpleT9glb::key_f9_name, this);
+    keys.insert(a_key->getKeyName(), a_key);
+
+    a_key = new FunctionKey(simpleT9glb::key_f8_name, this);
+    keys.insert(a_key->getKeyName(), a_key);
+
+    a_key = new FunctionKey(simpleT9glb::key_f7_name, this);
+    keys.insert(a_key->getKeyName(), a_key);
+
+    a_key = new FunctionKey(simpleT9glb::key_f6_name, this);
+    keys.insert(a_key->getKeyName(), a_key);
+
+    a_key = new FunctionKey(simpleT9glb::key_f5_name, this);
+    keys.insert(a_key->getKeyName(), a_key);
+    
+    a_key = new FunctionKey(simpleT9glb::key_f4_name, this);
+    keys.insert(a_key->getKeyName(), a_key);
+
+    a_key = new FunctionKey(simpleT9glb::key_f3_name, this);
+    keys.insert(a_key->getKeyName(), a_key);
+
+    a_key = new FunctionKey(simpleT9glb::key_f2_name, this);
+    keys.insert(a_key->getKeyName(), a_key);
+
+    a_key = new FunctionKey(simpleT9glb::key_f1_name, this);
     keys.insert(a_key->getKeyName(), a_key);
 }

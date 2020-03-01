@@ -20,12 +20,16 @@ void SimplePager::setContent(QVector<QString> info)
   
    if ((info.size() % chnCharCntPerPage) != 0) {
        pageCount = (info.size() + chnCharCntPerPage)/chnCharCntPerPage;
+       lastPageCharCount = (info.size() % chnCharCntPerPage);
    } else {
        pageCount = info.size()/chnCharCntPerPage;
+       lastPageCharCount = chnCharCntPerPage;
    }
 
    //std::cout << "info.size() - " << info.size() << ", chnCharCntPerPage - " << chnCharCntPerPage << std::endl;
    //std::cout << "setContent, pageCount - " << pageCount << std::endl;
+
+   currPage = 0;
 
    preparePageContent();
 }
@@ -51,7 +55,7 @@ int SimplePager::pageBackward()
 }
 
 SimplePager::SimplePager() : 
-    currPage(0), pageCount(0)
+    currPage(0), pageCount(0), lastPageCharCount(0)
 {
 
 }
@@ -74,6 +78,17 @@ QVector<QString> &SimplePager::getPageContent()
     return this->contentOfCurrentPage;
 }
 
+int SimplePager::getCharCountOfCurrPage() const
+{
+    if (pageCount == 1) {
+        return lastPageCharCount;
+    } else if (currPage < (pageCount - 1)) {
+        return chnCharCntPerPage;
+    } else {
+        return lastPageCharCount;
+    }
+}
+
 void SimplePager::reset() 
 {
     //if (pageContent != nullptr && pageContent->size() > 0) {
@@ -85,4 +100,5 @@ void SimplePager::reset()
 
     currPage = 0;
     pageCount = 0;
+    lastPageCharCount = 0;
 }

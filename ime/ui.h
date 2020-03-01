@@ -45,8 +45,8 @@ private:
 private slots:
 
 public:
-    void handle__Key_O();
-    void handle__Key_Return();
+    //void handle__Key_O();
+    //void handle__Key_Return();
     void handle__Key_Right();
     void handle__Key_Left();
     void handle__Key_Up();

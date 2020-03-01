@@ -10,20 +10,12 @@
 #include <QDialog>
 #include <iostream>
 #include <algorithm>
-#include "simple.h"
+#include "ui.h"
 #include "key.h"
 #include "keyboard.h"
 #include "pager.h"
 #include "../data/fontlib_zh.h"
 #include "../data/vocabulary.h"
-
-//void messageBox(QString text)
-//{
-//    QMessageBox msgBox;
-//    msgBox.setText(text);
-//    msgBox.exec();
-//}
-
 
 MainWindow *MainWindow::_instance = nullptr;
 int ImeWindow::chnCharCntPerPage = 6;
@@ -53,34 +45,39 @@ MainWindow *MainWindow::getInstance()
     return _instance;
 };
 
-void MainWindow::handle__Key_O()
-{
-    QLabel *currLabel = imeWindow->chnChars.at(imeWindow->currSelected_get());
-    textInput->setText(textInput->text() + currLabel->text());
-}
+//void MainWindow::handle__Key_O()
+//{
+    //QLabel *currLabel = imeWindow->chnChars.at(imeWindow->currSelected_get());
+    //textInput->setText(textInput->text() + currLabel->text());
+//}
 
-void MainWindow::handle__Key_Return()
-{
-    imeWindow->close();
-    imeWindowShown = false;
-}
+//void MainWindow::handle__Key_Return()
+//{
+    //imeWindow->close();
+    //imeWindowShown = false;
+//}
 
 void MainWindow::handle__Key_Right()
 {
     QLabel *lastLabel = imeWindow->chnChars.at(imeWindow->currSelected_get());
     QLabel *currLabel = imeWindow->chnChars.at(imeWindow->currSelected_inc());
 
-    imeWindow->ChnCharLabelHighlight(currLabel, true);
-    imeWindow->ChnCharLabelHighlight(lastLabel, false);
+    if (imeWindow->pager.getCharCountOfCurrPage() > 1) {
+        imeWindow->ChnCharLabelHighlight(currLabel, true);
+        imeWindow->ChnCharLabelHighlight(lastLabel, false);
+    }
 }
+
 
 void MainWindow::handle__Key_Left()
 {
     QLabel *lastLabel = imeWindow->chnChars.at(imeWindow->currSelected_get());
     QLabel *currLabel = imeWindow->chnChars.at(imeWindow->currSelected_dec());
 
-    imeWindow->ChnCharLabelHighlight(currLabel, true);
-    imeWindow->ChnCharLabelHighlight(lastLabel, false);
+    if (imeWindow->pager.getCharCountOfCurrPage() > 1) {
+        imeWindow->ChnCharLabelHighlight(currLabel, true);
+        imeWindow->ChnCharLabelHighlight(lastLabel, false);
+    }
 }
 
 void MainWindow::handle__Key_Up()
@@ -96,7 +93,6 @@ void MainWindow::handle__Key_Up()
         imeWindow->ChnCharLabelHighlight(currLabel, true);
         imeWindow->ChnCharLabelHighlight(lastLabel, false);
     }
-    
 }
 
 void MainWindow::handle__Key_Down()
@@ -190,6 +186,7 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
                 
                 imeWindow->resize(250, 150);
                 imeWindow->setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
+                //imeWindow->setFixedSize(imeWindow->size());
                 imeWindow->setGeometry(globalCursorPos.x() + 10, globalCursorPos.y() + 10, 400, 20);
                 imeWindow->show();      
                 imeWindowShown = true;          
@@ -197,24 +194,14 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
         }        
     } else if (event->type() == QEvent::KeyPress) {              
         QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
-        //messageBox(QString::number(keyEvent->key(), 16));  
-        /*
-        if (keyEvent->key() == Qt::Key_Return) {
-            handle__Key_Return(); 
-        } else if (keyEvent->key() == Qt::Key_O) {
-            handle__Key_O();
-        } else if (keyEvent->key() == Qt::Key_Up) {
-            handle__Key_Up();
-        } else if (keyEvent->key() == Qt::Key_Down) {
-            handle__Key_Down();
-        } else if (keyEvent->key() >= Qt::Key_1 && keyEvent->key() <= Qt::Key_8) {
-            handle__Key_Digit(keyEvent->key());
-        } else {
-            handleGeneric(keyEvent->key());
-        }
-        */
         std::cout << "Key - " << QString::number(keyEvent->key(), 16).toStdString() << " pressed" << std::endl;
         handleKeyPressEvent(keyEvent->key());
+    } else if (event->type() == QEvent::HoverEnter) {
+        std::cout << "Mouse Hover Enter" << std::endl;
+    } else if (event->type() == QEvent::HoverLeave) {
+        std::cout << "Mouse Hover Leave" << std::endl;
+    } else if (event->type() == QEvent::HoverMove) {
+        std::cout << "Mouse Hover Move" << std::endl;
     } else {
         // Standard event processing
         return QObject::eventFilter(obj, event);
@@ -241,16 +228,12 @@ int ImeWindow::refreshCandidate()
     //    chnChars.at(i)->setText(pageContent.at(i));
     //}
 
-    std::cout << "44" << std::endl;
-    
     int i = 0;
     for (auto iter = pageContent.begin(); iter != pageContent.end(); iter++) {
         std::cout << (*iter).toStdString() << std::endl;
         chnChars.at(i)->setText(*iter);
         i++;
     }
-    
-    std::cout << "55" << std::endl;
     
     return pageContent.size();
 }
@@ -321,7 +304,7 @@ void ImeWindow::ChnCharLabelHighlight(QLabel *label, bool highlight = true)
 int ImeWindow::currSelected_inc() 
 { 
     currSelected++;
-    currSelected = currSelected > (ImeWindow::chnCharCntPerPage - 1) ? 0 : currSelected;
+    currSelected = currSelected > (pager.getCharCountOfCurrPage() - 1) ? 0 : currSelected;
     
     return currSelected;
 }
@@ -329,7 +312,7 @@ int ImeWindow::currSelected_inc()
 int ImeWindow::currSelected_dec() 
 { 
     currSelected--; 
-    currSelected = currSelected < 0 ? (ImeWindow::chnCharCntPerPage - 1) : currSelected;
+    currSelected = currSelected < 0 ? (pager.getCharCountOfCurrPage() - 1) : currSelected;
     
     return currSelected;
 }

@@ -1,7 +1,7 @@
 #include <QApplication>
 #include <QWidget>
 #include <QMainWindow>
-#include "simple.h"
+#include "ui.h"
 #include "../data/vocabulary.h"
 
 int main(int argc, char *argv[]) {

@@ -1,6 +1,6 @@
 #include "key.h"
 #include "keyboard.h"
-#include "simple.h"
+#include "ui.h"
 
 SimpleKey::SimpleKey(QString _name, int _type, SimpleKeyboard *_keyboard) : 
     keyName(_name), keyType(_type), keyboard(_keyboard) 

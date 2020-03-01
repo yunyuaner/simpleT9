@@ -14,13 +14,26 @@ HEADERS += data/fontlib_zh.h \
            ime/key.h \
            ime/keyboard.h \
            ime/pager.h \
-           ime/simple.h
+           ime/ui.h \
+           ime/globals.h
+
 SOURCES += data/fontlib_zh.cpp \
            data/vocabulary.cpp \
            ime/key.cpp \
            ime/keyboard.cpp \
            ime/main.cpp \
            ime/pager.cpp \
-           ime/simple.cpp
+           ime/ui.cpp   \
+           ime/globals.cpp
 
-CONFIG += c++11
+CONFIG += c++11 debug  warn_on
+
+DEFINES += __linux__
+# DEFINES += __reworks__
+
+QMAKE_CFLAGS_DEBUG +=
+
+OBJECTS_DIR = .obj
+MOC_DIR = .obj
+
+QMAKE_CLEAN += simpleT9
