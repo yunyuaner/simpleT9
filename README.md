@@ -18,28 +18,28 @@ I'm new to QT and has limited experience in C++, it's a great chance for me to p
 <p><b>T9 Key Map</b>
   <table>
     <tr>
-      <td>Key_1</td><td>a'b'c</td>
+      <td>Key_1</td><td>1'a'b'c</td>
     </tr>
     <tr>
-      <td>Key_2</td><td>d'e'f</td>
+      <td>Key_2</td><td>2'd'e'f</td>
     </tr>
     <tr>
-      <td>Key_3</td><td>g'h'i</td>
+      <td>Key_3</td><td>3'g'h'i</td>
     </tr>
     <tr>
-      <td>Key_4</td><td>j'k'l</td>
+      <td>Key_4</td><td>4'j'k'l</td>
     </tr>
     <tr>
-      <td>Key_5</td><td>m'n'o</td>
+      <td>Key_5</td><td>5'm'n'o</td>
     </tr>
     <tr>
-      <td>Key_6</td><td>p'q'r's</td>
+      <td>Key_6</td><td>6'p'q'r's</td>
     </tr>
     <tr>
-      <td>Key_7</td><td>t'u'v</td>
+      <td>Key_7</td><td>7't'u'v</td>
     </tr>
     <tr>
-      <td>Key_8</td><td>w'x'y'z</td>
+      <td>Key_8</td><td>8'w'x'y'z</td>
     </tr>
     </tr>
   </table>
