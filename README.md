@@ -42,8 +42,6 @@ I'm new to QT and has limited experience in C++, it's a great chance for me to p
       <td>Key_8</td><td><b>8'w'x'y'z</b> <i>(Under English input mode)</i></br><b>w'x'y'z</b> <i>(Under Chinese input mode)</i></td>
     </tr>
     </tr>
-  </table>
-  <table>
     <tr>
       <td>Key_9</td>
       <td><b>9</b> <i>(Under English input mode)</i></br><b>Pinyin Seperater</b> <i>(Under Chinese input mode)</i></td>
