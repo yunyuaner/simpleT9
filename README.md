@@ -16,9 +16,6 @@ I'm new to QT and has limited experience in C++, it's a great chance for me to p
 </p>
 
 <p><b>T9 Key Map</b>
-<table>
-<tr>
-  <td>
   <table>
     <tr>
       <td>Key_1</td><td>a'b'c</td>
@@ -46,9 +43,6 @@ I'm new to QT and has limited experience in C++, it's a great chance for me to p
     </tr>
     </tr>
   </table>
-  </td>
-  
-  <td>
   <table>
     <tr>
       <td>Key_9</td>
@@ -79,7 +73,4 @@ I'm new to QT and has limited experience in C++, it's a great chance for me to p
       <td>Candidate Selection Backward</td>
     </tr>
   </table>
-  </td>
-</tr>
-</table>
 </p>
