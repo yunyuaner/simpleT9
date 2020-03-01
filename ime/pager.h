@@ -26,10 +26,10 @@ public:
     int pageForward();
     int pageBackward();
     
-    QString &getPageContent();
+    QVector<QString> &getPageContent();
     //QString &getPageContent(int page);
     
-    void setContent(QString &info);
+    void setContent(QVector<QString> info);
     int setChnCharCntPerPage(int count);
 
     int getCurrPage() const { return currPage; };
@@ -39,11 +39,12 @@ public:
     void reset();
 
 private:
-    void PreparePageContent();
-
+    void preparePageContent();
+    
 private:
-    QVector<QChar> content;
-    QString *pageContent;
+    QVector<QString> content;
+    QVector<QString> contentOfCurrentPage;
+    //QString *pageContent;
     
     int currPage;
     int pageCount;

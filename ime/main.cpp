@@ -13,7 +13,8 @@ int main(int argc, char *argv[]) {
     mainWindow->show();
 
     return app.exec();
-
+    
     //Vocabulary vocabulary;
     //vocabulary.init();
+    //vocabulary.search("ba'ba");
 }

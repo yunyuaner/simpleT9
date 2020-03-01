@@ -225,21 +225,34 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
 
 int ImeWindow::refreshCandidate()
 {
-    QString &pageContent = pager.getPageContent();
-    int page = ((pageContent.length() == 0) ? 0 : pager.getCurrPageNatual());
+    //QString &pageContent = pager.getPageContent();
+    QVector<QString> pageContent = pager.getPageContent();
+
+    int page = ((pageContent.size() == 0) ? 0 : pager.getCurrPageNatual());
     int pageCount = pager.getPageCount();
 
     imePagerHint->setText(QString("[%1/%2]").arg(page).arg(pageCount));
-    
+   
     for (auto iter = chnChars.begin(); iter != chnChars.end(); iter++) {
         (*iter)->setText("");
     }
 
-    for (int i = 0; i < pageContent.length(); i++) {
-        chnChars.at(i)->setText(pageContent.at(i));
-    }
+    //for (int i = 0; i < pageContent.length(); i++) {
+    //    chnChars.at(i)->setText(pageContent.at(i));
+    //}
 
-    return pageContent.length();
+    std::cout << "44" << std::endl;
+    
+    int i = 0;
+    for (auto iter = pageContent.begin(); iter != pageContent.end(); iter++) {
+        std::cout << (*iter).toStdString() << std::endl;
+        chnChars.at(i)->setText(*iter);
+        i++;
+    }
+    
+    std::cout << "55" << std::endl;
+    
+    return pageContent.size();
 }
 
 ImeWindow::ImeWindow(QWidget *parent) : 
@@ -254,10 +267,6 @@ ImeWindow::ImeWindow(QWidget *parent) :
     QHBoxLayout *hbox_upper = new QHBoxLayout();
     QHBoxLayout *hbox_lower = new QHBoxLayout();
     
-    //const unsigned char str[] = { "产成程陈蔡曹崔楚褚池仇晁岑从此处车场传厂才次查" };
-    //QString strUnicode = QString::fromUtf8(reinterpret_cast<const char *>(str));
-
-    //std::cout << "1" << std::endl;
     imeTitle = new QLabel(QString::fromUtf8(reinterpret_cast<const char *>(ImeWindow::imeTitleStr)));
     imePinyin = new QLabel("");
     imePinyinVar = new QLabel("");
@@ -265,19 +274,13 @@ ImeWindow::ImeWindow(QWidget *parent) :
     hbox_upper->addWidget(imePinyin);
     hbox_upper->addWidget(imePinyinVar);
   
-    //std::cout << "2" << std::endl;
     imeModeSwitch = new QLabel("[中文]");
     imePagerHint = new QLabel("[0/0]");
-    //imePagerHint = new QLabel(QString("[%1/%2]").arg(pager.getCurrPageNatual()).arg(pager.getPageCount()));
     hbox_lower->addWidget(imeModeSwitch);
     hbox_lower->addWidget(imePagerHint);
 
     pager.setChnCharCntPerPage(ImeWindow::chnCharCntPerPage);
-    //pager.setContent(strUnicode);
 
-    //QString &pageContent = pager.getPageContent();
-
-    //std::cout << "3" << std::endl;
     for (int i = 0; i < ImeWindow::chnCharCntPerPage; i++) {
         //QLabel *label = new QLabel(pageContent.at(i));
         QLabel *label = new QLabel("");
@@ -287,12 +290,10 @@ ImeWindow::ImeWindow(QWidget *parent) :
         chnChars.append(label);
     }
 
-    //std::cout << "4" << std::endl;
     vbox->addLayout(hbox_upper);
     vbox->addLayout(hbox_lower);
     setLayout(vbox);
 
-    //std::cout << "5" << std::endl;
     /* Initialize keyboard */
     keyboard = new NonStandardKeyboard;
     keyboard->initializeKeys();
@@ -350,23 +351,48 @@ int ImeWindow::currSelected_get()
 void ImeWindow::showPinyinOnBoard(QString &inputText)
 {
     /* @inputText is the key word to search in the Chinese Character database */
-    QHash<QString, QString>::const_iterator iter = pinyinSingleWord_db->find(inputText);
-    if (iter != pinyinSingleWord_db->cend()) {
-        QString pinyinCandidate = static_cast<QString>(*iter);
-        std::cout << "pinyinCandidate - " << pinyinCandidate.toStdString() << std::endl;
-        pager.setContent(pinyinCandidate);
-        refreshCandidate();
-
-        /* Init decoration */
-        QLabel *a_label;
-        for (auto iter = chnChars.begin(); iter != chnChars.end(); iter++) {
-            a_label = *iter;
-            ChnCharLabelHighlight(a_label, false);
-        }
+    QVector<QString> searchContent;
+    QString pinyinCandidate;
+    
+    if (inputText.indexOf("'") != -1) {
+        std::cout << "Search in vocabulary database" << std::endl;
         
-        a_label = chnChars[0];
-        ChnCharLabelHighlight(a_label, true);
+        auto _p = pinyinVocabulary_db->search(inputText);
+        if (_p == nullptr) {
+            std::cout << inputText.toStdString() << " not found" << std::endl;
+            return;
+        } else {
+            searchContent = *_p;
+        }
+    } else {
+        std::cout << "Search in single word database" << std::endl;
+        
+        QHash<QString, QString>::const_iterator iter = pinyinSingleWord_db->find(inputText);
+        if (iter == pinyinSingleWord_db->cend()) {
+            std::cout << inputText.toStdString() << " not found" << std::endl;
+            return;
+        } else {
+            pinyinCandidate = static_cast<QString>(*iter);
+            std::cout << "pinyinCandidate - " << pinyinCandidate.toStdString() << std::endl;
+        
+            for (auto iter = pinyinCandidate.begin(); iter != pinyinCandidate.end(); iter++) {
+                searchContent.append(*iter);
+            }
+        }
     }
+       
+    pager.setContent(searchContent);
+    refreshCandidate();
+
+    /* Init decoration */
+    QLabel *a_label;
+    for (auto iter = chnChars.begin(); iter != chnChars.end(); iter++) {
+        a_label = *iter;
+        ChnCharLabelHighlight(a_label, false);
+    }
+    
+    a_label = chnChars[0];
+    ChnCharLabelHighlight(a_label, true);
 
     /* If not match any items in the database, just key the old ones in the pager */
 

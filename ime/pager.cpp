@@ -1,39 +1,33 @@
 #include "pager.h"
 #include <iostream>
 
-void SimplePager::PreparePageContent()
+void SimplePager::preparePageContent()
 {
     int pos = currPage * chnCharCntPerPage;
     int count = (content.length() - pos < chnCharCntPerPage) ? 
         content.length() - pos : chnCharCntPerPage;
    
-    if (pageContent != nullptr) {
-        delete pageContent;
-        pageContent = nullptr;
-    }
-
-    pageContent = new QString;
+    contentOfCurrentPage.clear();
 
     for (int i = 0; i < count; i++) {
-        pageContent->append(content.at(pos + i));
+        contentOfCurrentPage.append(content.at(pos + i));
     }
 }
 
-void SimplePager::setContent(QString &info)
+void SimplePager::setContent(QVector<QString> info)
 {
-    content.clear();
+   this->content = info;
+  
+   if ((info.size() % chnCharCntPerPage) != 0) {
+       pageCount = (info.size() + chnCharCntPerPage)/chnCharCntPerPage;
+   } else {
+       pageCount = info.size()/chnCharCntPerPage;
+   }
 
-    QString::iterator iter;
-    
-    for (iter = info.begin(); iter != info.end(); iter++)
-        content.append(*iter);
+   //std::cout << "info.size() - " << info.size() << ", chnCharCntPerPage - " << chnCharCntPerPage << std::endl;
+   //std::cout << "setContent, pageCount - " << pageCount << std::endl;
 
-    currPage = 0;
-    pageCount = (info.length() % chnCharCntPerPage) > 0 ? 
-        ((info.length() + chnCharCntPerPage) / chnCharCntPerPage) : 
-        (info.length() / chnCharCntPerPage);
-
-   PreparePageContent(); 
+   preparePageContent();
 }
 
 int SimplePager::pageForward()
@@ -41,7 +35,7 @@ int SimplePager::pageForward()
     if (currPage < (pageCount - 1))
         currPage++;
 
-    PreparePageContent();
+    preparePageContent();
 
     return currPage;
 }
@@ -51,21 +45,21 @@ int SimplePager::pageBackward()
     if (currPage > 0)
         currPage--;
     
-    PreparePageContent();
+    preparePageContent();
 
     return currPage;
 }
 
 SimplePager::SimplePager() : 
-    pageContent(nullptr), currPage(0), pageCount(0)
+    currPage(0), pageCount(0)
 {
 
 }
 
 SimplePager::~SimplePager()
 {
-    if (pageContent != nullptr)
-        delete pageContent;
+    //if (pageContent != nullptr)
+    //    delete pageContent;
 }
 
 int SimplePager::setChnCharCntPerPage(int count)
@@ -74,17 +68,21 @@ int SimplePager::setChnCharCntPerPage(int count)
     return chnCharCntPerPage;
 }
 
-QString &SimplePager::getPageContent()
+QVector<QString> &SimplePager::getPageContent()
 {
-    return *pageContent;
+    //return this->content;
+    return this->contentOfCurrentPage;
 }
 
 void SimplePager::reset() 
 {
-    if (pageContent != nullptr && pageContent->size() > 0) {
-        pageContent->clear();
-    }
-    
+    //if (pageContent != nullptr && pageContent->size() > 0) {
+    //    pageContent->clear();
+    //}
+
+    this->content.clear();
+    this->contentOfCurrentPage.clear();
+
     currPage = 0;
     pageCount = 0;
 }

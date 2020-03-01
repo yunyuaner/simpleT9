@@ -39,6 +39,7 @@ void Vocabulary::init()
         //std::cout << line << std::endl;
         std::istringstream tokenStream(line);
         while (std::getline(tokenStream, token, '-')) {
+            token.erase(remove(token.begin(), token.end(), ' '), token.end());
             //std::cout << token << std::endl;
             tokens.push_back(token);
         }
@@ -78,9 +79,12 @@ QVector<QString> *Vocabulary::search(QString pinyin)
     std::string _pinyin = pinyin.toStdString();
     auto iter = a_expected_map.find(_pinyin);
 
+    std::cout << "Search - " << _pinyin << std::endl;
+
     a_return_candidate_list->clear();
     
     if (iter == a_expected_map.end()) {
+        std::cout << _pinyin << " not found" << std::endl;
         return nullptr;
     } else {
         std::vector<std::string> *_v = a_expected_map[_pinyin];
