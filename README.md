@@ -74,5 +74,5 @@ I'm new to QT and has limited experience in C++, it's a great chance for me to p
 </p>
 <p><b>Screenshoot</b></p>
 <p><img src="http://yatge.com/simpleT9.png" alt="simpleT9 Screenshoot" /></p>
-<p><b>Physical Keyboard Style</b></p>
+<p><b>Physical Keyboard Layout</b></p>
 <p><img src="http://yatge.com/keyboard.png" alt="simpleT9 Screenshoot" /></p>
