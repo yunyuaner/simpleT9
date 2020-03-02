@@ -1,6 +1,7 @@
 #include "key.h"
 #include "keyboard.h"
 #include "ui.h"
+#include "globals.h"
 
 SimpleKey::SimpleKey(QString _name, int _type, SimpleKeyboard *_keyboard) : 
     keyName(_name), keyType(_type), keyboard(_keyboard) 
@@ -43,15 +44,33 @@ MultiPurposeKey::~MultiPurposeKey()
 
 }
 
+QVector<QString> MultiPurposeKey::getCandidateKeys()
+{
+    NonStandardKeyboard *nsKeyboard = dynamic_cast<NonStandardKeyboard *>(keyboard);
+    if (nsKeyboard->getKeyRole() == NonStandardKeyboard::KR_Chinese) {
+        /* If in Chinese input mode, drop the first digit candidate */
+        QVector<QString> _candidate = this->candidateKeys;
+        _candidate.pop_front();
+        return _candidate;
+    } else {
+        return this->candidateKeys;
+    }
+}
+
+int MultiPurposeKey::getCandidateKeysCount()
+{
+    return getCandidateKeys().size();
+}
+
 const QString MultiPurposeKey::getKeyValue()
 {
     NonStandardKeyboard *nsKeyboard = dynamic_cast<NonStandardKeyboard *>(keyboard);
 
     if (lastPressedStage >= 0 && lastPressedStage < candidateKeys.length()) {
         if (nsKeyboard->capsLockPressed) {
-            return candidateKeys.at(lastPressedStage).toUpper();
+            return getCandidateKeys().at(lastPressedStage).toUpper();
         } else {
-            return candidateKeys.at(lastPressedStage);
+            return getCandidateKeys().at(lastPressedStage);
         }
     } else {
         std::cout << "Index out of range, lastPressedStage - " << lastPressedStage << std::endl;
@@ -81,11 +100,8 @@ int MultiPurposeKey::press()
     if (!selectInProgress) {
         /* First press, mark the timestamp */
         lastPressedStage = NonStandardKeyboard::Press_0;
-        //std::cout << "First press" << std::endl;
         selectInProgress = true;
-        //std::cout << "Push key value '" << this->value().toStdString() << "' to pinyinDisplay" << std::endl;
         nsKeyboard->pinyinDisplay.push(this->getKeyValue());
-        //std::cout << "Mark the current timestamp" << std::endl;
         lastPressedTime = QDateTime::currentDateTime();
     } else {
         /* Continuous press, change stage (key value) */
@@ -106,14 +122,11 @@ int MultiPurposeKey::press()
                 std::cout << "rollback" << std::endl;
             }
 
-            //std::cout << "+++" << std::endl;
             if (!nsKeyboard->pinyinDisplay.isEmpty()) {
                 nsKeyboard->pinyinDisplay.pop();
             }
-            //std::cout << "push '" << this->value().toStdString() << "'" <<std::endl;
             nsKeyboard->pinyinDisplay.push(this->getKeyValue());
             lastPressedTime = now;
-            //std::cout << "---" << std::endl;
         } else {
             /* Timeout */
             std::cout << "Timeout" << std::endl;
@@ -224,19 +237,19 @@ void FunctionKey::press_Key_9(FunctionKey *_this)
 
 int FunctionKey::press()
 {
-    if (keyName == "Backspace") {
+    if (keyName == simpleT9glb::key_backspace_name) {
         FunctionKey::press_Key_Backspace(this);
-    } else if (keyName == "Left") {
+    } else if (keyName == simpleT9glb::key_left_name) {
         FunctionKey::press_Key_Left(this);
-    } else if (keyName == "Right") {
+    } else if (keyName == simpleT9glb::key_right_name) {
         FunctionKey::press_Key_Right(this);
-    } else if (keyName == "Up") {
+    } else if (keyName == simpleT9glb::key_up_name) {
         FunctionKey::press_Key_Up(this);
-    } else if (keyName == "Down") {
+    } else if (keyName == simpleT9glb::key_down_name) {
         FunctionKey::press_Key_Down(this);
-    } else if (keyName == "F10") {
+    } else if (keyName == simpleT9glb::key_f10_name) {
         FunctionKey::press_Key_F10(this);
-    } else if (keyName == "9") {
+    } else if (keyName == simpleT9glb::key_9_name) {
         FunctionKey::press_Key_9(this); 
     }
 

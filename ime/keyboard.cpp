@@ -116,32 +116,32 @@ void NonStandardKeyboard::initializeKeys()
     SimpleKey *a_key;
    
     /* Multi-Purpose Keys, for T9 input method, they're '1' ~ '8' */
-    a_key = new MultiPurposeKey(simpleT9glb::key_1_name, QString("1abc"), this);
+    a_key = new MultiPurposeKey(simpleT9glb::key_1_name, simpleT9glb::key_1_value, this);
     keys.insert(a_key->getKeyName(), a_key);
 
-    a_key = new MultiPurposeKey(simpleT9glb::key_2_name, QString("2def"), this);
+    a_key = new MultiPurposeKey(simpleT9glb::key_2_name, simpleT9glb::key_2_value, this);
     keys.insert(a_key->getKeyName(), a_key);
 
-    a_key = new MultiPurposeKey(simpleT9glb::key_3_name, QString("3ghi"), this);
+    a_key = new MultiPurposeKey(simpleT9glb::key_3_name, simpleT9glb::key_3_value, this);
     keys.insert(a_key->getKeyName(), a_key);
 
-    a_key = new MultiPurposeKey(simpleT9glb::key_4_name, QString("4jkl"), this);
+    a_key = new MultiPurposeKey(simpleT9glb::key_4_name, simpleT9glb::key_4_value, this);
     keys.insert(a_key->getKeyName(), a_key);
 
-    a_key = new MultiPurposeKey(simpleT9glb::key_5_name, QString("5mno"), this);
+    a_key = new MultiPurposeKey(simpleT9glb::key_5_name, simpleT9glb::key_5_value, this);
     keys.insert(a_key->getKeyName(), a_key);
 
-    a_key = new MultiPurposeKey(simpleT9glb::key_6_name, QString("6pqrs"), this);
+    a_key = new MultiPurposeKey(simpleT9glb::key_6_name, simpleT9glb::key_6_value, this);
     keys.insert(a_key->getKeyName(), a_key);
 
-    a_key = new MultiPurposeKey(simpleT9glb::key_7_name, QString("7tuv"), this);
+    a_key = new MultiPurposeKey(simpleT9glb::key_7_name, simpleT9glb::key_7_value, this);
     keys.insert(a_key->getKeyName(), a_key);
 
-    a_key = new MultiPurposeKey(simpleT9glb::key_8_name, QString("8wxyz"), this);
+    a_key = new MultiPurposeKey(simpleT9glb::key_8_name, simpleT9glb::key_8_value, this);
     keys.insert(a_key->getKeyName(), a_key);
 
     /* Functional Keys */
-    a_key = new FunctionKey(simpleT9glb::key_9_name, "'", this);
+    a_key = new FunctionKey(simpleT9glb::key_9_name, simpleT9glb::key_9_value, this);
     keys.insert(a_key->getKeyName(), a_key);
 
     a_key = new FunctionKey(simpleT9glb::key_0_name, this);

@@ -16,10 +16,12 @@
 #include "pager.h"
 #include "../data/fontlib_zh.h"
 #include "../data/vocabulary.h"
+#include "globals.h"
 
 MainWindow *MainWindow::_instance = nullptr;
-int ImeWindow::chnCharCntPerPage = 6;
-const char *ImeWindow::imeTitleStr = "华创拼音";
+
+int ImeWindow::chnCharCntPerPage = simpleT9glb::max_chinese_char_candidate_per_page;
+const char *ImeWindow::imeTitleStr = simpleT9glb::ime_title_string;
 
 MainWindow::MainWindow(QWidget *parent) : 
     QWidget(parent), 
@@ -45,18 +47,6 @@ MainWindow *MainWindow::getInstance()
     return _instance;
 };
 
-//void MainWindow::handle__Key_O()
-//{
-    //QLabel *currLabel = imeWindow->chnChars.at(imeWindow->currSelected_get());
-    //textInput->setText(textInput->text() + currLabel->text());
-//}
-
-//void MainWindow::handle__Key_Return()
-//{
-    //imeWindow->close();
-    //imeWindowShown = false;
-//}
-
 void MainWindow::handle__Key_Right()
 {
     QLabel *lastLabel = imeWindow->chnChars.at(imeWindow->currSelected_get());
@@ -67,7 +57,6 @@ void MainWindow::handle__Key_Right()
         imeWindow->ChnCharLabelHighlight(lastLabel, false);
     }
 }
-
 
 void MainWindow::handle__Key_Left()
 {
@@ -118,13 +107,13 @@ void MainWindow::handle__Key_Role()
     switch (nsKeyboard->getKeyRole()) {
         case NonStandardKeyboard::KR_Chinese:
         default:
-            keyRoleText = "[中文]";
+            keyRoleText = simpleT9glb::key_role_type_chinese_text;
             break;
         case NonStandardKeyboard::KR_English:
-            keyRoleText = "[英文小写]";
+            keyRoleText = simpleT9glb::key_role_type_english_text;
             break;
         case NonStandardKeyboard::KR_English_Capital:
-            keyRoleText = "[英文大写]";
+            keyRoleText = simpleT9glb::key_role_type_english_capital_text;
             break;
     }
 
@@ -134,6 +123,7 @@ void MainWindow::handle__Key_Role()
     imeWindow->imePinyin->setText(QString(""));
    
     /* Clear highlight */
+    std::cout << "currSelected_get() - " << imeWindow->currSelected_get() << std::endl;
     QLabel *label = imeWindow->chnChars.at(imeWindow->currSelected_get());
     imeWindow->ChnCharLabelHighlight(label, false);
 }
@@ -257,7 +247,7 @@ ImeWindow::ImeWindow(QWidget *parent) :
     hbox_upper->addWidget(imePinyin);
     hbox_upper->addWidget(imePinyinVar);
   
-    imeModeSwitch = new QLabel("[中文]");
+    imeModeSwitch = new QLabel(simpleT9glb::key_role_type_chinese_text);
     imePagerHint = new QLabel("[0/0]");
     hbox_lower->addWidget(imeModeSwitch);
     hbox_lower->addWidget(imePagerHint);
@@ -283,6 +273,13 @@ ImeWindow::ImeWindow(QWidget *parent) :
 
     /* May use lazy-initialization */
     pinyinVocabulary_db->init();
+}
+
+ImeWindow::~ImeWindow()
+{
+	delete keyboard;
+	delete pinyinVocabulary_db;
+	delete pinyinSingleWord_db;
 }
 
 void ImeWindow::ChnCharLabelHighlight(QLabel *label, bool highlight = true)
@@ -377,7 +374,7 @@ void ImeWindow::showPinyinOnBoard(QString &inputText)
     a_label = chnChars[0];
     ChnCharLabelHighlight(a_label, true);
 
-    /* If not match any items in the database, just key the old ones in the pager */
+    /* If not match any items in the database, just keep the old ones in the pager */
 
     /* If length of @inputText equals to 0, clear the pager */
     if (inputText.length() == 0) {

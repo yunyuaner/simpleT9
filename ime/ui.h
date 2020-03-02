@@ -45,8 +45,6 @@ private:
 private slots:
 
 public:
-    //void handle__Key_O();
-    //void handle__Key_Return();
     void handle__Key_Right();
     void handle__Key_Left();
     void handle__Key_Up();
@@ -73,7 +71,7 @@ friend class MainWindow;
 
 public:
     explicit ImeWindow(QWidget *parent = nullptr);
-    virtual ~ImeWindow() {};
+    virtual ~ImeWindow();
     int currSelected_inc(); 
     int currSelected_dec();
     int currSelected_set(int pos);

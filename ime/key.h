@@ -52,7 +52,8 @@ public:
     
     virtual const QString getKeyValue();
 
-    int getCandidateKeysCount() { return candidateKeys.size(); };
+    int getCandidateKeysCount();
+    QVector<QString> getCandidateKeys();
 
 private:
     QVector<QString> candidateKeys;
