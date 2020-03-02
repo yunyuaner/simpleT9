@@ -116,8 +116,8 @@ void NonStandardKeyboard::initializeKeys()
     SimpleKey *a_key;
    
     /* Multi-Purpose Keys, for T9 input method, they're '1' ~ '8' */
-    a_key = new MultiPurposeKey(simpleT9glb::key_1_name, simpleT9glb::key_1_value, this);
-    keys.insert(a_key->getKeyName(), a_key);
+    //a_key = new MultiPurposeKey(simpleT9glb::key_1_name, simpleT9glb::key_1_value, this);
+    //keys.insert(a_key->getKeyName(), a_key);
 
     a_key = new MultiPurposeKey(simpleT9glb::key_2_name, simpleT9glb::key_2_value, this);
     keys.insert(a_key->getKeyName(), a_key);
@@ -140,11 +140,17 @@ void NonStandardKeyboard::initializeKeys()
     a_key = new MultiPurposeKey(simpleT9glb::key_8_name, simpleT9glb::key_8_value, this);
     keys.insert(a_key->getKeyName(), a_key);
 
-    /* Functional Keys */
-    a_key = new FunctionKey(simpleT9glb::key_9_name, simpleT9glb::key_9_value, this);
+    a_key = new MultiPurposeKey(simpleT9glb::key_8_name, simpleT9glb::key_8_value, this);
     keys.insert(a_key->getKeyName(), a_key);
 
-    a_key = new FunctionKey(simpleT9glb::key_0_name, this);
+    /* Functional Keys */
+    //a_key = new FunctionKey(simpleT9glb::key_9_name, simpleT9glb::key_9_value, this);
+    //keys.insert(a_key->getKeyName(), a_key);
+
+    a_key = new FunctionKey(simpleT9glb::key_1_name, simpleT9glb::key_1_value, this);
+    keys.insert(a_key->getKeyName(), a_key);
+
+    a_key = new FunctionKey(simpleT9glb::key_9_name, this);
     keys.insert(a_key->getKeyName(), a_key);
 
     a_key = new FunctionKey(simpleT9glb::key_backspace_name, this);

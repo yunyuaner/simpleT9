@@ -201,9 +201,9 @@ void FunctionKey::press_Key_Down(FunctionKey *_this)
     mainWindow->handle__Key_Down(); 
 }
 
-void FunctionKey::press_Key_F10(FunctionKey *_this)
+void FunctionKey::press_Key_IME_Input_Mode_Switch(FunctionKey *_this)
 {
-    std::cout << "press_Key_F10" << std::endl;
+    std::cout << "press_Key_IME_Input_Mode_Switch" << std::endl;
     NonStandardKeyboard *nsKeyboard = dynamic_cast<NonStandardKeyboard *>(_this->keyboard);
     int keyRoles[] = { NonStandardKeyboard::KR_Chinese, 
                      NonStandardKeyboard::KR_English, 
@@ -228,9 +228,9 @@ void FunctionKey::press_Key_F10(FunctionKey *_this)
     mainWindow->handle__Key_Role();
 }
 
-void FunctionKey::press_Key_9(FunctionKey *_this)
+void FunctionKey::press_Key_Pinyin_Segmentation(FunctionKey *_this)
 {
-    std::cout << "press_Key_9" << std::endl;
+    std::cout << "press_Key_Pinyin_Segmentation" << std::endl;
     NonStandardKeyboard *nsKeyboard = dynamic_cast<NonStandardKeyboard *>(_this->keyboard);
     nsKeyboard->appendChar(_this->getKeyValue());
 }
@@ -248,9 +248,9 @@ int FunctionKey::press()
     } else if (keyName == simpleT9glb::key_down_name) {
         FunctionKey::press_Key_Down(this);
     } else if (keyName == simpleT9glb::key_f10_name) {
-        FunctionKey::press_Key_F10(this);
-    } else if (keyName == simpleT9glb::key_9_name) {
-        FunctionKey::press_Key_9(this); 
+        FunctionKey::press_Key_IME_Input_Mode_Switch(this); /* IME input mode switch */
+    } else if (keyName == simpleT9glb::key_1_name) {
+        FunctionKey::press_Key_Pinyin_Segmentation(this); /* Pinyin segmentation */ 
     }
 
     return 0;

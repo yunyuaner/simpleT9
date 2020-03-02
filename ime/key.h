@@ -70,8 +70,8 @@ public:
     static void press_Key_Right(FunctionKey *_this);
     static void press_Key_Up(FunctionKey *_this);
     static void press_Key_Down(FunctionKey *_this);
-    static void press_Key_F10(FunctionKey *_this);
-    static void press_Key_9(FunctionKey *_this);
+    static void press_Key_IME_Input_Mode_Switch(FunctionKey *_this);
+    static void press_Key_Pinyin_Segmentation(FunctionKey *_this);
 
     FunctionKey(QString _name, SimpleKeyboard *_keyboard);
     FunctionKey(QString _name, QString _value, SimpleKeyboard *_keyboard);

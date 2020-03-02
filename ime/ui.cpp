@@ -158,7 +158,7 @@ void MainWindow::handleFunctionKey(int key)
 
 void MainWindow::handleKeyPressEvent(int key)
 {
-    if (key >= Qt::Key_1 && key <= Qt::Key_8) {
+    if (key >= simpleT9glb::multi_purpose_key_start && key <= simpleT9glb::multi_purpose_key_end) {
         handleMultiPurposeKey(key);
     } else {
         handleFunctionKey(key);

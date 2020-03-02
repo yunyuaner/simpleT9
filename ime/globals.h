@@ -53,6 +53,10 @@ public:
     static const QString key_7_value;
     static const QString key_8_value;
     static const QString key_9_value;
+    static const QString key_0_value;
+
+    static const int multi_purpose_key_start;
+    static const int multi_purpose_key_end;
 
     static const int max_chinese_char_candidate_per_page;
     static const char *ime_title_string;

@@ -1,3 +1,4 @@
+#include <Qt>
 #include "globals.h"
 
 const QString simpleT9glb::key_0_name = "0";
@@ -38,15 +39,19 @@ const QString simpleT9glb::key_confirm_name = "Confirm";
 const QString simpleT9glb::key_hyphen_name = "Hyphen";
 const QString simpleT9glb::key_dot_name = "Dot";
 
-const QString simpleT9glb::key_1_value = "1abc";
-const QString simpleT9glb::key_2_value = "2def";
-const QString simpleT9glb::key_3_value = "3ghi";
-const QString simpleT9glb::key_4_value = "4jkl";
-const QString simpleT9glb::key_5_value = "5mno";
-const QString simpleT9glb::key_6_value = "6pqrs";
-const QString simpleT9glb::key_7_value = "7tuv";
-const QString simpleT9glb::key_8_value = "8wxyz";
-const QString simpleT9glb::key_9_value = "'";
+const QString simpleT9glb::key_1_value = "'";
+const QString simpleT9glb::key_2_value = "1abc";
+const QString simpleT9glb::key_3_value = "2def";
+const QString simpleT9glb::key_4_value = "3ghi";
+const QString simpleT9glb::key_5_value = "4jkl";
+const QString simpleT9glb::key_6_value = "5mno";
+const QString simpleT9glb::key_7_value = "6pqrs";
+const QString simpleT9glb::key_8_value = "7tuv";
+const QString simpleT9glb::key_9_value = "8wxyz";
+const QString simpleT9glb::key_0_value = ",.?;:!/@#$%^&*'()[]-=\\`+-{}|\"<>~";
+
+const int simpleT9glb::multi_purpose_key_start = Qt::Key_2;
+const int simpleT9glb::multi_purpose_key_end = Qt::Key_9;
 
 const int simpleT9glb::max_chinese_char_candidate_per_page = 6;
 const char *simpleT9glb::ime_title_string = "simpleT9 pinyin";
