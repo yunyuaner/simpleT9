@@ -18,6 +18,14 @@ I'm new to QT and has limited experience in C++, it's a great chance for me to p
 <p><b>T9 Key Map</b>
   <table>
     <tr>
+      <td>Key_0</td>
+      <td><b>0</b> <i>(Under English input mode)</i></br><b>Pinyin Seperater</b> <i>(Under Chinese input mode)</i></td>
+    </tr>
+    <tr>
+      <td>Key_1</td>
+      <td><b>1</b> <i>(Under English input mode)</i></br><b>Punctuations</b> <i>(Under Chinese input mode)</i></td>
+    </tr>
+    <tr>
       <td>Key_2</td><td><b>2'a'b'c / 2'A'B'C</b> <i>(Under English input mode)</i></br><b>a'b'c</b> <i>(Under Chinese input mode)</i></td>
     </tr>
     <tr>
@@ -41,15 +49,7 @@ I'm new to QT and has limited experience in C++, it's a great chance for me to p
     <tr>
       <td>Key_9</td><td><b>9'w'x'y'z / 9'W'X'Y'Z</b> <i>(Under English input mode)</i></br><b>w'x'y'z</b> <i>(Under Chinese input mode)</i></td>
     </tr>
-    </tr>
-    <tr>
-      <td>Key_0</td>
-      <td><b>0</b> <i>(Under English input mode)</i></br><b>Pinyin Seperater</b> <i>(Under Chinese input mode)</i></td>
-    </tr>
-    <tr>
-      <td>Key_1</td>
-      <td><b>1</b> <i>(Under English input mode)</i></br><b>Punctuations</b> <i>(Under Chinese input mode)</i></td>
-    </tr>
+    </tr>    
     <tr>
       <td>Key_F10</td>
       <td><b>Input Mode Switch</b></td>
