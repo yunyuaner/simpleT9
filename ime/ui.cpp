@@ -47,7 +47,7 @@ MainWindow *MainWindow::getInstance()
     return _instance;
 };
 
-void MainWindow::handle__Key_Right()
+void MainWindow::handleCandidateSelForward()
 {
     QLabel *lastLabel = imeWindow->chnChars.at(imeWindow->currSelected_get());
     QLabel *currLabel = imeWindow->chnChars.at(imeWindow->currSelected_inc());
@@ -58,7 +58,7 @@ void MainWindow::handle__Key_Right()
     }
 }
 
-void MainWindow::handle__Key_Left()
+void MainWindow::handleCandidateSelBackward()
 {
     QLabel *lastLabel = imeWindow->chnChars.at(imeWindow->currSelected_get());
     QLabel *currLabel = imeWindow->chnChars.at(imeWindow->currSelected_dec());
@@ -69,7 +69,7 @@ void MainWindow::handle__Key_Left()
     }
 }
 
-void MainWindow::handle__Key_Up()
+void MainWindow::handleCandidateSelPageUp()
 {
     imeWindow->pager.pageBackward();
     imeWindow->refreshCandidate();
@@ -84,7 +84,7 @@ void MainWindow::handle__Key_Up()
     }
 }
 
-void MainWindow::handle__Key_Down()
+void MainWindow::handleCandidateSelPageDown()
 {
     imeWindow->pager.pageForward();
     imeWindow->refreshCandidate();
@@ -99,7 +99,7 @@ void MainWindow::handle__Key_Down()
     }
 }
 
-void MainWindow::handle__Key_Role()
+void MainWindow::handleKeyRoleSwith()
 {
     NonStandardKeyboard *nsKeyboard = dynamic_cast<NonStandardKeyboard *>(imeWindow->keyboard);
     QString keyRoleText;
@@ -115,54 +115,117 @@ void MainWindow::handle__Key_Role()
         case NonStandardKeyboard::KR_English_Capital:
             keyRoleText = simpleT9glb::key_role_type_english_capital_text;
             break;
+		case NonStandardKeyboard::KR_Digit:
+			keyRoleText = simpleT9glb::key_role_type_digit_text;
+			break;
+        case NonStandardKeyboard::KR_Punctuation:
+            keyRoleText = simpleT9glb::key_role_type_punctuation_text;
+			break;
     }
 
     imeWindow->imeModeSwitch->setText(keyRoleText);
     imeWindow->pager.reset();
+
+    /* Prepare pager content if any */
+    if (nsKeyboard->getKeyRole() == NonStandardKeyboard::KR_Punctuation) {
+        QVector<QString> _info;
+        for (int i = 0; i < simpleT9glb::key_punctuation_candidate.size(); i++) {
+            _info.append(simpleT9glb::key_punctuation_candidate.at(i));
+        }
+        imeWindow->pager.setContent(_info);
+        imeWindow->currSelected_set(0);
+    }
+
     imeWindow->refreshCandidate();
-    imeWindow->imePinyin->setText(QString(""));
+    if (nsKeyboard->getKeyRole() == NonStandardKeyboard::KR_Chinese) {
+        imeWindow->imePinyin->setText(QString(""));
+    }
    
     /* Clear highlight */
-    std::cout << "currSelected_get() - " << imeWindow->currSelected_get() << std::endl;
     QLabel *label = imeWindow->chnChars.at(imeWindow->currSelected_get());
     imeWindow->ChnCharLabelHighlight(label, false);
+
+    /* If input method is 'Punctuation' mode, make the first candidate as selected */
+    if (nsKeyboard->getKeyRole() == NonStandardKeyboard::KR_Punctuation) {
+        QLabel *label = imeWindow->chnChars.at(0);
+        imeWindow->ChnCharLabelHighlight(label, true);
+    }
 }
 
 void MainWindow::handleMultiPurposeKey(int key)
 {
     std::cout << "handleMultiPurposeKey" << std::endl;
-    QString &inputText = imeWindow->keyboard->handleKeyPress(key); 
+    QString inputText = imeWindow->keyboard->handleKeyPress(key); 
     imeWindow->imePinyin->setText(inputText);
     
     std::cout << "inputText - " << inputText.toStdString() << std::endl;
-    
-    NonStandardKeyboard *nsKeyboard = dynamic_cast<NonStandardKeyboard *>(imeWindow->keyboard);
-    if (nsKeyboard->getKeyRole() == NonStandardKeyboard::KR_Chinese) {
-        imeWindow->showPinyinOnBoard(inputText);
-    }
+    imeWindow->showCandidateOnBoard(inputText);
 }
 
 void MainWindow::handleFunctionKey(int key)
 {
     std::cout << "handleFunctionKey" << std::endl;
-    QString &inputText = imeWindow->keyboard->handleKeyPress(key); 
+    QString inputText = imeWindow->keyboard->handleKeyPress(key); 
     imeWindow->imePinyin->setText(inputText);
 
     if (key == Qt::Key_Backspace) {
-        NonStandardKeyboard *nsKeyboard = dynamic_cast<NonStandardKeyboard *>(imeWindow->keyboard);
-        if (nsKeyboard->getKeyRole() == NonStandardKeyboard::KR_Chinese) {
-            imeWindow->showPinyinOnBoard(inputText);
-        }
+        /* We only need to show candidates in case of Chinese or Punctuations selection */
+        imeWindow->showCandidateOnBoard(inputText);
     }
+
+    /* Press 'Space Key' mean confirm the current candidates 
+     * selection and make it shown on parent input box */
+    const NonStandardKeyboard *nsKeyboard = dynamic_cast<const NonStandardKeyboard *>(imeWindow->getKeyboard());
+    int _keyRole = nsKeyboard->getKeyRole();
+    
+    if (key == Qt::Key_Space && 
+        (_keyRole == NonStandardKeyboard::KR_Chinese || 
+        _keyRole == NonStandardKeyboard::KR_Punctuation)) {
+        QLabel *label = imeWindow->chnChars.at(imeWindow->currSelected_get());
+        this->textInput->setText(this->textInput->text() + label->text());
+    }
+}
+
+void MainWindow::handleDigitKey(int key)
+{
+    std::cout << "handleDigitKey" << std::endl;
+    QString inputText = imeWindow->keyboard->handleKeyPress(key); 
+    imeWindow->imePinyin->setText(inputText);
 }
 
 void MainWindow::handleKeyPressEvent(int key)
 {
-    if (key >= simpleT9glb::multi_purpose_key_start && key <= simpleT9glb::multi_purpose_key_end) {
-        handleMultiPurposeKey(key);
-    } else {
+	NonStandardKeyboard *nsKeyboard = dynamic_cast<NonStandardKeyboard *>(imeWindow->keyboard);
+
+	switch (nsKeyboard->getKeyRole()) {
+	case NonStandardKeyboard::KR_Chinese:
+		if (key >= simpleT9glb::multi_purpose_key_start && key <= simpleT9glb::multi_purpose_key_end) {
+	        handleMultiPurposeKey(key);
+	    } else {
+	        handleFunctionKey(key);
+	    }
+        break;
+
+    case NonStandardKeyboard::KR_English:        
+    case NonStandardKeyboard::KR_English_Capital:
+        if (key >= simpleT9glb::multi_purpose_key_start && key <= simpleT9glb::multi_purpose_key_end) {
+	        handleMultiPurposeKey(key);
+	    } else {
+	        handleFunctionKey(key);
+	    }
+        break;
+
+    case NonStandardKeyboard::KR_Digit:
+        handleDigitKey(key);
+        break;
+
+    case NonStandardKeyboard::KR_Punctuation:
         handleFunctionKey(key);
-    }
+        break;
+        
+	default:
+	    break;
+	}    
 }
 
 bool MainWindow::eventFilter(QObject *obj, QEvent *event)
@@ -255,10 +318,9 @@ ImeWindow::ImeWindow(QWidget *parent) :
     pager.setChnCharCntPerPage(ImeWindow::chnCharCntPerPage);
 
     for (int i = 0; i < ImeWindow::chnCharCntPerPage; i++) {
-        //QLabel *label = new QLabel(pageContent.at(i));
         QLabel *label = new QLabel("");
         label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
-        //ChnCharLabelHighlight(label, (i == currSelected_get()));
+        ChnCharLabelHighlight(label, false);
         hbox_lower->addWidget(label);
         chnChars.append(label);
     }
@@ -328,39 +390,52 @@ int ImeWindow::currSelected_get()
     return currSelected;
 }
 
-void ImeWindow::showPinyinOnBoard(QString &inputText)
+void ImeWindow::showCandidateOnBoard(QString &inputText)
 {
+    NonStandardKeyboard *nsKeyboard = dynamic_cast<NonStandardKeyboard *>(this->keyboard);
+
+    if (nsKeyboard->getKeyRole() != NonStandardKeyboard::KR_Chinese && 
+        nsKeyboard->getKeyRole() != NonStandardKeyboard::KR_Punctuation) {
+        std::cout << "Under keyRole - " 
+                  << nsKeyboard->getKeyRole() 
+                  << ", no need to show candidate on board" 
+                  << std::endl;
+        return;
+    }
+    
     /* @inputText is the key word to search in the Chinese Character database */
     QVector<QString> searchContent;
-    QString pinyinCandidate;
-    
-    if (inputText.indexOf("'") != -1) {
-        std::cout << "Search in vocabulary database" << std::endl;
+
+    if (nsKeyboard->getKeyRole() == NonStandardKeyboard::KR_Chinese) {
+        QString pinyinCandidate;
         
-        auto _p = pinyinVocabulary_db->search(inputText);
-        if (_p == nullptr) {
-            std::cout << inputText.toStdString() << " not found" << std::endl;
-            return;
-        } else {
-            searchContent = *_p;
-        }
-    } else {
-        std::cout << "Search in single word database" << std::endl;
-        
-        QHash<QString, QString>::const_iterator iter = pinyinSingleWord_db->find(inputText);
-        if (iter == pinyinSingleWord_db->cend()) {
-            std::cout << inputText.toStdString() << " not found" << std::endl;
-            return;
-        } else {
-            pinyinCandidate = static_cast<QString>(*iter);
-            std::cout << "pinyinCandidate - " << pinyinCandidate.toStdString() << std::endl;
-        
-            for (auto iter = pinyinCandidate.begin(); iter != pinyinCandidate.end(); iter++) {
-                searchContent.append(*iter);
+        if (inputText.indexOf("'") != -1) {        
+            auto _p = pinyinVocabulary_db->search(inputText);
+            if (_p == nullptr) {
+                std::cout << inputText.toStdString() << " not found" << std::endl;
+                return;
+            } else {
+                searchContent = *_p;
+            }
+        } else {        
+            QHash<QString, QString>::const_iterator iter = pinyinSingleWord_db->find(inputText);
+            if (iter == pinyinSingleWord_db->cend()) {
+                std::cout << inputText.toStdString() << " not found" << std::endl;
+                return;
+            } else {
+                pinyinCandidate = static_cast<QString>(*iter);
+            
+                for (auto iter = pinyinCandidate.begin(); iter != pinyinCandidate.end(); iter++) {
+                    searchContent.append(*iter);
+                }
             }
         }
+    } else if (nsKeyboard->getKeyRole() == NonStandardKeyboard::KR_Punctuation) {
+        for (int i = 0; i < simpleT9glb::key_punctuation_candidate.size(); i++) {
+            searchContent.append(simpleT9glb::key_punctuation_candidate.at(i));
+        }
     }
-       
+
     pager.setContent(searchContent);
     refreshCandidate();
 

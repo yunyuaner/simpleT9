@@ -45,15 +45,16 @@ private:
 private slots:
 
 public:
-    void handle__Key_Right();
-    void handle__Key_Left();
-    void handle__Key_Up();
-    void handle__Key_Down();
-    void handle__Key_Role();    /* input method mode switch */
+    void handleCandidateSelForward();
+    void handleCandidateSelBackward();
+    void handleCandidateSelPageUp();
+    void handleCandidateSelPageDown();
+    void handleKeyRoleSwith();    /* input method mode switch */
 
     void handleMultiPurposeKey(int key);
     void handleFunctionKey(int key);
-
+    void handleDigitKey(int key);
+    
     void handleKeyPressEvent(int key);
 
 private:
@@ -88,7 +89,8 @@ private slots:
 
 private:
     void ChnCharLabelHighlight(QLabel *label, bool highlight);
-    void showPinyinOnBoard(QString &inputText);
+    //void showPinyinOnBoard(QString &inputText);
+    void showCandidateOnBoard(QString &inputText);
 
 private:
     int currSelected;

@@ -41,6 +41,14 @@ protected:
     SimpleKeyboard *keyboard;
 };
 
+class DigitKey : public SimpleKey
+{
+	public:
+		DigitKey(QString _name, QString _value, SimpleKeyboard *_keyboard);
+		virtual ~DigitKey();
+		virtual int press();
+};
+
 class MultiPurposeKey : public SimpleKey
 {
 public:
@@ -65,13 +73,13 @@ private:
 class FunctionKey: public SimpleKey
 {
 public:
-    static void press_Key_Backspace(FunctionKey *_this);
-    static void press_Key_Left(FunctionKey *_this);
-    static void press_Key_Right(FunctionKey *_this);
-    static void press_Key_Up(FunctionKey *_this);
-    static void press_Key_Down(FunctionKey *_this);
-    static void press_Key_IME_Input_Mode_Switch(FunctionKey *_this);
-    static void press_Key_Pinyin_Segmentation(FunctionKey *_this);
+    static void pressKeyBackspace(FunctionKey *_this);        /* Qt::Key_Backspace */
+    static void pressKeyLeft(FunctionKey *_this);      /* Qt::Key_Left */
+    static void pressKeyRight(FunctionKey *_this);      /* Qt::Key_Right */
+    static void pressKeyUp(FunctionKey *_this); /* Qt::Key_Up */
+    static void pressKeyDown(FunctionKey *_this);      /* Qt::Key_Down */
+    static void pressKeyIMEInputModeSwitch(FunctionKey *_this); /* Qt::Key_F10 */
+    static void pressKeyPinyinSegmentation(FunctionKey *_this); /* Qt::Key_1 */
 
     FunctionKey(QString _name, SimpleKeyboard *_keyboard);
     FunctionKey(QString _name, QString _value, SimpleKeyboard *_keyboard);
