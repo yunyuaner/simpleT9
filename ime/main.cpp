@@ -1,3 +1,11 @@
+/*****************************************
+ * Copyright (c) All Right Reserved
+ * Shang Hai Hua Yuan Chuang Xin Co., Ltd
+ * 
+ * Author: Jia Guo <jiag@ntesec.com.cn>
+ * Date:   Mar. 3rd 2020
+ *
+ *****************************************/
 #include <QApplication>
 #include <QWidget>
 #include <QMainWindow>
