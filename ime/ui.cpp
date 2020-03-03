@@ -125,6 +125,8 @@ void MainWindow::handleKeyRoleSwith()
 
     imeWindow->imeModeSwitch->setText(keyRoleText);
     imeWindow->pager.reset();
+	nsKeyboard->displayBufferStackClear();
+	imeWindow->imePinyin->setText(0);
 
     /* Prepare pager content if any */
     if (nsKeyboard->getKeyRole() == NonStandardKeyboard::KR_Punctuation) {
@@ -133,7 +135,7 @@ void MainWindow::handleKeyRoleSwith()
             _info.append(simpleT9glb::key_punctuation_candidate.at(i));
         }
         imeWindow->pager.setContent(_info);
-        imeWindow->currSelected_set(0);
+        imeWindow->currSelected_set(0);		
     }
 
     imeWindow->refreshCandidate();
@@ -353,10 +355,10 @@ ImeWindow::ImeWindow(QWidget *parent) :
     
     imeTitle = new QLabel(QString::fromUtf8(reinterpret_cast<const char *>(ImeWindow::imeTitleStr)));
     imePinyin = new QLabel("");
-    imePinyinVar = new QLabel("");
+    //imePinyinVar = new QLabel("");
     hbox_upper->addWidget(imeTitle);
     hbox_upper->addWidget(imePinyin);
-    hbox_upper->addWidget(imePinyinVar);
+    //hbox_upper->addWidget(imePinyinVar);
   
     imeModeSwitch = new QLabel(simpleT9glb::key_role_type_chinese_text);
     imePagerHint = new QLabel("[0/0]");

@@ -103,10 +103,20 @@ private:
     QVector<QLabel *> chnChars;
     QLabel *imeTitle;
     QLabel *imeModeSwitch;
-    QLabel *imePinyin;
-    QLabel *imePinyinVar;
+
+	/* This variable is named 'imePinyin' for 
+	 * historical reason, however, it will also 
+	 * used to show Letters and Digits in case 
+	 * of English/English Capital/Digit input mode */
+	QLabel *imePinyin;	
+
+	/* I'm planning to use this label show as a blinking 
+	 * letter of the current selected Pinyin, but 
+	 * unfortunately, it hasn't been done yet :-( */
     QLabel *imePagerHint;
-    SimplePager pager;
+	//QLabel *imePinyinVar;	
+
+	SimplePager pager;
     
     const QHash<QString, QString> *pinyinSingleWord_db;
     Vocabulary *pinyinVocabulary_db;
