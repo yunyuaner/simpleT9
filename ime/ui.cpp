@@ -178,11 +178,33 @@ void MainWindow::handleFunctionKey(int key)
     const NonStandardKeyboard *nsKeyboard = dynamic_cast<const NonStandardKeyboard *>(imeWindow->getKeyboard());
     int _keyRole = nsKeyboard->getKeyRole();
     
-    if (key == Qt::Key_Space && 
-        (_keyRole == NonStandardKeyboard::KR_Chinese || 
-        _keyRole == NonStandardKeyboard::KR_Punctuation)) {
-        QLabel *label = imeWindow->chnChars.at(imeWindow->currSelected_get());
-        this->textInput->setText(this->textInput->text() + label->text());
+    if (key == Qt::Key_Space) {
+        if (_keyRole == NonStandardKeyboard::KR_Punctuation) {
+            QLabel *label = imeWindow->chnChars.at(imeWindow->currSelected_get());
+            this->textInput->setText(this->textInput->text() + label->text());            
+        } else if (_keyRole == NonStandardKeyboard::KR_Chinese) {
+            QLabel *label = imeWindow->chnChars.at(imeWindow->currSelected_get());
+            this->textInput->setText(this->textInput->text() + label->text());
+
+            /* Reset keyboard buffer, pager, page hint and candidates */
+            (const_cast<NonStandardKeyboard *>(nsKeyboard))->displayBufferStackClear();
+            imeWindow->pager.reset();
+            imeWindow->imePagerHint->setText("[0/0]");
+            imeWindow->imePinyin->setText("");
+            for (auto &label : imeWindow->chnChars) {
+                label->setText("");
+                imeWindow->ChnCharLabelHighlight(label, false);
+            }
+
+            imeWindow->currPage = 0;
+            imeWindow->pageCount = 0;
+            imeWindow->currSelected = 0;
+        } else {
+            /* English, English_Capital, Punctuation */
+            this->textInput->setText(this->textInput->text() + imeWindow->getPinyinContent());
+            (const_cast<NonStandardKeyboard *>(nsKeyboard))->displayBufferStackClear();
+            imeWindow->imePinyin->setText("");
+        }
     }
 }
 
@@ -216,7 +238,11 @@ void MainWindow::handleKeyPressEvent(int key)
         break;
 
     case NonStandardKeyboard::KR_Digit:
-        handleDigitKey(key);
+        if (key >= simpleT9glb::digit_key_start && key <= simpleT9glb::digit_key_end) {
+            handleDigitKey(key);
+        } else {
+            handleFunctionKey(key);
+        }
         break;
 
     case NonStandardKeyboard::KR_Punctuation:
@@ -362,23 +388,28 @@ void ImeWindow::ChnCharLabelHighlight(QLabel *label, bool highlight = true)
 
 int ImeWindow::currSelected_inc() 
 { 
-    currSelected++;
-    currSelected = currSelected > (pager.getCharCountOfCurrPage() - 1) ? 0 : currSelected;
+    if (pager.getCharCountOfCurrPage() > 0) {
+        currSelected++;
+        currSelected = currSelected > (pager.getCharCountOfCurrPage() - 1) ? 0 : currSelected;
+    }
     
     return currSelected;
 }
 
 int ImeWindow::currSelected_dec() 
 { 
-    currSelected--; 
-    currSelected = currSelected < 0 ? (pager.getCharCountOfCurrPage() - 1) : currSelected;
+    if (pager.getCharCountOfCurrPage() > 0) {
+        currSelected--; 
+        currSelected = currSelected < 0 ? (pager.getCharCountOfCurrPage() - 1) : currSelected;
+    }
     
     return currSelected;
 }
 
 int ImeWindow::currSelected_set(int pos) 
 { 
-    if (pos >= 0 && pos <=5) { 
+    if (pos >= 0 && pos <= std::min(pager.getCharCountOfCurrPage(), 
+            (simpleT9glb::max_chinese_char_candidate_per_page - 1))) { 
         currSelected = pos; 
     } 
 

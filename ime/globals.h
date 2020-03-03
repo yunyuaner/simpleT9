@@ -86,6 +86,9 @@ public:
     static const int multi_purpose_key_start;
     static const int multi_purpose_key_end;
 
+    static const int digit_key_start;
+    static const int digit_key_end;
+
     static const int max_chinese_char_candidate_per_page;
     static const char *ime_title_string;
 

@@ -80,6 +80,7 @@ public:
     int refreshCandidate();
     QVector<QLabel *> &getChnChars() { return chnChars; };
     const SimpleKeyboard *getKeyboard() { return keyboard; };
+    QString getPinyinContent() const { return imePinyin->text(); };
 
 public:
     static int chnCharCntPerPage;

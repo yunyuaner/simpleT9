@@ -140,6 +140,9 @@ const QString simpleT9glb::key_punctuation_candidate = ",.?;:!/@#$%^&*'()[]-=\\`
 const int simpleT9glb::multi_purpose_key_start = Qt::Key_2;
 const int simpleT9glb::multi_purpose_key_end = Qt::Key_9;
 
+const int simpleT9glb::digit_key_start = Qt::Key_0;
+const int simpleT9glb::digit_key_end = Qt::Key_9;
+
 const int simpleT9glb::max_chinese_char_candidate_per_page = 6;
 const char *simpleT9glb::ime_title_string = "华创拼音";
 

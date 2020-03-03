@@ -86,7 +86,7 @@ public:
      * use the following auxillary helper functions instead */
     void displayBufferStackPush(QString ch) { displayBufferStack.push(ch); };
     QString displayBufferStackPop() { return displayBufferStack.pop();       };
-    void displayBufferStackClear() { return displayBufferStack.clear(); };
+    void displayBufferStackClear()       { return displayBufferStack.clear(); };
     bool isDisplayBufferStackEmpty() { return displayBufferStack.isEmpty();        };
     QStack<QString> &getDisplayBufferStack() { return displayBufferStack; };
 
