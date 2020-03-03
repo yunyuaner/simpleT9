@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?fileVersion 4.0.0?>
+
+<cproject storage_type_id="org.eclipse.cdt.core.XmlProjectDescriptionStorage">
+	<storageModule moduleId="org.eclipse.cdt.core.settings">
+		<cconfiguration id="rede.mips.reworks.crossGCC.mips.1710614340">
+			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="rede.mips.reworks.crossGCC.mips.1710614340" moduleId="org.eclipse.cdt.core.settings" name="gnumips">
+				<externalSettings/>
+				<extensions>
+					<extension id="org.eclipse.cdt.core.ELF" point="org.eclipse.cdt.core.BinaryParser"/>
+					<extension id="org.eclipse.cdt.core.MakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+				</extensions>
+			</storageModule>
+			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
+				<configuration artifactExtension="elf" artifactName="reworks" buildProperties="" cleanCommand="rm -rf" description="" errorParsers="org.eclipse.cdt.core.MakeErrorParser;org.eclipse.cdt.core.GCCErrorParser;org.eclipse.cdt.core.GLDErrorParser;org.eclipse.cdt.core.GASErrorParser" id="rede.mips.reworks.crossGCC.mips.1710614340" name="gnumips" parent="rede.mips.reworks.crossGCC.mips">
+					<folderInfo id="rede.mips.reworks.crossGCC.mips.1710614340." name="/" resourcePath="">
+						<toolChain id="rede.mips.reworks.bootableProject.crossGCC.toolChain.949259471" name="gnumips" superClass="rede.mips.reworks.bootableProject.crossGCC.toolChain">
+							<targetPlatform archList="mipsel" binaryParser="org.eclipse.cdt.core.ELF" id="rede.mips.reworks.crossGCC.targetPlatform.1885894199" isAbstract="false" name="mips targetPlatform" osList="reworks" superClass="rede.mips.reworks.crossGCC.targetPlatform"/>
+							<builder buildPath="${workspace_loc:/simpleT9/gnumips/LOONGSON3A-7A1000}" id="rede.mips.reworks.bootableproject.crossGCC.builder.1773610850" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="GNU构建" superClass="rede.mips.reworks.bootableproject.crossGCC.builder"/>
+							<tool id="rede.mips.reworks.gnu.c.linker.1462086748" name="GCC C Linker" superClass="rede.mips.reworks.gnu.c.linker"/>
+							<tool id="rede.mips.reworks.bootableProject.gnu.assembler.503321768" name="GCC Assembler" superClass="rede.mips.reworks.bootableProject.gnu.assembler">
+								<inputType id="rede.mips.reworks.gnu.assembler.inputType.469700063" superClass="rede.mips.reworks.gnu.assembler.inputType"/>
+							</tool>
+							<tool id="rede.mips.reworks.bootableProject.gnu.c.compiler.953722353" name="GCC C Compiler" superClass="rede.mips.reworks.bootableProject.gnu.c.compiler">
+								<inputType id="rede.mips.reworks.gnu.c.compiler.inputType.1841620747" superClass="rede.mips.reworks.gnu.c.compiler.inputType"/>
+							</tool>
+							<tool id="rede.mips.reworks.bootableProject.gnu.cpp.compiler.1081443793" name="GCC C++ Compiler" superClass="rede.mips.reworks.bootableProject.gnu.cpp.compiler">
+								<option id="rede.gnu.cpp.compiler.option.other.other.1285106597" name="其他标志" superClass="rede.gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0 -std=c++0x" valueType="string"/>
+								<inputType id="rede.mips.reworks.gnu.cpp.compiler.inputType.1230134889" superClass="rede.mips.reworks.gnu.cpp.compiler.inputType"/>
+							</tool>
+							<tool id="rede.mips.reworks.bootableProject.gnu.cpp.linker.519021901" name="GCC C++ Linker" superClass="rede.mips.reworks.bootableProject.gnu.cpp.linker">
+								<inputType id="rede.mips.reworks.bootableProject.gnu.cpp.inputType.1271936273" superClass="rede.mips.reworks.bootableProject.gnu.cpp.inputType">
+									<additionalInput kind="additionaldependency" paths="$(OBJS)"/>
+									<additionalInput kind="additionalinput" paths="$(LIBS_USR)"/>
+									<additionalInput kind="additionalinput" paths="$(USER_OBJS)"/>
+									<additionalInput kind="additionalinput" paths="$(LIBS_CFG)"/>
+								</inputType>
+							</tool>
+							<tool id="rede.mips.reworks.bootableProject.gnu.objcopy.350453444" name="GCC objcopy Tool" superClass="rede.mips.reworks.bootableProject.gnu.objcopy"/>
+						</toolChain>
+					</folderInfo>
+					<fileInfo id="rede.mips.reworks.crossGCC.mips.1710614340.128334708" name="main.cpp" rcbsApplicability="disable" resourcePath="ime/main.cpp" toolsToInvoke="rede.mips.reworks.bootableProject.gnu.cpp.compiler.1081443793.1290756975">
+						<tool id="rede.mips.reworks.bootableProject.gnu.cpp.compiler.1081443793.1290756975" name="GCC C++ Compiler" superClass="rede.mips.reworks.bootableProject.gnu.cpp.compiler.1081443793"/>
+					</fileInfo>
+					<sourceEntries>
+						<entry excluding="ime/main.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+					</sourceEntries>
+				</configuration>
+			</storageModule>
+			<storageModule moduleId="scannerConfiguration">
+				<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+				<profile id="org.eclipse.cdt.make.core.GCCStandardMakePerProjectProfile">
+					<buildOutputProvider>
+						<openAction enabled="true" filePath=""/>
+						<parser enabled="true"/>
+					</buildOutputProvider>
+					<scannerInfoProvider id="specsFile">
+						<runAction arguments="-E -P -v -dD ${plugin_state_location}/${specs_file}" command="gcc" useDefault="true"/>
+						<parser enabled="true"/>
+					</scannerInfoProvider>
+				</profile>
+				<profile id="org.eclipse.cdt.make.core.GCCStandardMakePerFileProfile">
+					<buildOutputProvider>
+						<openAction enabled="true" filePath=""/>
+						<parser enabled="true"/>
+					</buildOutputProvider>
+					<scannerInfoProvider id="makefileGenerator">
+						<runAction arguments="-E -P -v -dD" command="" useDefault="true"/>
+						<parser enabled="true"/>
+					</scannerInfoProvider>
+				</profile>
+				<profile id="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfile">
+					<buildOutputProvider>
+						<openAction enabled="true" filePath=""/>
+						<parser enabled="true"/>
+					</buildOutputProvider>
+					<scannerInfoProvider id="specsFile">
+						<runAction arguments="-E -P -v -dD ${plugin_state_location}/${specs_file}" command="gcc" useDefault="true"/>
+						<parser enabled="true"/>
+					</scannerInfoProvider>
+				</profile>
+				<profile id="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileCPP">
+					<buildOutputProvider>
+						<openAction enabled="true" filePath=""/>
+						<parser enabled="true"/>
+					</buildOutputProvider>
+					<scannerInfoProvider id="specsFile">
+						<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.cpp" command="g++" useDefault="true"/>
+						<parser enabled="true"/>
+					</scannerInfoProvider>
+				</profile>
+				<profile id="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileC">
+					<buildOutputProvider>
+						<openAction enabled="true" filePath=""/>
+						<parser enabled="true"/>
+					</buildOutputProvider>
+					<scannerInfoProvider id="specsFile">
+						<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.c" command="gcc" useDefault="true"/>
+						<parser enabled="true"/>
+					</scannerInfoProvider>
+				</profile>
+				<profile id="org.eclipse.cdt.managedbuilder.core.GCCWinManagedMakePerProjectProfile">
+					<buildOutputProvider>
+						<openAction enabled="true" filePath=""/>
+						<parser enabled="true"/>
+					</buildOutputProvider>
+					<scannerInfoProvider id="specsFile">
+						<runAction arguments="-c 'gcc -E -P -v -dD &quot;${plugin_state_location}/${specs_file}&quot;'" command="sh" useDefault="true"/>
+						<parser enabled="true"/>
+					</scannerInfoProvider>
+				</profile>
+				<profile id="org.eclipse.cdt.managedbuilder.core.GCCWinManagedMakePerProjectProfileCPP">
+					<buildOutputProvider>
+						<openAction enabled="true" filePath=""/>
+						<parser enabled="true"/>
+					</buildOutputProvider>
+					<scannerInfoProvider id="specsFile">
+						<runAction arguments="-c 'g++ -E -P -v -dD &quot;${plugin_state_location}/specs.cpp&quot;'" command="sh" useDefault="true"/>
+						<parser enabled="true"/>
+					</scannerInfoProvider>
+				</profile>
+				<profile id="org.eclipse.cdt.managedbuilder.core.GCCWinManagedMakePerProjectProfileC">
+					<buildOutputProvider>
+						<openAction enabled="true" filePath=""/>
+						<parser enabled="true"/>
+					</buildOutputProvider>
+					<scannerInfoProvider id="specsFile">
+						<runAction arguments="-c 'gcc -E -P -v -dD &quot;${plugin_state_location}/specs.c&quot;'" command="sh" useDefault="true"/>
+						<parser enabled="true"/>
+					</scannerInfoProvider>
+				</profile>
+				<profile id="cn.com.ecict.rede.toolchain.reworks.ResimGCCManagedMakePerProjectProfile">
+					<buildOutputProvider>
+						<openAction enabled="true" filePath=""/>
+						<parser enabled="true"/>
+					</buildOutputProvider>
+					<scannerInfoProvider id="specsFile">
+						<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.c" command="sim-elf-gcc" useDefault="true"/>
+						<parser enabled="true"/>
+					</scannerInfoProvider>
+				</profile>
+				<profile id="cn.com.ecict.rede.toolchain.reworks.ResimGCCManagedMakePerProjectProfileCPP">
+					<buildOutputProvider>
+						<openAction enabled="true" filePath=""/>
+						<parser enabled="true"/>
+					</buildOutputProvider>
+					<scannerInfoProvider id="specsFile">
+						<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.cpp" command="sim-elf-g++" useDefault="true"/>
+						<parser enabled="true"/>
+					</scannerInfoProvider>
+				</profile>
+				<profile id="cn.com.ecict.rede.toolchain.reworks.I386GCCManagedMakePerProjectProfile">
+					<buildOutputProvider>
+						<openAction enabled="true" filePath=""/>
+						<parser enabled="true"/>
+					</buildOutputProvider>
+					<scannerInfoProvider id="specsFile">
+						<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.c" command="i386-elf-gcc" useDefault="true"/>
+						<parser enabled="true"/>
+					</scannerInfoProvider>
+				</profile>
+				<profile id="cn.com.ecict.rede.toolchain.reworks.I386GCCManagedMakePerProjectProfileCPP">
+					<buildOutputProvider>
+						<openAction enabled="true" filePath=""/>
+						<parser enabled="true"/>
+					</buildOutputProvider>
+					<scannerInfoProvider id="specsFile">
+						<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.cpp" command="i386-elf-g++" useDefault="true"/>
+						<parser enabled="true"/>
+					</scannerInfoProvider>
+				</profile>
+				<profile id="cn.com.ecict.rede.toolchain.reworks.ppcGCCManagedMakePerProjectProfile">
+					<buildOutputProvider>
+						<openAction enabled="true" filePath=""/>
+						<parser enabled="true"/>
+					</buildOutputProvider>
+					<scannerInfoProvider id="specsFile">
+						<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.c" command="ppc-elf-gcc" useDefault="true"/>
+						<parser enabled="true"/>
+					</scannerInfoProvider>
+				</profile>
+				<profile id="cn.com.ecict.rede.toolchain.reworks.ppcGCCManagedMakePerProjectProfileCPP">
+					<buildOutputProvider>
+						<openAction enabled="true" filePath=""/>
+						<parser enabled="true"/>
+					</buildOutputProvider>
+					<scannerInfoProvider id="specsFile">
+						<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.cpp" command="ppc-elf-g++" useDefault="true"/>
+						<parser enabled="true"/>
+					</scannerInfoProvider>
+				</profile>
+				<profile id="cn.com.ecict.rede.toolchain.reworks.mipsGCCManagedMakePerProjectProfile">
+					<buildOutputProvider>
+						<openAction enabled="true" filePath=""/>
+						<parser enabled="true"/>
+					</buildOutputProvider>
+					<scannerInfoProvider id="specsFile">
+						<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.c" command="mipsel-elf-gcc" useDefault="true"/>
+						<parser enabled="true"/>
+					</scannerInfoProvider>
+				</profile>
+				<profile id="cn.com.ecict.rede.toolchain.reworks.mipsGCCManagedMakePerProjectProfileCPP">
+					<buildOutputProvider>
+						<openAction enabled="true" filePath=""/>
+						<parser enabled="true"/>
+					</buildOutputProvider>
+					<scannerInfoProvider id="specsFile">
+						<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.cpp" command="mipsel-elf-g++" useDefault="true"/>
+						<parser enabled="true"/>
+					</scannerInfoProvider>
+				</profile>
+				<profile id="cn.com.ecict.rede.toolchain.reworks.armGCCManagedMakePerProjectProfile">
+					<buildOutputProvider>
+						<openAction enabled="true" filePath=""/>
+						<parser enabled="true"/>
+					</buildOutputProvider>
+					<scannerInfoProvider id="specsFile">
+						<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.c" command="arm-elf-gcc" useDefault="true"/>
+						<parser enabled="true"/>
+					</scannerInfoProvider>
+				</profile>
+				<profile id="cn.com.ecict.rede.toolchain.reworks.armGCCManagedMakePerProjectProfileCPP">
+					<buildOutputProvider>
+						<openAction enabled="true" filePath=""/>
+						<parser enabled="true"/>
+					</buildOutputProvider>
+					<scannerInfoProvider id="specsFile">
+						<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.cpp" command="arm-elf-g++" useDefault="true"/>
+						<parser enabled="true"/>
+					</scannerInfoProvider>
+				</profile>
+			</storageModule>
+			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+			<storageModule moduleId="org.eclipse.cdt.core.language.mapping"/>
+			<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
+		</cconfiguration>
+	</storageModule>
+	<storageModule moduleId="cdtBuildSystem" version="4.0.0">
+		<project id="simpleT9.rede.bootableProject.projectType.1715206301" name="自引导工程" projectType="rede.bootableProject.projectType"/>
+	</storageModule>
+</cproject>
