@@ -110,7 +110,7 @@ private:
 	 * of English/English Capital/Digit input mode */
 	QLabel *imePinyin;	
 
-	/* I'm planning to use this label show as a blinking 
+	/* I'm planning to use this label as a blinking 
 	 * letter of the current selected Pinyin, but 
 	 * unfortunately, it hasn't been done yet :-( */
     QLabel *imePagerHint;

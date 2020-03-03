@@ -279,7 +279,7 @@ void MainWindow::eventFilterForMainWindow(QObject *obj, QEvent *event)
         QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
         if (keyEvent->key() == Qt::Key_Backspace) {
             /* TODO: Actually we should derive a subclass from QTextInput
-             * and override it's 'event' method, so as to make it only 
+             * and override its 'event' method, so as to make it only 
              * reponse to 'Backspace' key and ignore others. Since it's 
              * simple demo here, I'm not planning to do it here.*/
         }
