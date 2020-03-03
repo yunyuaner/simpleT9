@@ -61,6 +61,8 @@ private:
     static MainWindow *_instance;
 
 protected:
+    void eventFilterForIMEWindow(QObject *obj, QEvent *event);
+    void eventFilterForMainWindow(QObject *obj, QEvent *event);
     bool eventFilter(QObject *obj, QEvent *event);
 };
 

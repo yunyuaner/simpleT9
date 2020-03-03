@@ -254,9 +254,34 @@ void MainWindow::handleKeyPressEvent(int key)
 	}    
 }
 
-bool MainWindow::eventFilter(QObject *obj, QEvent *event)
+void MainWindow::eventFilterForIMEWindow(QObject *obj, QEvent *event)
 {
-    if (event->type() == QEvent::MouseButtonPress) {
+    (void)obj;
+    
+    if (event->type() == QEvent::KeyPress) {              
+        QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+        std::cout << "Key - " << QString::number(keyEvent->key(), 16).toStdString() << " pressed" << std::endl;
+        handleKeyPressEvent(keyEvent->key());
+    } else if (event->type() == QEvent::HoverEnter) {
+        std::cout << "Mouse Hover Enter" << std::endl;
+    } else if (event->type() == QEvent::HoverLeave) {
+        std::cout << "Mouse Hover Leave" << std::endl;
+    } else if (event->type() == QEvent::HoverMove) {
+        std::cout << "Mouse Hover Move" << std::endl;
+    }
+}
+
+void MainWindow::eventFilterForMainWindow(QObject *obj, QEvent *event)
+{
+    if (event->type() == QEvent::KeyPress && static_cast<QLineEdit *>(obj) == textInput) {
+        QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+        if (keyEvent->key() == Qt::Key_Backspace) {
+            /* TODO: Actually we should derive a subclass from QTextInput
+             * and override it's 'event' method, so as to make it only 
+             * reponse to 'Backspace' key and ignore others. Since it's 
+             * simple demo here, I'm not planning to do it here.*/
+        }
+    } else if (event->type() == QEvent::MouseButtonPress) {
         QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
         if (mouseEvent->button() & Qt::LeftButton) {
             
@@ -271,22 +296,19 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
                 imeWindowShown = true;          
             }
         }        
-    } else if (event->type() == QEvent::KeyPress) {              
-        QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
-        std::cout << "Key - " << QString::number(keyEvent->key(), 16).toStdString() << " pressed" << std::endl;
-        handleKeyPressEvent(keyEvent->key());
-    } else if (event->type() == QEvent::HoverEnter) {
-        std::cout << "Mouse Hover Enter" << std::endl;
-    } else if (event->type() == QEvent::HoverLeave) {
-        std::cout << "Mouse Hover Leave" << std::endl;
-    } else if (event->type() == QEvent::HoverMove) {
-        std::cout << "Mouse Hover Move" << std::endl;
+    }
+}
+
+bool MainWindow::eventFilter(QObject *obj, QEvent *event)
+{
+    if (this->textInput->hasFocus()) {
+        eventFilterForMainWindow(obj, event);
     } else {
-        // Standard event processing
-        return QObject::eventFilter(obj, event);
+        eventFilterForIMEWindow(obj, event);
     }
 
-    return true;
+    // Standard event processing
+    return QObject::eventFilter(obj, event);
 }
 
 int ImeWindow::refreshCandidate()
