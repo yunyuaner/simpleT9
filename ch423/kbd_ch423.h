@@ -41,7 +41,7 @@ extern "C"{
 #define     ADDR_READ_KEYBOARD_CODE      (CH452_I2C_ADDR | REG_READ_KEYBOARD_CODE)
 #define     ADDR_RESET_CHIP              (CH452_I2C_ADDR | REG_RESET_CHIP)
 
-//int initKbdCh423(struct kbd_device_struct *kbd);
+int initKbdCh423(struct kbd_device_struct *kbd);
 
 #ifdef	__cplusplus
 }
