@@ -1,6 +1,17 @@
 #ifndef _KEY_CODES_H
 #define _KEY_CODES_H
 
+/*
+ * Keys and buttons
+ *
+ * Most of the keys/buttons are modeled after USB HUT 1.12
+ * (see http://www.usb.org/developers/hidpage).
+ * Abbreviations in the comments:
+ * AC - Application Control
+ * AL - Application Launch Button
+ * SC - System Control
+ */
+
 #define KEY_1			2
 #define KEY_2			3
 #define KEY_3			4
@@ -60,6 +71,7 @@
 #define KEY_PAGEUP		104
 #define KEY_PAGEDOWN		109
 
+/* Value from CH423 via i2c */
 #define KEY_1_CH423			18
 #define KEY_2_CH423			19
 #define KEY_3_CH423			20

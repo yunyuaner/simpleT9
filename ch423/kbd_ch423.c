@@ -13,41 +13,13 @@
 #include <clock.h>
 #include <irq.h>
 #include <atomic.h>
-//#include "gpio.h"
+#include "gpio.h"
 #include "key_codes.h"
 #include "kbd_ch423.h"
 
 typedef void(*wdgFunc)(void *arg);
 
 /*MACRO*/
-#if 0
-#define KEY_A			30
-#define KEY_S			31
-#define KEY_D			32
-#define KEY_F			33
-#define KEY_G			34
-#define KEY_H			35
-#define KEY_J			36
-#define KEY_K			37
-#define KEY_L			38
-#define KEY_Q			16
-#define KEY_W			17
-#define KEY_E			18
-#define KEY_R			19
-#define KEY_T			20
-#define KEY_Y			21
-#define KEY_U			22
-#define KEY_I			23
-#define KEY_O			24
-#define KEY_P			25
-#define KEY_Z			44
-#define KEY_X			45
-#define KEY_C			46
-#define KEY_V			47
-#define KEY_B			48
-#define KEY_N			49
-#define KEY_M			50
-#endif
 
 /*LOCAL*/
 static int KbdCh423Read(u8 offset, u8* pVal);
@@ -84,22 +56,22 @@ static const unsigned char sg_keymap[92] = {
 		[14] = 0,
 		[15] = 0,
 
-		[16] = 103,	//F11 KEY_UP
+		[KEY_UP_CH423] = KEY_UP,	//F11 KEY_UP
 		[KEY_PAGEUP_CH423] = KEY_PAGEUP,	//KEY_PAGEUP
-		[18] = KEY_1,	//1
-		[19] = KEY_2,	//2
-		[20] = KEY_3,	//3
-		[21] = KEY_4,	//4
-		[22] = KEY_5,	//5
+		[KEY_1_CH423] = KEY_1,	//1
+		[KEY_2_CH423] = KEY_2,	//2
+		[KEY_3_CH423] = KEY_3,	//3
+		[KEY_4_CH423] = KEY_4,	//4
+		[KEY_5_CH423] = KEY_5,	//5
 		[23] = 0,
 
 		[KEY_DOWN_CH423] = KEY_DOWN,	//F12 KEY_DOWN
 		[KEY_PAGEDOWN_CH423] = KEY_PAGEDOWN,	//KEY_PAGEDOWN
-		[26] = KEY_6,	//6
-		[27] = KEY_7,	//7
-		[28] = KEY_8,	//8
-		[29] = KEY_9,	//9
-		[30] = KEY_0,	//0
+		[KEY_6_CH423] = KEY_6,	//6
+		[KEY_7_CH423] = KEY_7,	//7
+		[KEY_8_CH423] = KEY_8,	//8
+		[KEY_9_CH423] = KEY_9,	//9
+		[KEY_0_CH423] = KEY_0,	//0
 		[31] = 0,
 
 		[KEY_DOT_CH423] = KEY_DOT,	//KEY_DOT
@@ -172,11 +144,12 @@ static const unsigned char sg_keymap[92] = {
 };
 
 /*EXPORT*/
-//extern int registerI2c();
-//extern int readFromI2cEx(int no, int addr, u8* pBuf, int len);
-//extern int writeToI2cEx(int no, int addr, u8 const* pBuf, int len);
-//extern int printk(const char *fmt, ...);
+extern int registerI2c();
+extern int readFromI2cEx(int no, int addr, u8* pBuf, int len);
+extern int writeToI2cEx(int no, int addr, u8 const* pBuf, int len);
+extern int printk(const char *fmt, ...);
 /*MACRO*/
+
 #define	KBD_CH423_I2C_CTL_NO			1
 #define KBD_CH423_I2C_DEV_ADDR			0x24
 #define	KBD_CH423_IRQ_NO				59
@@ -205,13 +178,13 @@ u8 OnRxKbdContinue(struct kbd_device_struct* pKbd,u8 key, int continueTimes)
         case KEY_5_CH423:
             offset = continueTimes&0x3;
             if (offset) {
-                index = (KEY_A_CH423 - 1) + (key - KEY_2_CH423) * 4;
+                index = (KEY_A_CH423 - 1) + (key - KEY_2_CH423 -1) * 4;
                 key = index + offset;
             }
             break;
 
         case KEY_6_CH423:
-            offset = continueTimes;
+            offset = continueTimes&0x3;
             if (offset) {
                 index = (KEY_M_CH423 - 1);
                 key = index + offset;
@@ -219,7 +192,7 @@ u8 OnRxKbdContinue(struct kbd_device_struct* pKbd,u8 key, int continueTimes)
             break;
 
         case KEY_7_CH423:
-            offset = continueTimes;
+            offset = continueTimes-(continueTimes/5)*5;
             if (offset) {
                 index = (KEY_P_CH423 - 1);
                 key = index + offset;
@@ -227,7 +200,7 @@ u8 OnRxKbdContinue(struct kbd_device_struct* pKbd,u8 key, int continueTimes)
             break;
 
         case KEY_8_CH423:
-            offset = continueTimes;
+            offset = continueTimes&0x3;
             if (offset) {
                 index = (KEY_T_CH423 - 1);
                 key = index + offset;
@@ -235,7 +208,7 @@ u8 OnRxKbdContinue(struct kbd_device_struct* pKbd,u8 key, int continueTimes)
             break;
 
         case KEY_9_CH423:
-            offset = continueTimes;
+            offset = continueTimes-(continueTimes/5)*5;
             if (offset) {
                 index = (KEY_W_CH423 - 1);
                 key = index + offset;
