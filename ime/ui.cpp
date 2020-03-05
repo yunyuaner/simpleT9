@@ -28,6 +28,8 @@
 #include <QMouseEvent>
 #include <QMessageBox>
 #include <QDialog>
+#include <QDebug>
+
 #include <iostream>
 #include <algorithm>
 #include "ui.h"
@@ -176,7 +178,7 @@ void MainWindow::handleKeyRoleSwith()
 
 void MainWindow::handleMultiPurposeKey(int key)
 {
-    std::cout << "handleMultiPurposeKey" << std::endl;
+	qDebug() << "handleMultiPurposeKey";
     QString inputText = imeWindow->keyboard->handleKeyPress(key); 
     imeWindow->imePinyin->setText(inputText);
     
@@ -186,7 +188,7 @@ void MainWindow::handleMultiPurposeKey(int key)
 
 void MainWindow::handleFunctionKey(int key)
 {
-    std::cout << "handleFunctionKey" << std::endl;
+	qDebug() << "handleFunctionKey";
     QString inputText = imeWindow->keyboard->handleKeyPress(key); 
     imeWindow->imePinyin->setText(inputText);
 
@@ -232,7 +234,7 @@ void MainWindow::handleFunctionKey(int key)
 
 void MainWindow::handleDigitKey(int key)
 {
-    std::cout << "handleDigitKey" << std::endl;
+	qDebug() << "handleDigitKey";
     QString inputText = imeWindow->keyboard->handleKeyPress(key); 
     imeWindow->imePinyin->setText(inputText);
 }
@@ -282,14 +284,14 @@ void MainWindow::eventFilterForIMEWindow(QObject *obj, QEvent *event)
     
     if (event->type() == QEvent::KeyPress) {              
         QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
-        std::cout << "Key - " << QString::number(keyEvent->key(), 16).toStdString() << " pressed" << std::endl;
+		qDebug() << "Key - " << QString::number(keyEvent->key(), 16) << " pressed";
         handleKeyPressEvent(keyEvent->key());
     } else if (event->type() == QEvent::HoverEnter) {
-        std::cout << "Mouse Hover Enter" << std::endl;
+		qDebug() << "Mouse Hover Enter";
     } else if (event->type() == QEvent::HoverLeave) {
-        std::cout << "Mouse Hover Leave" << std::endl;
+		qDebug() << "Mouse Hover Leave";
     } else if (event->type() == QEvent::HoverMove) {
-        std::cout << "Mouse Hover Move" << std::endl;
+		qDebug() << "Mouse Hover Move";
     }
 }
 
@@ -353,7 +355,8 @@ int ImeWindow::refreshCandidate()
 
     int i = 0;
     for (auto iter = pageContent.begin(); iter != pageContent.end(); iter++) {
-        std::cout << (*iter).toStdString() << std::endl;
+        //std::cout << (*iter).toStdString() << std::endl;
+		qDebug() << *iter;
         chnChars.at(i)->setText(*iter);
         i++;
     }
@@ -471,10 +474,9 @@ void ImeWindow::showCandidateOnBoard(QString &inputText)
 
     if (nsKeyboard->getKeyRole() != NonStandardKeyboard::KR_Chinese && 
         nsKeyboard->getKeyRole() != NonStandardKeyboard::KR_Punctuation) {
-        std::cout << "Under keyRole - " 
+        qDebug() << "Under keyRole - " 
                   << nsKeyboard->getKeyRole() 
-                  << ", no need to show candidate on board" 
-                  << std::endl;
+                  << ", no need to show candidate on board";                
         return;
     }
     
@@ -487,7 +489,7 @@ void ImeWindow::showCandidateOnBoard(QString &inputText)
         if (inputText.indexOf("'") != -1) {        
             auto _p = pinyinVocabulary_db->search(inputText);
             if (_p == nullptr) {
-                std::cout << inputText.toStdString() << " not found" << std::endl;
+				qDebug() << inputText << " not found";
                 return;
             } else {
                 searchContent = *_p;
@@ -495,7 +497,7 @@ void ImeWindow::showCandidateOnBoard(QString &inputText)
         } else {        
             QHash<QString, QString>::const_iterator iter = pinyinSingleWord_db->find(inputText);
             if (iter == pinyinSingleWord_db->cend()) {
-                std::cout << inputText.toStdString() << " not found" << std::endl;
+				qDebug() << inputText << " not found";
                 return;
             } else {
                 pinyinCandidate = static_cast<QString>(*iter);

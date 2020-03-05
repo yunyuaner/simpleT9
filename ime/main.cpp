@@ -20,12 +20,15 @@
 #include <QApplication>
 #include <QWidget>
 #include <QMainWindow>
+#include <QDebug>
 #include "ui.h"
 #include "../data/vocabulary.h"
 
 int main(int argc, char *argv[]) {
     QApplication app(argc, argv);
     MainWindow *mainWindow = MainWindow::getInstance();
+
+	qDebug() << "SimpleT9 starts";
 
     mainWindow->resize(400, 300);
     mainWindow->setWindowTitle("Simple Text Input Demo");

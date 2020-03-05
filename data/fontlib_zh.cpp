@@ -3,6 +3,7 @@
 #include <string.h>
 #include <QHash>
 #include <QString>
+#include <QDebug>
 
 namespace hycx {
 namespace wuhan {

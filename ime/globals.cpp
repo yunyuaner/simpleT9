@@ -19,6 +19,8 @@
  */
 
 #include <Qt>
+#include <QDebug>
+
 #include "globals.h"
 #include "keyboard.h"
 

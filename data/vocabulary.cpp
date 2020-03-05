@@ -26,6 +26,7 @@
 #include <vector>
 #include <algorithm>
 #include "vocabulary.h"
+#include <QDebug>
 
 const std::string Vocabulary::dsFile = "./data/ds/pinyin_vocabulary_map.txt";
 
@@ -99,12 +100,12 @@ QVector<QString> *Vocabulary::search(QString pinyin)
     std::string _pinyin = pinyin.toStdString();
     auto iter = a_expected_map.find(_pinyin);
 
-    std::cout << "Search - " << _pinyin << std::endl;
+    qDebug() << "Search - " << _pinyin.c_str();
 
     a_return_candidate_list->clear();
     
     if (iter == a_expected_map.end()) {
-        std::cout << _pinyin << " not found" << std::endl;
+        qDebug() << QString::fromStdString(_pinyin) << " not found";
         return nullptr;
     } else {
         std::vector<std::string> *_v = a_expected_map[_pinyin];
