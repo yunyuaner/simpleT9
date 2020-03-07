@@ -1,3 +1,23 @@
+/**
+ *      Copyright (c) 2020 Jia Guo <jiag@ntesec.com.cn>
+ *          
+ *          Shang Hai Hua Yuan Chuang Xin Co., Ltd
+ *                  All Right Reserved
+ * 
+ *  simpleT9 is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License version 3
+ *  as published by the Free Software Foundation.
+ *   
+ *  simpleT9 is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *   
+ *  You should have received a copy of the GNU General Public License
+ *  version 3 along with MediaTomb; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
 #ifndef _SIMPLE_H
 #define _SIMPLE_H
 
@@ -110,7 +130,7 @@ private:
 	 * of English/English Capital/Digit input mode */
 	QLabel *imePinyin;	
 
-	/* I'm planning to use this label show as a blinking 
+	/* I'm planning to use this label as a blinking 
 	 * letter of the current selected Pinyin, but 
 	 * unfortunately, it hasn't been done yet :-( */
     QLabel *imePagerHint;
@@ -118,8 +138,7 @@ private:
 
 	SimplePager pager;
     
-    const QHash<QString, QString> *pinyinSingleWord_db;
-    Vocabulary *pinyinVocabulary_db;
+    SimpleVocabulary *pinyinVocabulary_db;
     SimpleKeyboard *keyboard;
 };
 

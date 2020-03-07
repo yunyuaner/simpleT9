@@ -1,3 +1,24 @@
+/**
+ *      Copyright (c) 2020 Jia Guo <jiag@ntesec.com.cn>
+ *          
+ *          Shang Hai Hua Yuan Chuang Xin Co., Ltd
+ *                  All Right Reserved
+ * 
+ *  simpleT9 is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License version 3
+ *  as published by the Free Software Foundation.
+ *   
+ *  simpleT9 is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *   
+ *  You should have received a copy of the GNU General Public License
+ *  version 3 along with MediaTomb; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+#include <QDebug>
+
 #include "keyboard.h"
 #include "globals.h"
 
@@ -59,7 +80,7 @@ QString NonStandardKeyboard::makePinyinDisplayContent()
         displayBuffer.append(_p.pop());
     }
 
-    std::cout << "pinyinDisplayContent - " << displayBuffer.toStdString() << std::endl;
+	qDebug() << "pinyinDisplayContent - " << displayBuffer;
 
     return displayBuffer;
 }
@@ -76,7 +97,7 @@ QString NonStandardKeyboard::handleKeyPress(int keyCode)
 	QString keyName;
 	SimpleKey *_k = nullptr;
 
-    std::cout << "handleKeyPress, keyCode - " << QString::number(keyCode, 16).toStdString() << std::endl;
+	qDebug() << "handleKeyPress, keyCode - " << QString::number(keyCode, 16);
 
     /* First check if the pressed key is valid under current input method */
 	if (simpleT9glb::a_key_code_to_key_name_map.find(keyCode) != simpleT9glb::a_key_code_to_key_name_map.end()) {
@@ -84,11 +105,11 @@ QString NonStandardKeyboard::handleKeyPress(int keyCode)
         if (_keys.find(keyName) != _keys.end()) {
             _k = _keys[keyName];
         } else {
-            std::cout << "key - " << QString::number(keyCode, 16).toStdString() << " not supported" << std::endl;
+            qDebug() << "key - " << QString::number(keyCode, 16) << " not supported";
             keyCodeNotSupported = true;
         }
 	} else {
-		std::cout << "key - " << QString::number(keyCode, 16).toStdString() << " not supported" << std::endl;
+		qDebug() << "key - " << QString::number(keyCode, 16) << " not supported";
 		keyCodeNotSupported = true;
 	}	
 

@@ -1,3 +1,23 @@
+/**
+ *      Copyright (c) 2020 Jia Guo <jiag@ntesec.com.cn>
+ *          
+ *          Shang Hai Hua Yuan Chuang Xin Co., Ltd
+ *                  All Right Reserved
+ * 
+ *  simpleT9 is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License version 3
+ *  as published by the Free Software Foundation.
+ *   
+ *  simpleT9 is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *   
+ *  You should have received a copy of the GNU General Public License
+ *  version 3 along with MediaTomb; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
 #include <cstddef>
 #include <QApplication>
 #include <QWidget>
@@ -8,13 +28,14 @@
 #include <QMouseEvent>
 #include <QMessageBox>
 #include <QDialog>
+#include <QDebug>
+
 #include <iostream>
 #include <algorithm>
 #include "ui.h"
 #include "key.h"
 #include "keyboard.h"
 #include "pager.h"
-#include "../data/fontlib_zh.h"
 #include "../data/vocabulary.h"
 #include "globals.h"
 
@@ -156,7 +177,7 @@ void MainWindow::handleKeyRoleSwith()
 
 void MainWindow::handleMultiPurposeKey(int key)
 {
-    std::cout << "handleMultiPurposeKey" << std::endl;
+	qDebug() << "handleMultiPurposeKey";
     QString inputText = imeWindow->keyboard->handleKeyPress(key); 
     imeWindow->imePinyin->setText(inputText);
     
@@ -166,7 +187,7 @@ void MainWindow::handleMultiPurposeKey(int key)
 
 void MainWindow::handleFunctionKey(int key)
 {
-    std::cout << "handleFunctionKey" << std::endl;
+	qDebug() << "handleFunctionKey";
     QString inputText = imeWindow->keyboard->handleKeyPress(key); 
     imeWindow->imePinyin->setText(inputText);
 
@@ -212,7 +233,7 @@ void MainWindow::handleFunctionKey(int key)
 
 void MainWindow::handleDigitKey(int key)
 {
-    std::cout << "handleDigitKey" << std::endl;
+	qDebug() << "handleDigitKey";
     QString inputText = imeWindow->keyboard->handleKeyPress(key); 
     imeWindow->imePinyin->setText(inputText);
 }
@@ -262,14 +283,14 @@ void MainWindow::eventFilterForIMEWindow(QObject *obj, QEvent *event)
     
     if (event->type() == QEvent::KeyPress) {              
         QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
-        std::cout << "Key - " << QString::number(keyEvent->key(), 16).toStdString() << " pressed" << std::endl;
+		qDebug() << "Key - " << QString::number(keyEvent->key(), 16) << " pressed";
         handleKeyPressEvent(keyEvent->key());
     } else if (event->type() == QEvent::HoverEnter) {
-        std::cout << "Mouse Hover Enter" << std::endl;
+		qDebug() << "Mouse Hover Enter";
     } else if (event->type() == QEvent::HoverLeave) {
-        std::cout << "Mouse Hover Leave" << std::endl;
+		qDebug() << "Mouse Hover Leave";
     } else if (event->type() == QEvent::HoverMove) {
-        std::cout << "Mouse Hover Move" << std::endl;
+		qDebug() << "Mouse Hover Move";
     }
 }
 
@@ -279,7 +300,7 @@ void MainWindow::eventFilterForMainWindow(QObject *obj, QEvent *event)
         QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
         if (keyEvent->key() == Qt::Key_Backspace) {
             /* TODO: Actually we should derive a subclass from QTextInput
-             * and override it's 'event' method, so as to make it only 
+             * and override its 'event' method, so as to make it only 
              * reponse to 'Backspace' key and ignore others. Since it's 
              * simple demo here, I'm not planning to do it here.*/
         }
@@ -333,7 +354,8 @@ int ImeWindow::refreshCandidate()
 
     int i = 0;
     for (auto iter = pageContent.begin(); iter != pageContent.end(); iter++) {
-        std::cout << (*iter).toStdString() << std::endl;
+        //std::cout << (*iter).toStdString() << std::endl;
+		qDebug() << *iter;
         chnChars.at(i)->setText(*iter);
         i++;
     }
@@ -346,8 +368,7 @@ ImeWindow::ImeWindow(QWidget *parent) :
     currSelected(0), 
     currPage(0), 
     pageCount(0),
-    pinyinSingleWord_db(hycx::wuhan::simpleT9::init_db()),
-    pinyinVocabulary_db(new Vocabulary)
+    pinyinVocabulary_db(new SimpleVocabulary)
 {
     QVBoxLayout *vbox = new QVBoxLayout();
     QHBoxLayout *hbox_upper = new QHBoxLayout();
@@ -384,14 +405,14 @@ ImeWindow::ImeWindow(QWidget *parent) :
     keyboard->initializeKeys();
 
     /* May use lazy-initialization */
-    pinyinVocabulary_db->init();
+    //pinyinVocabulary_db->init();
+    pinyinVocabulary_db->init1();
 }
 
 ImeWindow::~ImeWindow()
 {
 	delete keyboard;
 	delete pinyinVocabulary_db;
-	delete pinyinSingleWord_db;
 }
 
 void ImeWindow::ChnCharLabelHighlight(QLabel *label, bool highlight = true)
@@ -451,39 +472,22 @@ void ImeWindow::showCandidateOnBoard(QString &inputText)
 
     if (nsKeyboard->getKeyRole() != NonStandardKeyboard::KR_Chinese && 
         nsKeyboard->getKeyRole() != NonStandardKeyboard::KR_Punctuation) {
-        std::cout << "Under keyRole - " 
+        qDebug() << "Under keyRole - " 
                   << nsKeyboard->getKeyRole() 
-                  << ", no need to show candidate on board" 
-                  << std::endl;
+                  << ", no need to show candidate on board";                
         return;
     }
     
     /* @inputText is the key word to search in the Chinese Character database */
     QVector<QString> searchContent;
 
-    if (nsKeyboard->getKeyRole() == NonStandardKeyboard::KR_Chinese) {
-        QString pinyinCandidate;
-        
-        if (inputText.indexOf("'") != -1) {        
-            auto _p = pinyinVocabulary_db->search(inputText);
-            if (_p == nullptr) {
-                std::cout << inputText.toStdString() << " not found" << std::endl;
-                return;
-            } else {
-                searchContent = *_p;
-            }
-        } else {        
-            QHash<QString, QString>::const_iterator iter = pinyinSingleWord_db->find(inputText);
-            if (iter == pinyinSingleWord_db->cend()) {
-                std::cout << inputText.toStdString() << " not found" << std::endl;
-                return;
-            } else {
-                pinyinCandidate = static_cast<QString>(*iter);
-            
-                for (auto iter = pinyinCandidate.begin(); iter != pinyinCandidate.end(); iter++) {
-                    searchContent.append(*iter);
-                }
-            }
+    if (nsKeyboard->getKeyRole() == NonStandardKeyboard::KR_Chinese) {             
+        auto _p = pinyinVocabulary_db->search1(inputText);
+        if (_p == nullptr) {
+			qDebug() << inputText << " not found";
+            return;
+        } else {
+            searchContent = *_p;
         }
     } else if (nsKeyboard->getKeyRole() == NonStandardKeyboard::KR_Punctuation) {
         for (int i = 0; i < simpleT9glb::key_punctuation_candidate.size(); i++) {
