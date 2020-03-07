@@ -25,10 +25,16 @@
 								<inputType id="rede.mips.reworks.gnu.assembler.inputType.469700063" superClass="rede.mips.reworks.gnu.assembler.inputType"/>
 							</tool>
 							<tool id="rede.mips.reworks.bootableProject.gnu.c.compiler.953722353" name="GCC C Compiler" superClass="rede.mips.reworks.bootableProject.gnu.c.compiler">
+								<option id="rede.gnu.c.compiler.option.preprocessor.def.symbols.1748564291" name="定义的符号 (-D)" superClass="rede.gnu.c.compiler.option.preprocessor.def.symbols" valueType="definedSymbols">
+									<listOptionValue builtIn="false" value="_GLIBCXX_USE_C99"/>
+								</option>
 								<inputType id="rede.mips.reworks.gnu.c.compiler.inputType.1841620747" superClass="rede.mips.reworks.gnu.c.compiler.inputType"/>
 							</tool>
 							<tool id="rede.mips.reworks.bootableProject.gnu.cpp.compiler.1081443793" name="GCC C++ Compiler" superClass="rede.mips.reworks.bootableProject.gnu.cpp.compiler">
 								<option id="rede.gnu.cpp.compiler.option.other.other.1285106597" name="其他标志" superClass="rede.gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0 -std=c++0x" valueType="string"/>
+								<option id="rede.gnu.cpp.compiler.option.preprocessor.def.1153313500" name="定义的符号 (-D)" superClass="rede.gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
+									<listOptionValue builtIn="false" value="_GLIBCXX_USE_C99"/>
+								</option>
 								<inputType id="rede.mips.reworks.gnu.cpp.compiler.inputType.1230134889" superClass="rede.mips.reworks.gnu.cpp.compiler.inputType"/>
 							</tool>
 							<tool id="rede.mips.reworks.bootableProject.gnu.cpp.linker.519021901" name="GCC C++ Linker" superClass="rede.mips.reworks.bootableProject.gnu.cpp.linker">
@@ -42,11 +48,19 @@
 							<tool id="rede.mips.reworks.bootableProject.gnu.objcopy.350453444" name="GCC objcopy Tool" superClass="rede.mips.reworks.bootableProject.gnu.objcopy"/>
 						</toolChain>
 					</folderInfo>
-					<fileInfo id="rede.mips.reworks.crossGCC.mips.1710614340.128334708" name="main.cpp" rcbsApplicability="disable" resourcePath="ime/main.cpp" toolsToInvoke="rede.mips.reworks.bootableProject.gnu.cpp.compiler.1081443793.1290756975">
-						<tool id="rede.mips.reworks.bootableProject.gnu.cpp.compiler.1081443793.1290756975" name="GCC C++ Compiler" superClass="rede.mips.reworks.bootableProject.gnu.cpp.compiler.1081443793"/>
-					</fileInfo>
+					<folderInfo id="rede.mips.reworks.crossGCC.mips.1710614340.1772877623" name="/" resourcePath="test">
+						<toolChain id="rede.mips.reworks.bootableProject.crossGCC.toolChain.866748308" name="gnumips" superClass="rede.mips.reworks.bootableProject.crossGCC.toolChain" unusedChildren="">
+							<tool id="rede.mips.reworks.gnu.c.linker.1401348739" name="GCC C Linker" superClass="rede.mips.reworks.gnu.c.linker.1462086748"/>
+							<tool id="rede.mips.reworks.bootableProject.gnu.assembler.853773419" name="GCC Assembler" superClass="rede.mips.reworks.bootableProject.gnu.assembler.503321768"/>
+							<tool id="rede.mips.reworks.bootableProject.gnu.c.compiler.526046115" name="GCC C Compiler" superClass="rede.mips.reworks.bootableProject.gnu.c.compiler.953722353"/>
+							<tool id="rede.mips.reworks.bootableProject.gnu.cpp.compiler.671543312" name="GCC C++ Compiler" superClass="rede.mips.reworks.bootableProject.gnu.cpp.compiler.1081443793"/>
+							<tool id="rede.mips.reworks.bootableProject.gnu.cpp.linker.1615365123" name="GCC C++ Linker" superClass="rede.mips.reworks.bootableProject.gnu.cpp.linker.519021901"/>
+							<tool id="rede.mips.reworks.bootableProject.gnu.objcopy.1521037008" name="GCC objcopy Tool" superClass="rede.mips.reworks.bootableProject.gnu.objcopy.350453444"/>
+						</toolChain>
+					</folderInfo>
+					<fileInfo id="rede.mips.reworks.crossGCC.mips.1710614340.612272270" name="kbd_ch423.h" rcbsApplicability="disable" resourcePath="ch423/kbd_ch423.h" toolsToInvoke=""/>
 					<sourceEntries>
-						<entry excluding="ime/main.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="test|ch423/kbd_ch423.h|ch423/kbd_ch423.c|ime/main.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
