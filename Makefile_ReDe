@@ -40,29 +40,28 @@ INCLUDES = -I"${REDE_HOME}/user resource/pci_config/runtimelib/h" \
 	-I"${REDE_HOME}/user resource/graphics_config/runtimelib/h/qt/QtCore"	\
 	-I"${REDE_HOME}/user resource/graphics_config/runtimelib/h/qt/QtWidgets" 
 
-HEADERS += ch423/kbd_ch423.h \
-           ch423/key_codes.h \
-           ime/globals.h \
-           ime/key.h \
-           ime/keyboard.h \
-           ime/pager.h \
-           ime/ui.h \
-           data/utf8_string/src/utf8_iterator.hpp \
-           data/utf8_string/src/utf8_string.hpp
+HEADERS += libsimpleT9/ch423/kbd_ch423.h \
+           libsimpleT9/ch423/key_codes.h \
+           libsimpleT9/ime/globals.h \
+           libsimpleT9/ime/key.h \
+           libsimpleT9/ime/keyboard.h \
+           libsimpleT9/ime/pager.h \
+           libsimpleT9/ime/ui.h \
+           libsimpleT9/data/utf8_string/src/utf8_iterator.hpp \
+           libsimpleT9/data/utf8_string/src/utf8_string.hpp
 
-SOURCES += data/vocabulary.cpp \
-           ime/globals.cpp \
-           ime/key.cpp \
-           ime/keyboard.cpp \
-           ime/main.cpp \
-           ime/pager.cpp \
-           ime/ui.cpp \
-           data/utf8_string/src/utf8_iterator.cpp \
-           data/utf8_string/src/utf8_string.cpp \
+SOURCES += libsimpleT9/data/vocabulary.cpp \
+           libsimpleT9/ime/globals.cpp \
+           libsimpleT9/ime/key.cpp \
+           libsimpleT9/ime/keyboard.cpp \
+           libsimpleT9/ime/pager.cpp \
+           libsimpleT9/ime/ui.cpp \
+           libsimpleT9/data/utf8_string/src/utf8_iterator.cpp \
+           libsimpleT9/data/utf8_string/src/utf8_string.cpp \
 
 OBJECTS = $(patsubst %.cpp,%.o,$(SOURCES))
 
-VPATH = ch423 data ime data/utf8_string/src
+VPATH = libsimpleT9/ch423 libsimpleT9/data libsimpleT9/ime libsimpleT9/data/utf8_string/src
 
 %.o: %.cpp
 	$(CXX) $(CFLAGS) $(CPPFLAGS) $(INCLUDES) -c $^ -o $@
