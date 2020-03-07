@@ -9,16 +9,18 @@ INCLUDEPATH += .
 QT += gui widgets
 
 # Input
-HEADERS += data/fontlib_zh.h \
-           data/vocabulary.h \
+HEADERS += data/vocabulary.h \
+           data/utf8_string/src/utf8_string.hpp \
+           data/utf8_string/src/utf8_iterator.hpp \
            ime/key.h \
            ime/keyboard.h \
            ime/pager.h \
            ime/ui.h \
            ime/globals.h
 
-SOURCES += data/fontlib_zh.cpp \
-           data/vocabulary.cpp \
+SOURCES += data/vocabulary.cpp \
+           data/utf8_string/src/utf8_string.cpp \
+           data/utf8_string/src/utf8_iterator.cpp \
            ime/key.cpp \
            ime/keyboard.cpp \
            ime/main.cpp \

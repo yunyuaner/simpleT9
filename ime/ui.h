@@ -138,8 +138,7 @@ private:
 
 	SimplePager pager;
     
-    const QHash<QString, QString> *pinyinSingleWord_db;
-    Vocabulary *pinyinVocabulary_db;
+    SimpleVocabulary *pinyinVocabulary_db;
     SimpleKeyboard *keyboard;
 };
 
