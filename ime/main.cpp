@@ -20,9 +20,27 @@
 #include <QApplication>
 #include <QWidget>
 #include <QMainWindow>
+#include <QVector>
+#include <QString>
 #include <QDebug>
 #include "ui.h"
 #include "../data/vocabulary.h"
+
+#if 0
+static void search_then_show(SimpleVocabulary &_vol, std::string to_search)
+{
+    QVector<QString> *results;
+    int i = 0;
+    
+    results = _vol.search1(QString::fromStdString(to_search));
+    
+    if (results != nullptr) {
+        for (auto iter = results->begin(); iter != results->end(); iter++) {
+            std::cout << i++ << (*iter).toStdString() << std::endl;
+        }
+    }
+}
+#endif
 
 int main(int argc, char *argv[]) {
     QApplication app(argc, argv);
@@ -34,9 +52,13 @@ int main(int argc, char *argv[]) {
     mainWindow->setWindowTitle("Simple Text Input Demo");
     mainWindow->show();
 
-    return app.exec();
-    
-    //Vocabulary vocabulary;
-    //vocabulary.init();
-    //vocabulary.search("ba'ba");
+    return app.exec();   
+
+#if 0
+    SimpleVocabulary vocabulary;
+    vocabulary.init1();
+    //vocabulary.show();
+    search_then_show(vocabulary, "guo");
+    search_then_show(vocabulary, "ma'ma");
+#endif
 }

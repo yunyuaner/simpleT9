@@ -36,7 +36,6 @@
 #include "key.h"
 #include "keyboard.h"
 #include "pager.h"
-#include "../data/fontlib_zh.h"
 #include "../data/vocabulary.h"
 #include "globals.h"
 
@@ -369,8 +368,7 @@ ImeWindow::ImeWindow(QWidget *parent) :
     currSelected(0), 
     currPage(0), 
     pageCount(0),
-    pinyinSingleWord_db(hycx::wuhan::simpleT9::init_db()),
-    pinyinVocabulary_db(new Vocabulary)
+    pinyinVocabulary_db(new SimpleVocabulary)
 {
     QVBoxLayout *vbox = new QVBoxLayout();
     QHBoxLayout *hbox_upper = new QHBoxLayout();
@@ -407,14 +405,14 @@ ImeWindow::ImeWindow(QWidget *parent) :
     keyboard->initializeKeys();
 
     /* May use lazy-initialization */
-    pinyinVocabulary_db->init();
+    //pinyinVocabulary_db->init();
+    pinyinVocabulary_db->init1();
 }
 
 ImeWindow::~ImeWindow()
 {
 	delete keyboard;
 	delete pinyinVocabulary_db;
-	delete pinyinSingleWord_db;
 }
 
 void ImeWindow::ChnCharLabelHighlight(QLabel *label, bool highlight = true)
@@ -483,29 +481,13 @@ void ImeWindow::showCandidateOnBoard(QString &inputText)
     /* @inputText is the key word to search in the Chinese Character database */
     QVector<QString> searchContent;
 
-    if (nsKeyboard->getKeyRole() == NonStandardKeyboard::KR_Chinese) {
-        QString pinyinCandidate;
-        
-        if (inputText.indexOf("'") != -1) {        
-            auto _p = pinyinVocabulary_db->search(inputText);
-            if (_p == nullptr) {
-				qDebug() << inputText << " not found";
-                return;
-            } else {
-                searchContent = *_p;
-            }
-        } else {        
-            QHash<QString, QString>::const_iterator iter = pinyinSingleWord_db->find(inputText);
-            if (iter == pinyinSingleWord_db->cend()) {
-				qDebug() << inputText << " not found";
-                return;
-            } else {
-                pinyinCandidate = static_cast<QString>(*iter);
-            
-                for (auto iter = pinyinCandidate.begin(); iter != pinyinCandidate.end(); iter++) {
-                    searchContent.append(*iter);
-                }
-            }
+    if (nsKeyboard->getKeyRole() == NonStandardKeyboard::KR_Chinese) {             
+        auto _p = pinyinVocabulary_db->search1(inputText);
+        if (_p == nullptr) {
+			qDebug() << inputText << " not found";
+            return;
+        } else {
+            searchContent = *_p;
         }
     } else if (nsKeyboard->getKeyRole() == NonStandardKeyboard::KR_Punctuation) {
         for (int i = 0; i < simpleT9glb::key_punctuation_candidate.size(); i++) {

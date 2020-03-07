@@ -27,21 +27,56 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
+#include <set>
 
-class Vocabulary
+class SimpleVocabulary
 {
 public:
-    Vocabulary();
-    ~Vocabulary();
+    SimpleVocabulary();
+    ~SimpleVocabulary();
 
     void init();
+    void init1();
+    void show();
     QVector<QString> *search(QString pinyin);
-
-    static const std::string dsFile;
+    QVector<QString> *search1(QString pinyin);
+    QVector<QString> *ambiguous_search(QString pinyin);
 
 private:
-    std::unordered_map< std::string, std::vector<std::string> * > a_expected_map;
+    const static std::string pinyin_vocalbulary_map;
+    
+    const static std::string pinyin_hanzi_map_small;
+    const static std::string pinyin_hanzi_map_large;
+    
+    const static std::string THUOCL_animal;
+    const static std::string THUOCL_caijing;
+    const static std::string THUOCL_car;
+    const static std::string THUOCL_chengyu;
+    const static std::string THUOCL_diming;
+    const static std::string THUOCL_food;
+    const static std::string THUOCL_it;
+    const static std::string THUOCL_law;
+    const static std::string THUOCL_lishimingren;
+    const static std::string THUOCL_medical;
+    const static std::string THUOCL_poem;
+
+    const static std::string dictionary_file;
+
+private:
+    bool split_by_hiphen(std::string &line, std::vector<std::string> &tokens);
+    void map_insert(std::string key, std::string value_item);
+    void map_insert(std::string key, std::set<std::string> *value_items);
+    void parse_chinese_volcabulary(const std::string filename);
+    void parse_chinese_word(const std::string filename);
+    void map_deserialize();
+
+private:
+    std::unordered_map< std::string, std::set<std::string> * > a_expected_map;  /* Will be removed later */
+    std::set<std::string> a_compound_pinyin_set;
     QVector<QString> *a_return_candidate_list;
+    std::map< std::string, std::set<std::pair<std::string, int>> * > a_word_frequency_map;
+
+    static char a_buf[8192];
 };
 
 #endif /* _VOCABULARY_ */
