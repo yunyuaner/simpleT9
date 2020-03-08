@@ -27,8 +27,8 @@
 #include <algorithm>
 #include <QDebug>
 #include "vocabulary.h"
-#include "utf8_string/src/utf8_string.hpp"
-#include "utf8_string/src/utf8_iterator.hpp"
+#include "utf8_string.hpp"
+#include "utf8_iterator.hpp"
 
 bool is_big_endian(void)
 {
@@ -79,12 +79,12 @@ const std::string SimpleVocabulary::THUOCL_lishimingren = "./data/ds/THUOCL/THUO
 const std::string SimpleVocabulary::THUOCL_medical = "./data/ds/THUOCL/THUOCL_medical.txt";
 const std::string SimpleVocabulary::THUOCL_poem = "./data/ds/THUOCL/THUOCL_medical.txt";
 
-const std::string SimpleVocabulary::dictionary_file = "./libsimpleT9/data/ds/dictionary.bin";
+const std::string SimpleVocabulary::dictionary_file = "./data/dictionary.bin";
 char SimpleVocabulary::a_buf[8192];
 
 SimpleVocabulary::SimpleVocabulary() : a_return_candidate_list(new QVector<QString>)
 {
-
+    std::cout << "SimpleVocabulary construct" << std::endl;
 }
 
 SimpleVocabulary::~SimpleVocabulary()

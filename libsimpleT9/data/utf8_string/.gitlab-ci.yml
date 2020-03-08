@@ -1,6 +1,0 @@
-
-buildgcc:
-
-   script:
-     - make CC="g++"
-     - ./utf8test

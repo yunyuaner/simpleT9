@@ -3,30 +3,30 @@
 ######################################################################
 
 TEMPLATE = lib
-INCLUDEPATH += .
+INCLUDEPATH += . ./inc
 TARGET = simpleT9
 
 QT += gui widgets
 
 # Input
-HEADERS += ch423/kbd_ch423.h \
-           ch423/key_codes.h \
-           ime/globals.h \
-           ime/key.h \
-           ime/keyboard.h \
-           ime/pager.h \
-           ime/ui.h \
-           data/utf8_string/src/utf8_iterator.hpp \
-           data/utf8_string/src/utf8_string.hpp
+HEADERS += inc/kbd_ch423.h \
+           inc/key_codes.h \
+           inc/globals.h \
+           inc/key.h \
+           inc/keyboard.h \
+           inc/pager.h \
+           inc/ui.h \
+           inc/utf8_iterator.hpp \
+           inc/utf8_string.hpp
 
-SOURCES += data/vocabulary.cpp \
-           ime/globals.cpp \
-           ime/key.cpp \
-           ime/keyboard.cpp \
-           ime/pager.cpp \
-           ime/ui.cpp \
-           data/utf8_string/src/utf8_iterator.cpp \
-           data/utf8_string/src/utf8_string.cpp \
+SOURCES += src/vocabulary.cpp \
+           src/globals.cpp \
+           src/key.cpp \
+           src/keyboard.cpp \
+           src/pager.cpp \
+           src/ui.cpp \
+           src/utf8_iterator.cpp \
+           src/utf8_string.cpp \
 
 CONFIG += C++11 debug warn_on staticlib
 

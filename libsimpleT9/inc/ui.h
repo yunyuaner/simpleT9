@@ -39,7 +39,7 @@
 #include "pager.h"
 #include "key.h"
 #include "keyboard.h"
-#include "../data/vocabulary.h"
+#include "vocabulary.h"
 
 class ImeWindow;
 

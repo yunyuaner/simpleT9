@@ -36,7 +36,7 @@
 #include "key.h"
 #include "keyboard.h"
 #include "pager.h"
-#include "../data/vocabulary.h"
+#include "vocabulary.h"
 #include "globals.h"
 
 MainWindow *MainWindow::_instance = nullptr;
@@ -50,6 +50,8 @@ MainWindow::MainWindow(QWidget *parent) :
     imeWindow(new ImeWindow(this)), 
     imeWindowShown(false)
 {
+    std::cout << "MainWindow construct" << std::endl;
+
     QVBoxLayout *vbox = new QVBoxLayout(this);
     textInput = new QLineEdit;
     textInput->setPlaceholderText("Input text here");
@@ -372,6 +374,8 @@ ImeWindow::ImeWindow(QWidget *parent) :
     pageCount(0),
     pinyinVocabulary_db(new SimpleVocabulary)
 {
+    std::cout << "ImeWindow construct" << std::endl;
+
     QVBoxLayout *vbox = new QVBoxLayout();
     QHBoxLayout *hbox_upper = new QHBoxLayout();
     QHBoxLayout *hbox_lower = new QHBoxLayout();
@@ -408,6 +412,8 @@ ImeWindow::ImeWindow(QWidget *parent) :
 
     /* May use lazy-initialization */
     //pinyinVocabulary_db->init();
+    
+    std::cout << "pinyinVocabulary_db->init1()" << std::endl;
     pinyinVocabulary_db->init1();
 }
 
