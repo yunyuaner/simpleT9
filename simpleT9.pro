@@ -1,4 +1,4 @@
 TEMPLATE = subdirs
 CONFIG += ordered
-SUBDIRS = app libsimpleT9
+SUBDIRS = libsimpleT9 app
 app.depends = libsimpleT9
