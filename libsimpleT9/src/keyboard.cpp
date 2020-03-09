@@ -90,6 +90,11 @@ QString NonStandardKeyboard::getDisplayBuffer()
     return this->makePinyinDisplayContent();
 }
 
+ImeWindow *NonStandardKeyboard::getParentWindow()
+{
+    return dynamic_cast<ImeWindow *>(this->SimpleKeyboard::parentWindow);
+}
+
 QString NonStandardKeyboard::handleKeyPress(int keyCode)
 {
 	QHash<QString, SimpleKey *> _keys = this->keys[keyRole];    
@@ -97,7 +102,7 @@ QString NonStandardKeyboard::handleKeyPress(int keyCode)
 	QString keyName;
 	SimpleKey *_k = nullptr;
 
-	qDebug() << "handleKeyPress, keyCode - " << QString::number(keyCode, 16);
+	qDebug() << "NonStandardKeyboard::handleKeyPress, keyCode - " << QString::number(keyCode, 16);
 
     /* First check if the pressed key is valid under current input method */
 	if (simpleT9glb::a_key_code_to_key_name_map.find(keyCode) != simpleT9glb::a_key_code_to_key_name_map.end()) {
@@ -112,7 +117,6 @@ QString NonStandardKeyboard::handleKeyPress(int keyCode)
 		qDebug() << "key - " << QString::number(keyCode, 16) << " not supported";
 		keyCodeNotSupported = true;
 	}	
-
 	/* Remove the dirty one later!! */
 	if (keyCode == Qt::Key_F10) {
         
@@ -129,7 +133,7 @@ QString NonStandardKeyboard::handleKeyPress(int keyCode)
 		    this->displayBufferStackClear();
         }
 	}
-
+    
     if (!keyCodeNotSupported) {
         _k->press();
     }
@@ -358,3 +362,4 @@ void NonStandardKeyboard::initializeKeys()
 	initializeDigitKeys();
     initializePunctuationKeys();
 }
+

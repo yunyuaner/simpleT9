@@ -38,6 +38,7 @@
 #include <iostream>
 #include "key.h"
 #include "globals.h"
+#include "ui.h"
 
 class SimpleKeyboard
 {
@@ -65,12 +66,16 @@ public:
     
     virtual QString handleKeyPress(int keyCode) { (void)keyCode; return displayBuffer; };
     virtual void initializeKeys() {};
+    virtual void setParentWindow(QDialog *parent) { parentWindow = parent; };
+    QDialog *getParentWindow() { return parentWindow; };
     virtual QString getDisplayBuffer() { return displayBuffer; };
 
 protected:
-    //QString pinyinDisplayContent;
     QString displayBuffer;
+    QDialog *parentWindow;
 };
+
+class ImeWindow;
 
 class NonStandardKeyboard : public SimpleKeyboard
 {
@@ -91,16 +96,12 @@ public:
     NonStandardKeyboard();
     virtual ~NonStandardKeyboard();
 
-    virtual void initializeKeys();
+    virtual void initializeKeys();    
+    
     virtual QString handleKeyPress(int keyCode);
 
     int getKeyRole() const { return keyRole; };
     int setKeyRole(int _kr) { keyRole = _kr; return keyRole; };
-
-    //void appendChar(QString ch) { pinyinDisplay.push(ch); };
-    //QString dropChar() { return pinyinDisplay.pop(); };
-    //void clearChars() { pinyinDisplay.clear(); };
-    //bool isPinyinDisplayEmpty() { return pinyinDisplay.isEmpty(); };
     
     /* Do not manipulate @displayBufferStack directly, 
      * use the following auxillary helper functions instead */
@@ -113,6 +114,7 @@ public:
     virtual QString getDisplayBuffer();
 
 	QHash<QString, SimpleKey *> &getKeysPerKeyRole() { return keys[keyRole]; };
+    ImeWindow *getParentWindow();
 
 private:
     QString makePinyinDisplayContent();

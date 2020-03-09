@@ -25,6 +25,7 @@
 #include <unordered_map>
 #include <vector>
 #include <algorithm>
+#include <set>
 #include <QDebug>
 #include "vocabulary.h"
 #include "utf8_string.hpp"
@@ -84,7 +85,6 @@ char SimpleVocabulary::a_buf[8192];
 
 SimpleVocabulary::SimpleVocabulary() : a_return_candidate_list(new QVector<QString>)
 {
-    std::cout << "SimpleVocabulary construct" << std::endl;
 }
 
 SimpleVocabulary::~SimpleVocabulary()

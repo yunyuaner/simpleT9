@@ -16,6 +16,7 @@ HEADERS += inc/kbd_ch423.h \
            inc/keyboard.h \
            inc/pager.h \
            inc/ui.h \
+           inc/simpleT9.h \
            inc/utf8_iterator.hpp \
            inc/utf8_string.hpp
 
@@ -25,6 +26,7 @@ SOURCES += src/vocabulary.cpp \
            src/keyboard.cpp \
            src/pager.cpp \
            src/ui.cpp \
+           src/simpleT9.cpp \
            src/utf8_iterator.cpp \
            src/utf8_string.cpp \
 

@@ -25,108 +25,151 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QEvent>
+#include <QHash>
+#include <QString>
+#include <QVector>
 #include <QMouseEvent>
 #include <QMessageBox>
 #include <QDialog>
 #include <QDebug>
-
 #include <iostream>
 #include <algorithm>
-#include "ui.h"
+#include <string>
+#include <unordered_map>
+#include <vector>
+#include <set>
 #include "key.h"
 #include "keyboard.h"
 #include "pager.h"
+#include "utf8_string.hpp"
 #include "vocabulary.h"
+#include "ui.h"
 #include "globals.h"
 
-MainWindow *MainWindow::_instance = nullptr;
-
-int ImeWindow::chnCharCntPerPage = simpleT9glb::max_chinese_char_candidate_per_page;
+int ImeWindow::candidateCountPerPage = simpleT9glb::max_chinese_char_candidate_per_page;
 const char *ImeWindow::imeTitleStr = simpleT9glb::ime_title_string;
 
-MainWindow::MainWindow(QWidget *parent) : 
-    QWidget(parent), 
-    textInput(new QLineEdit), 
-    imeWindow(new ImeWindow(this)), 
-    imeWindowShown(false)
+ImeWindow::ImeWindow(QWidget *parent) : 
+    QDialog(parent),
+    pinyinVocabulary_db(new SimpleVocabulary)
 {
-    std::cout << "MainWindow construct" << std::endl;
-
-    QVBoxLayout *vbox = new QVBoxLayout(this);
-    textInput = new QLineEdit;
-    textInput->setPlaceholderText("Input text here");
-    vbox->addWidget(textInput);
-    setLayout(vbox);
-    textInput->installEventFilter(this);
-    imeWindow->installEventFilter(this);     
-}
-
-MainWindow *MainWindow::getInstance() 
-{
-    std::cout << "MainWindow::getInstance()" << std::endl;
-
-    if (_instance == nullptr) {
-        _instance = new MainWindow;
-    }
-
-    return _instance;
-};
-
-void MainWindow::handleCandidateSelForward()
-{
-    QLabel *lastLabel = imeWindow->chnChars.at(imeWindow->currSelected_get());
-    QLabel *currLabel = imeWindow->chnChars.at(imeWindow->currSelected_inc());
-
-    if (imeWindow->pager.getCharCountOfCurrPage() > 1) {
-        imeWindow->ChnCharLabelHighlight(currLabel, true);
-        imeWindow->ChnCharLabelHighlight(lastLabel, false);
-    }
-}
-
-void MainWindow::handleCandidateSelBackward()
-{
-    QLabel *lastLabel = imeWindow->chnChars.at(imeWindow->currSelected_get());
-    QLabel *currLabel = imeWindow->chnChars.at(imeWindow->currSelected_dec());
-
-    if (imeWindow->pager.getCharCountOfCurrPage() > 1) {
-        imeWindow->ChnCharLabelHighlight(currLabel, true);
-        imeWindow->ChnCharLabelHighlight(lastLabel, false);
-    }
-}
-
-void MainWindow::handleCandidateSelPageUp()
-{
-    imeWindow->pager.pageBackward();
-    imeWindow->refreshCandidate();
-
-    /* When page up/down, reset highlight character pos to the first one */
-    if (imeWindow->currSelected_get() > 0) {
-        QLabel *lastLabel = imeWindow->chnChars.at(imeWindow->currSelected_get());
-        QLabel *currLabel = imeWindow->chnChars.at(imeWindow->currSelected_set(0));
-
-        imeWindow->ChnCharLabelHighlight(currLabel, true);
-        imeWindow->ChnCharLabelHighlight(lastLabel, false);
-    }
-}
-
-void MainWindow::handleCandidateSelPageDown()
-{
-    imeWindow->pager.pageForward();
-    imeWindow->refreshCandidate();
+    QVBoxLayout *vbox = new QVBoxLayout();
+    QHBoxLayout *hbox_upper = new QHBoxLayout();
+    QHBoxLayout *hbox_lower = new QHBoxLayout();
     
-    /* When page up/down, reset highlight character pos to the first one */
-    if (imeWindow->currSelected_get() > 0) {
-        QLabel *lastLabel = imeWindow->chnChars.at(imeWindow->currSelected_get());
-        QLabel *currLabel = imeWindow->chnChars.at(imeWindow->currSelected_set(0));
+    imeTitle = new QLabel(QString::fromUtf8(reinterpret_cast<const char *>(ImeWindow::imeTitleStr)));
+    imePinyin = new QLabel("");
+    hbox_upper->addWidget(imeTitle);
+    hbox_upper->addWidget(imePinyin);
+  
+    imeModeSwitch = new QLabel(simpleT9glb::key_role_type_chinese_text);
+    imePagerHint = new QLabel("[0/0]");
+    hbox_lower->addWidget(imeModeSwitch);
+    hbox_lower->addWidget(imePagerHint);
 
-        imeWindow->ChnCharLabelHighlight(currLabel, true);
-        imeWindow->ChnCharLabelHighlight(lastLabel, false);
+    for (int i = 0; i < ImeWindow::candidateCountPerPage; i++) {
+        QLabel *label = new QLabel("");
+        label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+        hbox_lower->addWidget(label);
+        candidateLabels.append(label);
+    }
+    
+    vbox->addLayout(hbox_upper);
+    vbox->addLayout(hbox_lower);
+    setLayout(vbox);
+    
+    pager = new SimplePager(candidateLabels, imePagerHint);
+    pager->setCandidateCntPerPage(ImeWindow::candidateCountPerPage);
+    
+    installEventFilter(this);
+
+    /* Initialize keyboard */
+    keyboard = new NonStandardKeyboard;
+    keyboard->initializeKeys();
+    keyboard->setParentWindow(this);
+    
+    pinyinVocabulary_db->init1();
+}
+
+ImeWindow::~ImeWindow()
+{
+	delete keyboard;
+	delete pinyinVocabulary_db;
+    delete pager;
+}
+
+void ImeWindow::showCandidateOnBoard(QString &inputText)
+{
+    NonStandardKeyboard *nsKeyboard = dynamic_cast<NonStandardKeyboard *>(this->keyboard);
+
+    if (nsKeyboard->getKeyRole() != NonStandardKeyboard::KR_Chinese && 
+        nsKeyboard->getKeyRole() != NonStandardKeyboard::KR_Punctuation) {
+        qDebug() << "Under keyRole - " 
+                  << nsKeyboard->getKeyRole() 
+                  << ", no need to show candidate on board";                
+        return;
+    }
+    
+    /* @inputText is the key word to search in the Chinese Character database */
+    QVector<QString> searchContent;
+
+    if (nsKeyboard->getKeyRole() == NonStandardKeyboard::KR_Chinese) {             
+        auto _p = pinyinVocabulary_db->search1(inputText);
+        if (_p == nullptr) {
+			qDebug() << inputText << " not found";
+            pager->reset();
+            pager->clearHighlight();
+            pager->clearText();
+            return;
+        } else {
+            searchContent = *_p;
+        }
+    } else if (nsKeyboard->getKeyRole() == NonStandardKeyboard::KR_Punctuation) {
+        for (int i = 0; i < simpleT9glb::key_punctuation_candidate.size(); i++) {
+            searchContent.append(simpleT9glb::key_punctuation_candidate.at(i));
+        }
+    }
+
+    pager->setContent(searchContent);
+    pager->refreshCandidate();
+
+    /* Init decoration */
+    pager->clearHighlight();
+    pager->labelHighlightAt(0);
+
+    /* If not match any items in the database, just keep the old ones in the pager */
+
+    /* If length of @inputText equals to 0, clear the pager */
+    if (inputText.length() == 0) {
+        pager->reset();
+        pager->clearHighlight();
+        pager->clearText();
     }
 }
 
-void MainWindow::handleKeyRoleSwith()
+void ImeWindow::handleCandidateSelForward()
+{    
+    pager->forward();
+}
+
+void ImeWindow::handleCandidateSelBackward()
 {
-    NonStandardKeyboard *nsKeyboard = dynamic_cast<NonStandardKeyboard *>(imeWindow->keyboard);
+    pager->backward();
+}
+
+void ImeWindow::handleCandidateSelPageUp()
+{
+    pager->pageUp();
+}
+
+void ImeWindow::handleCandidateSelPageDown()
+{
+    pager->pageDown();
+}
+
+void ImeWindow::handleKeyRoleSwith()
+{
+    NonStandardKeyboard *nsKeyboard = dynamic_cast<NonStandardKeyboard *>(keyboard);
     QString keyRoleText;
 
     switch (nsKeyboard->getKeyRole()) {
@@ -148,10 +191,10 @@ void MainWindow::handleKeyRoleSwith()
 			break;
     }
 
-    imeWindow->imeModeSwitch->setText(keyRoleText);
-    imeWindow->pager.reset();
+    imeModeSwitch->setText(keyRoleText);
+    pager->reset();
 	nsKeyboard->displayBufferStackClear();
-	imeWindow->imePinyin->setText(0);
+	imePinyin->setText(0);
 
     /* Prepare pager content if any */
     if (nsKeyboard->getKeyRole() == NonStandardKeyboard::KR_Punctuation) {
@@ -159,92 +202,83 @@ void MainWindow::handleKeyRoleSwith()
         for (int i = 0; i < simpleT9glb::key_punctuation_candidate.size(); i++) {
             _info.append(simpleT9glb::key_punctuation_candidate.at(i));
         }
-        imeWindow->pager.setContent(_info);
-        imeWindow->currSelected_set(0);		
+        pager->setContent(_info);
+        pager->currSelected_set(0);		
     }
 
-    imeWindow->refreshCandidate();
+    pager->refreshCandidate();
     if (nsKeyboard->getKeyRole() == NonStandardKeyboard::KR_Chinese) {
-        imeWindow->imePinyin->setText(QString(""));
+        imePinyin->setText(QString(""));
     }
    
     /* Clear highlight */
-    QLabel *label = imeWindow->chnChars.at(imeWindow->currSelected_get());
-    imeWindow->ChnCharLabelHighlight(label, false);
+    qDebug() << "pager->currSelected_get() " << pager->currSelected_get();
+    pager->clearCurrHightlight();
 
     /* If input method is 'Punctuation' mode, make the first candidate as selected */
     if (nsKeyboard->getKeyRole() == NonStandardKeyboard::KR_Punctuation) {
-        QLabel *label = imeWindow->chnChars.at(0);
-        imeWindow->ChnCharLabelHighlight(label, true);
+        pager->labelHighlightAt(0);
     }
 }
 
-void MainWindow::handleMultiPurposeKey(int key)
+void ImeWindow::handleMultiPurposeKey(int key)
 {
 	qDebug() << "handleMultiPurposeKey";
-    QString inputText = imeWindow->keyboard->handleKeyPress(key); 
-    imeWindow->imePinyin->setText(inputText);
+    QString inputText = keyboard->handleKeyPress(key); 
+    imePinyin->setText(inputText);
     
-    std::cout << "inputText - " << inputText.toStdString() << std::endl;
-    imeWindow->showCandidateOnBoard(inputText);
+    qDebug() << "inputText - " << inputText;
+    showCandidateOnBoard(inputText);
 }
 
-void MainWindow::handleFunctionKey(int key)
+void ImeWindow::handleFunctionKey(int key)
 {
 	qDebug() << "handleFunctionKey";
-    QString inputText = imeWindow->keyboard->handleKeyPress(key); 
-    imeWindow->imePinyin->setText(inputText);
+    QString inputText = keyboard->handleKeyPress(key); 
+    imePinyin->setText(inputText);
 
     if (key == Qt::Key_Backspace) {
         /* We only need to show candidates in case of Chinese or Punctuations selection */
-        imeWindow->showCandidateOnBoard(inputText);
+        showCandidateOnBoard(inputText);
     }
 
     /* Press 'Space Key' mean confirm the current candidates 
      * selection and make it shown on parent input box */
-    const NonStandardKeyboard *nsKeyboard = dynamic_cast<const NonStandardKeyboard *>(imeWindow->getKeyboard());
+    const NonStandardKeyboard *nsKeyboard = dynamic_cast<const NonStandardKeyboard *>(getKeyboard());
     int _keyRole = nsKeyboard->getKeyRole();
+
+    QLineEdit *parentTextInput = dynamic_cast<QLineEdit *>(getParentWidget());
     
     if (key == Qt::Key_Space) {
         if (_keyRole == NonStandardKeyboard::KR_Punctuation) {
-            QLabel *label = imeWindow->chnChars.at(imeWindow->currSelected_get());
-            this->textInput->setText(this->textInput->text() + label->text());            
+            parentTextInput->setText(parentTextInput->text() + pager->getCurrSelectedLabelText());            
         } else if (_keyRole == NonStandardKeyboard::KR_Chinese) {
-            QLabel *label = imeWindow->chnChars.at(imeWindow->currSelected_get());
-            this->textInput->setText(this->textInput->text() + label->text());
-
+            parentTextInput->setText(parentTextInput->text() + pager->getCurrSelectedLabelText());
             /* Reset keyboard buffer, pager, page hint and candidates */
             (const_cast<NonStandardKeyboard *>(nsKeyboard))->displayBufferStackClear();
-            imeWindow->pager.reset();
-            imeWindow->imePagerHint->setText("[0/0]");
-            imeWindow->imePinyin->setText("");
-            for (auto &label : imeWindow->chnChars) {
-                label->setText("");
-                imeWindow->ChnCharLabelHighlight(label, false);
-            }
-
-            imeWindow->currPage = 0;
-            imeWindow->pageCount = 0;
-            imeWindow->currSelected = 0;
+            pager->reset();
+            pager->clearHighlight();
+            imePagerHint->setText("[0/0]");
+            imePinyin->setText("");
         } else {
             /* English, English_Capital, Punctuation */
-            this->textInput->setText(this->textInput->text() + imeWindow->getPinyinContent());
+            parentTextInput->setText(parentTextInput->text() + getPinyinContent());
             (const_cast<NonStandardKeyboard *>(nsKeyboard))->displayBufferStackClear();
-            imeWindow->imePinyin->setText("");
+            imePinyin->setText("");
         }
     }
 }
 
-void MainWindow::handleDigitKey(int key)
+void ImeWindow::handleDigitKey(int key)
 {
 	qDebug() << "handleDigitKey";
-    QString inputText = imeWindow->keyboard->handleKeyPress(key); 
-    imeWindow->imePinyin->setText(inputText);
+    QString inputText = keyboard->handleKeyPress(key); 
+    imePinyin->setText(inputText);
 }
 
-void MainWindow::handleKeyPressEvent(int key)
+void ImeWindow::handleKeyPressEvent(int key)
 {
-	NonStandardKeyboard *nsKeyboard = dynamic_cast<NonStandardKeyboard *>(imeWindow->keyboard);
+	NonStandardKeyboard *nsKeyboard = dynamic_cast<NonStandardKeyboard *>(keyboard);
 
 	switch (nsKeyboard->getKeyRole()) {
 	case NonStandardKeyboard::KR_Chinese:
@@ -281,7 +315,7 @@ void MainWindow::handleKeyPressEvent(int key)
 	}    
 }
 
-void MainWindow::eventFilterForIMEWindow(QObject *obj, QEvent *event)
+bool ImeWindow::eventFilter(QObject *obj, QEvent *event)
 {
     (void)obj;
     
@@ -296,234 +330,7 @@ void MainWindow::eventFilterForIMEWindow(QObject *obj, QEvent *event)
     } else if (event->type() == QEvent::HoverMove) {
 		qDebug() << "Mouse Hover Move";
     }
-}
 
-void MainWindow::eventFilterForMainWindow(QObject *obj, QEvent *event)
-{
-    if (event->type() == QEvent::KeyPress && static_cast<QLineEdit *>(obj) == textInput) {
-        QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
-        if (keyEvent->key() == Qt::Key_Backspace) {
-            /* TODO: Actually we should derive a subclass from QTextInput
-             * and override its 'event' method, so as to make it only 
-             * reponse to 'Backspace' key and ignore others. Since it's 
-             * simple demo here, I'm not planning to do it here.*/
-        }
-    } else if (event->type() == QEvent::MouseButtonPress) {
-        QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
-        if (mouseEvent->button() & Qt::LeftButton) {
-            
-            if (static_cast<QLineEdit *>(obj) == textInput && !imeWindowShown) {            
-                QPoint globalCursorPos = QCursor::pos();
-                
-                imeWindow->resize(250, 150);
-                imeWindow->setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
-                //imeWindow->setFixedSize(imeWindow->size());
-                imeWindow->setGeometry(globalCursorPos.x() + 10, globalCursorPos.y() + 10, 400, 20);
-                imeWindow->show();      
-                imeWindowShown = true;          
-            }
-        }        
-    }
-}
-
-bool MainWindow::eventFilter(QObject *obj, QEvent *event)
-{
-    if (this->textInput->hasFocus()) {
-        eventFilterForMainWindow(obj, event);
-    } else {
-        eventFilterForIMEWindow(obj, event);
-    }
-
-    // Standard event processing
     return QObject::eventFilter(obj, event);
 }
 
-int ImeWindow::refreshCandidate()
-{
-    //QString &pageContent = pager.getPageContent();
-    QVector<QString> pageContent = pager.getPageContent();
-
-    int page = ((pageContent.size() == 0) ? 0 : pager.getCurrPageNatual());
-    int pageCount = pager.getPageCount();
-
-    imePagerHint->setText(QString("[%1/%2]").arg(page).arg(pageCount));
-   
-    for (auto iter = chnChars.begin(); iter != chnChars.end(); iter++) {
-        (*iter)->setText("");
-    }
-
-    //for (int i = 0; i < pageContent.length(); i++) {
-    //    chnChars.at(i)->setText(pageContent.at(i));
-    //}
-
-    int i = 0;
-    for (auto iter = pageContent.begin(); iter != pageContent.end(); iter++) {
-        //std::cout << (*iter).toStdString() << std::endl;
-		qDebug() << *iter;
-        chnChars.at(i)->setText(*iter);
-        i++;
-    }
-    
-    return pageContent.size();
-}
-
-ImeWindow::ImeWindow(QWidget *parent) : 
-    QDialog(parent), 
-    currSelected(0), 
-    currPage(0), 
-    pageCount(0),
-    pinyinVocabulary_db(new SimpleVocabulary)
-{
-    std::cout << "ImeWindow construct" << std::endl;
-
-    QVBoxLayout *vbox = new QVBoxLayout();
-    QHBoxLayout *hbox_upper = new QHBoxLayout();
-    QHBoxLayout *hbox_lower = new QHBoxLayout();
-    
-    imeTitle = new QLabel(QString::fromUtf8(reinterpret_cast<const char *>(ImeWindow::imeTitleStr)));
-    imePinyin = new QLabel("");
-    //imePinyinVar = new QLabel("");
-    hbox_upper->addWidget(imeTitle);
-    hbox_upper->addWidget(imePinyin);
-    //hbox_upper->addWidget(imePinyinVar);
-  
-    imeModeSwitch = new QLabel(simpleT9glb::key_role_type_chinese_text);
-    imePagerHint = new QLabel("[0/0]");
-    hbox_lower->addWidget(imeModeSwitch);
-    hbox_lower->addWidget(imePagerHint);
-
-    pager.setChnCharCntPerPage(ImeWindow::chnCharCntPerPage);
-
-    for (int i = 0; i < ImeWindow::chnCharCntPerPage; i++) {
-        QLabel *label = new QLabel("");
-        label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
-        ChnCharLabelHighlight(label, false);
-        hbox_lower->addWidget(label);
-        chnChars.append(label);
-    }
-
-    vbox->addLayout(hbox_upper);
-    vbox->addLayout(hbox_lower);
-    setLayout(vbox);
-
-    /* Initialize keyboard */
-    keyboard = new NonStandardKeyboard;
-    keyboard->initializeKeys();
-
-    /* May use lazy-initialization */
-    //pinyinVocabulary_db->init();
-    
-    std::cout << "pinyinVocabulary_db->init1()" << std::endl;
-    pinyinVocabulary_db->init1();
-}
-
-ImeWindow::~ImeWindow()
-{
-	delete keyboard;
-	delete pinyinVocabulary_db;
-}
-
-void ImeWindow::ChnCharLabelHighlight(QLabel *label, bool highlight = true)
-{
-    QPalette pal = palette();
-    
-    if (highlight) {
-        pal.setColor(QPalette::Background, Qt::black);
-        pal.setColor(QPalette::WindowText, Qt::white);
-    } else {
-        pal.setColor(QPalette::Background, Qt::white);
-        pal.setColor(QPalette::WindowText, Qt::black);
-    }
-    
-    label->setAutoFillBackground(true);
-    label->setPalette(pal);
-}
-
-int ImeWindow::currSelected_inc() 
-{ 
-    if (pager.getCharCountOfCurrPage() > 0) {
-        currSelected++;
-        currSelected = currSelected > (pager.getCharCountOfCurrPage() - 1) ? 0 : currSelected;
-    }
-    
-    return currSelected;
-}
-
-int ImeWindow::currSelected_dec() 
-{ 
-    if (pager.getCharCountOfCurrPage() > 0) {
-        currSelected--; 
-        currSelected = currSelected < 0 ? (pager.getCharCountOfCurrPage() - 1) : currSelected;
-    }
-    
-    return currSelected;
-}
-
-int ImeWindow::currSelected_set(int pos) 
-{ 
-    if (pos >= 0 && pos <= std::min(pager.getCharCountOfCurrPage(), 
-            (simpleT9glb::max_chinese_char_candidate_per_page - 1))) { 
-        currSelected = pos; 
-    } 
-
-    return currSelected;
-}
-
-int ImeWindow::currSelected_get()
-{
-    return currSelected;
-}
-
-void ImeWindow::showCandidateOnBoard(QString &inputText)
-{
-    NonStandardKeyboard *nsKeyboard = dynamic_cast<NonStandardKeyboard *>(this->keyboard);
-
-    if (nsKeyboard->getKeyRole() != NonStandardKeyboard::KR_Chinese && 
-        nsKeyboard->getKeyRole() != NonStandardKeyboard::KR_Punctuation) {
-        qDebug() << "Under keyRole - " 
-                  << nsKeyboard->getKeyRole() 
-                  << ", no need to show candidate on board";                
-        return;
-    }
-    
-    /* @inputText is the key word to search in the Chinese Character database */
-    QVector<QString> searchContent;
-
-    if (nsKeyboard->getKeyRole() == NonStandardKeyboard::KR_Chinese) {             
-        auto _p = pinyinVocabulary_db->search1(inputText);
-        if (_p == nullptr) {
-			qDebug() << inputText << " not found";
-            return;
-        } else {
-            searchContent = *_p;
-        }
-    } else if (nsKeyboard->getKeyRole() == NonStandardKeyboard::KR_Punctuation) {
-        for (int i = 0; i < simpleT9glb::key_punctuation_candidate.size(); i++) {
-            searchContent.append(simpleT9glb::key_punctuation_candidate.at(i));
-        }
-    }
-
-    pager.setContent(searchContent);
-    refreshCandidate();
-
-    /* Init decoration */
-    QLabel *a_label;
-    for (auto iter = chnChars.begin(); iter != chnChars.end(); iter++) {
-        a_label = *iter;
-        ChnCharLabelHighlight(a_label, false);
-    }
-    
-    a_label = chnChars[0];
-    ChnCharLabelHighlight(a_label, true);
-
-    /* If not match any items in the database, just keep the old ones in the pager */
-
-    /* If length of @inputText equals to 0, clear the pager */
-    if (inputText.length() == 0) {
-        pager.reset();
-        for (auto iter = chnChars.begin(); iter != chnChars.end(); iter++) {
-            (*iter)->setText(0);
-            ChnCharLabelHighlight(*iter, false);
-        }
-    }
-}

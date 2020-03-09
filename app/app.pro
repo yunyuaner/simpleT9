@@ -9,7 +9,9 @@ INCLUDEPATH += . ../libsimpleT9/inc
 QT += gui widgets
 
 # Input
-SOURCES += main.cpp
+SOURCES += main.cpp MainWindow.cpp
+
+HEADERS += MainWindow.h
 
 CONFIG += C++11 debug warn_on 
 

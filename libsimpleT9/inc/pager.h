@@ -40,37 +40,55 @@
 class SimplePager
 {
 public:
-    SimplePager();
+    SimplePager(QVector<QLabel *> &candidateLabels, QLabel *pagerHintLabel);
     virtual ~SimplePager();
     
-    int pageForward();
-    int pageBackward();
-    
-    QVector<QString> &getPageContent();
-    //QString &getPageContent(int page);
-    
+    int setCandidateCntPerPage(int count);
     void setContent(QVector<QString> info);
-    int setChnCharCntPerPage(int count);
+    
+    int refreshCandidate();
+    
+    void reset();
+    
+    void forward();
+    void backward();
+    void pageUp();
+    void pageDown();
+    
+    int currSelected_inc(); 
+    int currSelected_dec();
+    int currSelected_set(int pos);
+    int currSelected_get();
+    
+    void clearHighlight();
+    void clearCurrHightlight();
+    void labelHighlightAt(int pos, bool hightlight = true);
+    
+    void clearText();
+    QString labelTextAt(int pos);
+    QString getCurrSelectedLabelText();
 
+private:
+    QVector<QString> &getPageContent();
     int getCurrPage() const { return currPage; };
     int getCurrPageNatual() const { return (currPage + 1); }
     int getPageCount() const { return pageCount; };
-    int getCharCountOfCurrPage() const;
-
-    void reset();
-
-private:
+    int getCandidateCountOfCurrPage() const;
+    void candidateLabelHighlight(QLabel *label, bool highlight = true);
+    QLabel *labelAt(int pos);
     void preparePageContent();
     
 private:
     QVector<QString> content;
     QVector<QString> contentOfCurrentPage;
-    //QString *pageContent;
+    QVector<QLabel *> &candidateLabels;
+    QLabel *pagerHintLabel;
     
     int currPage;
     int pageCount;
-    int chnCharCntPerPage;
+    int candidateCntPerPage;
     int lastPageCharCount;
+    int currSelected;   /* Currently selected candidate */
 };
 
 #endif /* _PAGER_H */

@@ -19,7 +19,6 @@
  */
 
 #include <QDebug>
-
 #include "key.h"
 #include "keyboard.h"
 #include "ui.h"
@@ -210,11 +209,7 @@ void FunctionKey::reset()
 
 void FunctionKey::pressKeyBackspace(FunctionKey *_this)
 {
-    NonStandardKeyboard *nsKeyboard = dynamic_cast<NonStandardKeyboard *>(_this->keyboard);
-    
-    //if (!nsKeyboard->pinyinDisplay.isEmpty()) {
-    //    nsKeyboard->pinyinDisplay.pop();
-    //}
+    NonStandardKeyboard *nsKeyboard = dynamic_cast<NonStandardKeyboard *>(_this->keyboard);   
 
     if (!nsKeyboard->isDisplayBufferStackEmpty()) {
         nsKeyboard->displayBufferStackPop();
@@ -224,33 +219,37 @@ void FunctionKey::pressKeyBackspace(FunctionKey *_this)
 void FunctionKey::pressKeyLeft(FunctionKey *_this)
 {
     (void)_this;
+    NonStandardKeyboard *nsKeyboard = dynamic_cast<NonStandardKeyboard *>(_this->keyboard);
 
-    MainWindow *mainWindow = MainWindow::getInstance();
-    mainWindow->handleCandidateSelBackward(); 
+    ImeWindow *imeWindow = nsKeyboard->getParentWindow();
+    imeWindow->handleCandidateSelBackward(); 
 }
 
 void FunctionKey::pressKeyRight(FunctionKey *_this)
 {
     (void)_this;
+    NonStandardKeyboard *nsKeyboard = dynamic_cast<NonStandardKeyboard *>(_this->keyboard);
 
-    MainWindow *mainWindow = MainWindow::getInstance();
-    mainWindow->handleCandidateSelForward(); 
+    ImeWindow *imeWindow = nsKeyboard->getParentWindow();
+    imeWindow->handleCandidateSelForward(); 
 }
 
 void FunctionKey::pressKeyUp(FunctionKey *_this)
 {
     (void)_this;
+    NonStandardKeyboard *nsKeyboard = dynamic_cast<NonStandardKeyboard *>(_this->keyboard);
 
-    MainWindow *mainWindow = MainWindow::getInstance();
-    mainWindow->handleCandidateSelPageUp(); 
+    ImeWindow *imeWindow = nsKeyboard->getParentWindow();
+    imeWindow->handleCandidateSelPageUp(); 
 }
 
 void FunctionKey::pressKeyDown(FunctionKey *_this)
 {
     (void)_this;
+    NonStandardKeyboard *nsKeyboard = dynamic_cast<NonStandardKeyboard *>(_this->keyboard);
 
-    MainWindow *mainWindow = MainWindow::getInstance();
-    mainWindow->handleCandidateSelPageDown(); 
+    ImeWindow *imeWindow = nsKeyboard->getParentWindow();
+    imeWindow->handleCandidateSelPageDown(); 
 }
 
 void FunctionKey::pressKeyIMEInputModeSwitch(FunctionKey *_this)
@@ -279,8 +278,8 @@ void FunctionKey::pressKeyIMEInputModeSwitch(FunctionKey *_this)
 		nsKeyboard->capsLockPressed = false;
 	}
 
-    MainWindow *mainWindow = MainWindow::getInstance();
-    mainWindow->handleKeyRoleSwith();
+    ImeWindow *imeWindow = nsKeyboard->getParentWindow();
+    imeWindow->handleKeyRoleSwith();
 }
 
 void FunctionKey::pressKeyPinyinSegmentation(FunctionKey *_this)
