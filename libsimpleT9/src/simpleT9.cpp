@@ -61,7 +61,7 @@ bool SimpleT9::forwardEvent(QEvent *event)
     return QApplication::sendEvent(imeWindow, event);
 }
 
-void SimpleT9::attachParentWidget(QWidget *_parentWidget)
+void SimpleT9::attachParentWidget(SimpleWidget *_parentWidget)
 {
     imeWindow->setParentWidget(_parentWidget);
 }
