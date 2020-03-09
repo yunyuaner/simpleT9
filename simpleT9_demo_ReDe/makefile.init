@@ -1,0 +1,11 @@
+PART := partial.o 
+
+PARTPGM := partial.obj
+
+SYMTBL := symtbl.o
+
+REDEPATH := __path.o
+
+OTHER_CLEAN := $(PART) $(PARTPGM) $(SYMTBL) $(REDEPATH)
+
+LD_OBJS = $(PART) $(SYMTBL)

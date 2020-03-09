@@ -1,0 +1,30 @@
+COMMA = ,
+GPP_R_DYNAMIC_FLAGS := $(addprefix -Wl$(COMMA), $(CONFIG_LINK_DYNAMIC_FLAGS))
+
+$(SYMTBL): $(PARTPGM)
+	@echo_rede '构建目标: $@'
+	@symtblgen.exe -C $(PARTPGM) symtbl.c
+	$(CPUARCH_PREFIX)-elf-gcc -c $(BUILD_PREFIX) $(CONFIG_COMPLILE_FLAGS) $(CPPFLAGS) -o $@ symtbl.c
+	@$(RM) symtbl.c
+	@echo_rede '完成构建: $@'
+	@echo_rede ' '
+
+$(PARTPGM): $(PART)
+	@echo_rede '构建目标: $@'
+	$(CPUARCH_PREFIX)-elf-g++ $(BUILD_PREFIX) $(LDFLAGS) $(USER_LDFLAGS) $(CONFIG_LD_FLAGS) -o $@ $(PART) -Wl,--start-group $(USER_OBJS) $(LIBS_USR) $(LIBS_CFG) -Wl,--end-group
+	@echo_rede '完成构建: $@'
+	@echo_rede ' '
+
+$(PART): $(OBJS) $(REDEPATH)
+	@echo_rede '构建目标: $@'
+	$(CPUARCH_PREFIX)-elf-g++ -r -nostdlib $(GPP_R_DYNAMIC_FLAGS) $(BUILD_PREFIX) $(LDFLAGS) $(USER_LDFLAGS) -Wl,--start-group $(REDEPATH) $(OBJS) $(LIBS_USR) $(LIBS_CFG) -Wl,--end-group -o $@
+	@echo_rede '完成构建: $@'
+	@echo_rede ' '
+
+$(REDEPATH): $(OBJS)
+	@echo_rede '构建目标: $@'
+	@echo_rede "char * __rede_path=\"$(OUTPUT_PATH)\";" > __path.c
+	$(CPUARCH_PREFIX)-elf-gcc -c $(CONFIG_COMPLILE_FLAGS) -o $@ __path.c
+	@$(RM) -f __path.c
+	@echo_rede '完成构建: $@'
+	@echo_rede ' '

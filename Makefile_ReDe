@@ -3,15 +3,16 @@ AR = mipsel-elf-ar
 
 TARGET = libsimpleT9.a
 
-all: $(TARGET)
+all: make_directories $(TARGET)
 
 CPPFLAGS = -D_GLIBCXX_USE_C99 -D__mips_abi_n32__ -D__multi_core__ \
 		-DCPU=MIPS64 -G0 -D__loongson2_64__ -DREWORKS_RTP -D__KERNEL__	\
 		-D_LOONGSON3A_780E_ -DUSE_REWORKS_IPNET_69 -D__WITH_GJ_PROTECT__ \
 		-D__reworks__ -D__reworks__ -D_GS464_
 
-CFLAGS = -O0 -g -Wall -c -fmessage-length=0 -std=c++0x -mabi=n32 -march=mips64r2 -mel -fPIC -mabicalls
- 
+CFLAGS = -O0 -g -Wall -c -fmessage-length=0 -std=c++0x -mabi=n32 -march=mips64r2 -mel 
+#CFLAGS += -fPIC -mabicalls
+
 INCLUDES = -I"${REDE_HOME}/user resource/pci_config/runtimelib/h" \
 	-I"${REDE_HOME}/user resource/loongson3a_7a1000_bsp_config/runtimelib/LOONGSON3A_SMP/h"	\
 	-I"${REDE_HOME}/user resource/io_config/runtimelib/h"	\
@@ -38,38 +39,51 @@ INCLUDES = -I"${REDE_HOME}/user resource/pci_config/runtimelib/h" \
 	-I"${REDE_HOME}/user resource/loongson3a_7a1000_csp_config/runtimelib/h/mmu/h" 	\
 	-I"${REDE_HOME}/user resource/graphics_config/runtimelib/h/qt" 	\
 	-I"${REDE_HOME}/user resource/graphics_config/runtimelib/h/qt/QtCore"	\
-	-I"${REDE_HOME}/user resource/graphics_config/runtimelib/h/qt/QtWidgets" 
+	-I"${REDE_HOME}/user resource/graphics_config/runtimelib/h/qt/QtWidgets" \
+	-IlibsimpleT9/inc
 
 HEADERS += libsimpleT9/ch423/kbd_ch423.h \
            libsimpleT9/ch423/key_codes.h \
-           libsimpleT9/ime/globals.h \
-           libsimpleT9/ime/key.h \
-           libsimpleT9/ime/keyboard.h \
-           libsimpleT9/ime/pager.h \
-           libsimpleT9/ime/ui.h \
-           libsimpleT9/data/utf8_string/src/utf8_iterator.hpp \
-           libsimpleT9/data/utf8_string/src/utf8_string.hpp
+           libsimpleT9/inc/simipleT9.h	\
+           libsimpleT9/inc/globals.h \
+           libsimpleT9/inc/key.h \
+           libsimpleT9/inc/keyboard.h \
+           libsimpleT9/inc/pager.h \
+           libsimpleT9/inc/ui.h \
+           libsimpleT9/inc/vocabulary.h \
+           libsimpleT9/inc/utf8_string/src/utf8_iterator.hpp \
+           libsimpleT9/inc/utf8_string/src/utf8_string.hpp
 
-SOURCES += libsimpleT9/data/vocabulary.cpp \
-           libsimpleT9/ime/globals.cpp \
-           libsimpleT9/ime/key.cpp \
-           libsimpleT9/ime/keyboard.cpp \
-           libsimpleT9/ime/pager.cpp \
-           libsimpleT9/ime/ui.cpp \
-           libsimpleT9/data/utf8_string/src/utf8_iterator.cpp \
-           libsimpleT9/data/utf8_string/src/utf8_string.cpp \
+SOURCES += libsimpleT9/src/simpleT9.cpp \
+           libsimpleT9/src/vocabulary.cpp \
+           libsimpleT9/src/globals.cpp \
+           libsimpleT9/src/key.cpp \
+           libsimpleT9/src/keyboard.cpp \
+           libsimpleT9/src/pager.cpp \
+           libsimpleT9/src/ui.cpp \
+           libsimpleT9/src/moc_ui.cpp \
+           libsimpleT9/src/utf8_iterator.cpp \
+           libsimpleT9/src/utf8_string.cpp \
+
+OUTPUT_PATH = ./output/
 
 OBJECTS = $(patsubst %.cpp,%.o,$(SOURCES))
+OBJECTS_WITH_PATH := $(patsubst %,$(OUTPUT_PATH)%,$(OBJECTS))
 
-VPATH = libsimpleT9/ch423 libsimpleT9/data libsimpleT9/ime libsimpleT9/data/utf8_string/src
+VPATH = libsimpleT9/src libsimpleT9/ch423
 
-%.o: %.cpp
+$(OUTPUT_PATH)%.o: %.cpp
 	$(CXX) $(CFLAGS) $(CPPFLAGS) $(INCLUDES) -c $^ -o $@
-	
-$(TARGET): $(OBJECTS)
+	         
+$(TARGET): $(OBJECTS_WITH_PATH)
 	$(AR) rcs $@ $^
 
-.PHONY: all clean
+.PHONY: make_directories clean
 
+make_directories:
+	[ -d output/libsimpleT9/src ] || mkdir -p output/libsimpleT9/src
+	[ -d output/libsimpleT9/ch423 ] || mkdir -p output/libsimpleT9/ch423
+	
 clean:
-	@rm -rf $(OBJECTS) $(TARGET)
+	@rm -rf $(OBJECTS_WITH_PATH) $(TARGET)
+	@rm -rf output
