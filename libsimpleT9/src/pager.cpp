@@ -129,6 +129,7 @@ void SimplePager::reset()
 
     clearHighlight();
     clearText();
+    pagerHintLabel->setText(QString("[0/0]"));
 }
 
 int SimplePager::currSelected_inc() 
