@@ -4,12 +4,14 @@
 
 TEMPLATE = app
 TARGET = ../simpleT9
-INCLUDEPATH += . ../libsimpleT9/ch423 ../libsimpleT9/data ../libsimpleT9/data/utf8_string/src ../libsimpleT9/ime
+INCLUDEPATH += . ../libsimpleT9/inc
 
 QT += gui widgets
 
 # Input
-SOURCES += main.cpp
+SOURCES += main.cpp MainWindow.cpp
+
+HEADERS += MainWindow.h
 
 CONFIG += C++11 debug warn_on 
 

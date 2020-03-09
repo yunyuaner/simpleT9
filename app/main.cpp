@@ -23,8 +23,8 @@
 #include <QVector>
 #include <QString>
 #include <QDebug>
-#include "ui.h"
-#include "vocabulary.h"
+#include "simpleT9.h"
+#include "MainWindow.h"
 
 #if 0
 static void search_then_show(SimpleVocabulary &_vol, std::string to_search)
@@ -43,20 +43,11 @@ static void search_then_show(SimpleVocabulary &_vol, std::string to_search)
 #endif
 
 int main(int argc, char *argv[]) {
-    std::cout << "Start of main" << std::endl;
-
     QApplication app(argc, argv);
-
-    std::cout << "app" << std::endl;
+    
     MainWindow *mainWindow = MainWindow::getInstance();
-    std::cout << "mainWindow" << std::endl;
-
-	qDebug() << "SimpleT9 starts";
-
     mainWindow->resize(400, 300);
-    mainWindow->setWindowTitle("Simple Text Input Demo");
     mainWindow->show();
-
     return app.exec();   
 
 #if 0

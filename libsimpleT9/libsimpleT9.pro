@@ -3,12 +3,17 @@
 ######################################################################
 
 TEMPLATE = lib
+<<<<<<< HEAD
 INCLUDEPATH += .
+=======
+INCLUDEPATH += . ./inc
+>>>>>>> devel
 TARGET = simpleT9
 
 QT += gui widgets
 
 # Input
+<<<<<<< HEAD
 HEADERS += ch423/kbd_ch423.h \
            ch423/key_codes.h \
            ime/globals.h \
@@ -27,6 +32,28 @@ SOURCES += data/vocabulary.cpp \
            ime/ui.cpp \
            data/utf8_string/src/utf8_iterator.cpp \
            data/utf8_string/src/utf8_string.cpp \
+=======
+HEADERS += inc/kbd_ch423.h \
+           inc/key_codes.h \
+           inc/globals.h \
+           inc/key.h \
+           inc/keyboard.h \
+           inc/pager.h \
+           inc/ui.h \
+           inc/simpleT9.h \
+           inc/utf8_iterator.hpp \
+           inc/utf8_string.hpp
+
+SOURCES += src/vocabulary.cpp \
+           src/globals.cpp \
+           src/key.cpp \
+           src/keyboard.cpp \
+           src/pager.cpp \
+           src/ui.cpp \
+           src/simpleT9.cpp \
+           src/utf8_iterator.cpp \
+           src/utf8_string.cpp \
+>>>>>>> devel
 
 CONFIG += C++11 debug warn_on staticlib
 
