@@ -9,8 +9,8 @@ TARGET = simpleT9
 QT += gui widgets
 
 # Input
-HEADERS += inc/kbd_ch423.h \
-           inc/key_codes.h \
+HEADERS += ch423/kbd_ch423.h \
+           ch423/key_codes.h \
            inc/globals.h \
            inc/key.h \
            inc/keyboard.h \

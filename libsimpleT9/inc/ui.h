@@ -40,6 +40,8 @@
 #include "vocabulary.h"
 #include "keyboard.h"
 
+class SimpleWidget;
+
 class ImeWindow : public QDialog
 {
     Q_OBJECT
@@ -52,8 +54,8 @@ public:
     const SimpleKeyboard *getKeyboard() { return keyboard; };
     QString getPinyinContent() const { return imePinyin->text(); };
 
-    void setParentWidget(QWidget *_parentWidget) { parentWidget = _parentWidget; };
-    QWidget * getParentWidget() { return parentWidget; };
+    void setParentWidget(SimpleWidget *_parentWidget) { parentWidget = _parentWidget; };
+    SimpleWidget * getParentWidget() { return parentWidget; };
 
     void handleCandidateSelForward();
     void handleCandidateSelBackward();
@@ -104,7 +106,7 @@ private:
     SimpleVocabulary *pinyinVocabulary_db;
     SimpleKeyboard *keyboard;
 
-    QWidget *parentWidget;
+    SimpleWidget *parentWidget;
 };
 
 #endif /* _SIMPLE_H */

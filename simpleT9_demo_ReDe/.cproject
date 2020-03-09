@@ -26,16 +26,16 @@
 							</tool>
 							<tool id="rede.mips.reworks.bootableProject.gnu.c.compiler.1752612990" name="GCC C Compiler" superClass="rede.mips.reworks.bootableProject.gnu.c.compiler">
 								<option id="rede.gnu.c.compiler.option.include.paths.102809004" name="包含目录 (-I)" superClass="rede.gnu.c.compiler.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/simpleT9/libsimpleT9/inc}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/simpleT9/libsimpleT9/ch423}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libsimpleT9/libsimpleT9/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libsimpleT9/libsimpleT9/ch423}&quot;"/>
 								</option>
 								<option id="rede.gnu.c.compiler.option.misc.other.1236757481" name="其他标志" superClass="rede.gnu.c.compiler.option.misc.other" value="-c -fmessage-length=0 -std=c++0x" valueType="string"/>
 								<inputType id="rede.mips.reworks.gnu.c.compiler.inputType.164909870" superClass="rede.mips.reworks.gnu.c.compiler.inputType"/>
 							</tool>
 							<tool id="rede.mips.reworks.bootableProject.gnu.cpp.compiler.1184014961" name="GCC C++ Compiler" superClass="rede.mips.reworks.bootableProject.gnu.cpp.compiler">
 								<option id="rede.gnu.cpp.compiler.option.include.paths.386361125" name="包含目录 (-I)" superClass="rede.gnu.cpp.compiler.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/simpleT9/libsimpleT9/inc}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/simpleT9/libsimpleT9/ch423}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libsimpleT9/libsimpleT9/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libsimpleT9/libsimpleT9/ch423}&quot;"/>
 								</option>
 								<option id="rede.gnu.cpp.compiler.option.other.other.2092945721" name="其他标志" superClass="rede.gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0 -std=c++0x" valueType="string"/>
 								<inputType id="rede.mips.reworks.gnu.cpp.compiler.inputType.599721460" superClass="rede.mips.reworks.gnu.cpp.compiler.inputType"/>
@@ -45,7 +45,7 @@
 									<listOptionValue builtIn="false" value="simpleT9"/>
 								</option>
 								<option id="rede.gnu.cpp.link.option.paths.1715650309" name="库查找路径 (-L)" superClass="rede.gnu.cpp.link.option.paths" valueType="stringList">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/simpleT9}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libsimpleT9}&quot;"/>
 								</option>
 								<inputType id="rede.mips.reworks.bootableProject.gnu.cpp.inputType.1169285773" superClass="rede.mips.reworks.bootableProject.gnu.cpp.inputType">
 									<additionalInput kind="additionaldependency" paths="$(OBJS)"/>

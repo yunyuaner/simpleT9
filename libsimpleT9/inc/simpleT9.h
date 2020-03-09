@@ -49,6 +49,8 @@
 #include "ui.h"
 #include "globals.h"
 
+class SimpleWidget;
+
 class SimpleT9 final
 {
 public:
@@ -63,10 +65,20 @@ public:
     std::string getOutput();
 
     bool forwardEvent(QEvent *event);
-    void attachParentWidget(QWidget *_parentWidget);
+    void attachParentWidget(SimpleWidget *_parentWidget);
 
 private:
     ImeWindow *imeWindow;    
+};
+
+class SimpleWidget
+{
+public:
+	SimpleWidget() {};
+	virtual ~SimpleWidget() {};
+
+	virtual void __setText(const QString &_text) { (void)_text; };
+	virtual QString __text() const { return QString(""); };
 };
 
 #endif /* _SIMPLET9_H */

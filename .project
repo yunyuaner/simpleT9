@@ -59,7 +59,7 @@
 				</dictionary>
 				<dictionary>
 					<key>org.eclipse.cdt.make.core.environment</key>
-					<value>PATH=${REDE_HOME}\\tools\\bin;${REDE_HOME}\\tools\\build\\gnumips\\bin;${REDE_HOME}\\tools\\build\\gnumipsn32\\bin;|REDE_HOME=C:/ReDeV5.1.2-LS3A-RTP-a190726|</value>
+					<value>CYGWIN=nodosfilewarning|PATH=${REDE_HOME}\\tools\\bin;${REDE_HOME}\\tools\\build\\gnumips\\bin;${REDE_HOME}\\tools\\build\\gnumipsn32\\bin;|REDE_HOME=C:/ReDeV5.1.2-LS3A-RTP-a190726|</value>
 				</dictionary>
 				<dictionary>
 					<key>org.eclipse.cdt.make.core.stopOnError</key>

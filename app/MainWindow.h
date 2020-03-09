@@ -16,6 +16,31 @@
 #include "ui.h"
 #include "simpleT9.h"
 
+/**
+ * Requirements on your 'Edit Box Control'
+ * 
+ * (1) Define your own 'Edit Box Control' Widget class, say 'MyLineEdit', which should 
+ *     multi-inheritate class SimpleWidget and a QT's built-in 'Edit Box Control',
+ *     e.g., QLineEdit
+ * 
+ * (2) Implement __setText and __text virtual functions, which should be served as 
+ *     setter and getter of your 'Edit Box Control'
+ *
+ * (3) Use class MyLineEdit at the place where an 'Edit Box Control' is required
+ *
+ **/
+
+class MyLineEdit : public SimpleWidget, public QLineEdit 
+{
+public:
+	MyLineEdit(const QString &contents, QWidget *parent = nullptr);
+	MyLineEdit(QWidget *parent = nullptr);
+	virtual ~MyLineEdit();
+
+	virtual void __setText(const QString &_text);
+	virtual QString __text() const;
+};
+
 class MainWindow : public QWidget
 {
     Q_OBJECT
@@ -28,7 +53,7 @@ private:
     explicit MainWindow(QWidget *parent = nullptr);
     
 private:
-    QLineEdit *textInput;
+    MyLineEdit *textInput;
     SimpleT9 simpleT9;
 
 private slots:
@@ -40,4 +65,3 @@ private:
 protected:
     bool eventFilter(QObject *obj, QEvent *event);
 };
-

@@ -7,15 +7,16 @@
 #include "simpleT9.h"
 #include "MainWindow.h"
 
+class MyLineEidt;
+
 MainWindow *MainWindow::_instance = nullptr;
 
 MainWindow::MainWindow(QWidget *parent) : 
     QWidget(parent), 
-    textInput(new QLineEdit), 
+    textInput(new MyLineEdit), 
     imeWindowShown(false)
 {
     QVBoxLayout *vbox = new QVBoxLayout(this);
-    textInput = new QLineEdit;
     textInput->setPlaceholderText("Input text here");
     vbox->addWidget(textInput);
     setLayout(vbox);
@@ -62,6 +63,28 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
     }
     
     return QObject::eventFilter(obj, event);
+}
+
+MyLineEdit::MyLineEdit(const QString &contents, QWidget *parent) : QLineEdit(contents, parent)
+{
+}
+
+MyLineEdit::MyLineEdit(QWidget *parent) : QLineEdit(parent)
+{
+}
+
+MyLineEdit::~MyLineEdit()
+{
+}
+
+void MyLineEdit::__setText(const QString &_text)
+{
+	this->QLineEdit::setText(_text);
+}
+
+QString MyLineEdit::__text() const
+{
+	return this->QLineEdit::text();
 }
 
 int testsimpleT9_main(int argc, char *argv[])

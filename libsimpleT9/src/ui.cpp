@@ -45,6 +45,7 @@
 #include "vocabulary.h"
 #include "ui.h"
 #include "globals.h"
+#include "simpleT9.h"
 
 int ImeWindow::candidateCountPerPage = simpleT9glb::max_chinese_char_candidate_per_page;
 const char *ImeWindow::imeTitleStr = simpleT9glb::ime_title_string;
@@ -247,13 +248,13 @@ void ImeWindow::handleFunctionKey(int key)
     const NonStandardKeyboard *nsKeyboard = dynamic_cast<const NonStandardKeyboard *>(getKeyboard());
     int _keyRole = nsKeyboard->getKeyRole();
 
-    QLineEdit *parentTextInput = dynamic_cast<QLineEdit *>(getParentWidget());
+    SimpleWidget *parentTextInput = getParentWidget();
     
     if (key == Qt::Key_Space) {
         if (_keyRole == NonStandardKeyboard::KR_Punctuation) {
-            parentTextInput->setText(parentTextInput->text() + pager->getCurrSelectedLabelText());            
+            parentTextInput->__setText(parentTextInput->__text() + pager->getCurrSelectedLabelText());            
         } else if (_keyRole == NonStandardKeyboard::KR_Chinese) {
-            parentTextInput->setText(parentTextInput->text() + pager->getCurrSelectedLabelText());
+            parentTextInput->__setText(parentTextInput->__text() + pager->getCurrSelectedLabelText());
             /* Reset keyboard buffer, pager, page hint and candidates */
             (const_cast<NonStandardKeyboard *>(nsKeyboard))->displayBufferStackClear();
             pager->reset();
@@ -262,7 +263,7 @@ void ImeWindow::handleFunctionKey(int key)
             imePinyin->setText("");
         } else {
             /* English, English_Capital, Punctuation */
-            parentTextInput->setText(parentTextInput->text() + getPinyinContent());
+            parentTextInput->__setText(parentTextInput->__text() + getPinyinContent());
             (const_cast<NonStandardKeyboard *>(nsKeyboard))->displayBufferStackClear();
             imePinyin->setText("");
         }
