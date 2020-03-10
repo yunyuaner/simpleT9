@@ -27,6 +27,7 @@
 #include <algorithm>
 #include <set>
 #include <QDebug>
+#include <cstring>
 #include "vocabulary.h"
 #include "utf8_string.hpp"
 #include "utf8_iterator.hpp"
@@ -283,9 +284,19 @@ void SimpleVocabulary::init1()
 {
     map_deserialize();
 
-    for (auto iter = a_expected_map.begin(); iter != a_expected_map.end(); iter++) {
+    for (auto iter = a_word_frequency_map.begin(); iter != a_word_frequency_map.end(); iter++) {
         a_compound_pinyin_set.insert(iter->first);
     }
+
+    /*
+     * http://www.cplusplus.com/reference/set/set/
+     *
+     * Internally, the elements in a set are always sorted following 
+     * a specific strict weak ordering criterion indicated by its 
+     * internal comparison object (of type Compare).
+     */
+
+    /* @a_compound_pinyin_set is now in alphabatical order */
 
     //for (std::string str : a_compound_pinyin_set) {
     //    std::cout << str << std::endl;
@@ -325,8 +336,9 @@ QVector<QString> *SimpleVocabulary::search1(QString pinyin)
     a_return_candidate_list->clear();
     
     if (iter == a_word_frequency_map.end()) {
-        qDebug() << QString::fromStdString(_pinyin) << " not found";
-        return nullptr;
+        qDebug() << QString::fromStdString(_pinyin) << " not found, use ambiguous search";
+        //return nullptr;
+        return ambiguous_search(pinyin);
     } else {
         std::set<std::pair<std::string, int>> *_v = a_word_frequency_map[_pinyin];
 
@@ -340,13 +352,43 @@ QVector<QString> *SimpleVocabulary::search1(QString pinyin)
 
 QVector<QString> *SimpleVocabulary::ambiguous_search(QString pinyin)
 {
-#if 0
-    if (pinyin.indexOf(QString::fromStdString("'")) == -1) {
-        return search(pinyin);
-    } else {
-    }
-#endif
+    std::string _pinyin = pinyin.toStdString();
 
-    return search(pinyin);
+    for (std::string str : a_compound_pinyin_set) {
+        int result = str.compare(0, _pinyin.size(), _pinyin);
+#if 0
+        qDebug() << "ambiguous search on - " 
+                 << QString::fromStdString(str) 
+                 << ", _pinyin - " 
+                 << QString::fromStdString(_pinyin) 
+                 << ", size - " 
+                 << _pinyin.size()
+                 << ", str - "
+                 << QString::fromStdString(str)
+                 << ", size - "
+                 << str.size()
+                 << ", result - "
+                 << result;
+#endif   
+        if (result == 0) {
+            std::set<std::pair<std::string, int>> *_v = a_word_frequency_map[str];
+
+            for (auto _s : *_v) {
+                a_return_candidate_list->append(QString::fromStdString(_s.first));
+            }
+
+            if (a_return_candidate_list->size() < 30) {
+                continue;
+            } else {
+                return a_return_candidate_list;
+            }
+        }
+    }
+
+    if (a_return_candidate_list->size() == 0) {
+        qDebug() << QString::fromStdString(_pinyin) << " not found in ambiguous search";
+    }
+
+    return a_return_candidate_list->size() > 0 ? a_return_candidate_list : nullptr;
 }
 

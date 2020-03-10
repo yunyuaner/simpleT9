@@ -73,6 +73,11 @@ private:
     std::unordered_map< std::string, std::set<std::string> * > a_expected_map;  /* Will be removed later */
     std::set<std::string> a_compound_pinyin_set;
     QVector<QString> *a_return_candidate_list;
+    
+    /**
+     * @a_word_frequency_map structure:
+     * { pinyin -> [ <words, frequency>, <words, frequency>, ... , <words, frequency> ] }
+     */
     std::map< std::string, std::set<std::pair<std::string, int>> * > a_word_frequency_map;
 
     static char a_buf[8192];

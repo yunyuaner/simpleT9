@@ -49,12 +49,12 @@ int main(int argc, char *argv[]) {
     mainWindow->resize(400, 300);
     mainWindow->show();
     return app.exec();   
-
-#if 0
+#if 0    
     SimpleVocabulary vocabulary;
     vocabulary.init1();
     //vocabulary.show();
-    search_then_show(vocabulary, "guo");
-    search_then_show(vocabulary, "ma'ma");
+    //search_then_show(vocabulary, "guo");
+    //search_then_show(vocabulary, "ma'ma");
+    search_then_show(vocabulary, "zhou'jie'lu");
 #endif
 }
