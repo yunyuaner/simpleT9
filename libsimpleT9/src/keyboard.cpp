@@ -25,15 +25,6 @@
 namespace hycx {
 namespace libsimpleT9 {
 
-#define insert_multi_purpose_key(_key, _val, _keyRole) ({ a_key = keyFactory.getKey(SimpleKeyboard::KT_MultiPurpose, _key, _val, this);	\
-	keys[_keyRole].insert(a_key->getKeyName(), a_key);	})
-
-#define insert_function_key(_key, _val, _keyRole) ({ a_key = keyFactory.getKey(SimpleKeyboard::KT_Function, _key, _val, this);		\
-	keys[_keyRole].insert(a_key->getKeyName(), a_key); })
-
-#define insert_digit_key(_key, _val, _keyRole) ({ a_key = keyFactory.getKey(SimpleKeyboard::KT_Digit, _key, _val, this);		\
-	keys[_keyRole].insert(a_key->getKeyName(), a_key); })
-
 #define multi_purpose_kv(_x) simpleT9glb::key_##_x##_value[a_key_role]
 #define multi_purpose_kn(_x) simpleT9glb::key_##_x##_name
 #define function_kv(_x) simpleT9glb::key_##_x##_value
