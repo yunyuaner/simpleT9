@@ -108,6 +108,14 @@ private:
     int keyCode;    /* Standard Key Code */
 };
 
+class SimpleKeyFactory
+{
+public:
+    SimpleKeyFactory() {};
+    virtual ~SimpleKeyFactory() {};
+    SimpleKey *getKey(int keyType, QString _name, QString _value, SimpleKeyboard *_keyboard);
+};
+
 }} /* namespace */
 
 #endif /* _KEY_H */

@@ -72,10 +72,12 @@ public:
     virtual void setParentWindow(QDialog *parent) { parentWindow = parent; };
     QDialog *getParentWindow() { return parentWindow; };
     virtual QString getDisplayBuffer() { return displayBuffer; };
+    SimpleKeyFactory &getKeyFactory() { return keyFactory; };
 
 protected:
     QString displayBuffer;
     QDialog *parentWindow;
+    SimpleKeyFactory keyFactory;
 };
 
 class ImeWindow;
@@ -129,6 +131,11 @@ private:
 	virtual void initializeEnglishCapitalKeys();
 	virtual void initializeDigitKeys();
     virtual void initializePunctuationKeys();
+
+    void insertKey(int _keyRole, int _keyType, QString _key, QString _val);
+    void insertMultiPurposeKey(int _keyRole, QString _key, QString _val);
+    void insertFunctionKey(int _keyRole, QString _key, QString _val);
+    void insertDigitKey(int _keyRole, QString _key, QString _val);
 
 private:
     QHash<QString, SimpleKey *> *keys;	/* Different input mode mode has it's own keys */

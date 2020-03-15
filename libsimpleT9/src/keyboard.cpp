@@ -25,13 +25,13 @@
 namespace hycx {
 namespace libsimpleT9 {
 
-#define insert_multi_purpose_key(_key, _val, _keyRole) ({ a_key = new MultiPurposeKey(_key, _val, this);	\
+#define insert_multi_purpose_key(_key, _val, _keyRole) ({ a_key = keyFactory.getKey(SimpleKeyboard::KT_MultiPurpose, _key, _val, this);	\
 	keys[_keyRole].insert(a_key->getKeyName(), a_key);	})
 
-#define insert_function_key(_key, _val, _keyRole) ({ a_key = new FunctionKey(_key, _val, this);		\
+#define insert_function_key(_key, _val, _keyRole) ({ a_key = keyFactory.getKey(SimpleKeyboard::KT_Function, _key, _val, this);		\
 	keys[_keyRole].insert(a_key->getKeyName(), a_key); })
 
-#define insert_digit_key(_key, _val, _keyRole) ({ a_key = new DigitKey(_key, _val, this);		\
+#define insert_digit_key(_key, _val, _keyRole) ({ a_key = keyFactory.getKey(SimpleKeyboard::KT_Digit, _key, _val, this);		\
 	keys[_keyRole].insert(a_key->getKeyName(), a_key); })
 
 #define multi_purpose_kv(_x) simpleT9glb::key_##_x##_value[a_key_role]
@@ -86,6 +86,27 @@ QString NonStandardKeyboard::makePinyinDisplayContent()
 	qDebug() << "pinyinDisplayContent - " << displayBuffer;
 
     return displayBuffer;
+}
+
+void NonStandardKeyboard::insertKey(int _keyRole, int _keyType, QString _key, QString _val)
+{
+	SimpleKey *a_key = keyFactory.getKey(_keyType, _key, _val, this);
+	keys[_keyRole].insert(a_key->getKeyName(), a_key);
+}
+
+void NonStandardKeyboard::insertMultiPurposeKey(int _keyRole, QString _key, QString _val)
+{
+	insertKey(_keyRole, SimpleKeyboard::KT_MultiPurpose, _key, _val);
+}
+
+void NonStandardKeyboard::insertFunctionKey(int _keyRole, QString _key, QString _val)
+{
+	insertKey(_keyRole, SimpleKeyboard::KT_Function, _key, _val);
+}
+
+void NonStandardKeyboard::insertDigitKey(int _keyRole, QString _key, QString _val)
+{
+	insertKey(_keyRole, SimpleKeyboard::KT_Digit, _key, _val);
 }
 
 QString NonStandardKeyboard::getDisplayBuffer()
@@ -146,8 +167,6 @@ QString NonStandardKeyboard::handleKeyPress(int keyCode)
 
 void NonStandardKeyboard::initializeF1ToF10Keys(int keyRole)
 {
-	SimpleKey *a_key;
-
 	QString a_kn_array[] = {
 							function_kn(f1),
 							function_kn(f2),
@@ -175,13 +194,12 @@ void NonStandardKeyboard::initializeF1ToF10Keys(int keyRole)
 						};
 
 	for (unsigned int i = 0; i < sizeof(a_kn_array)/sizeof(a_kn_array[0]); i++) {
-		insert_function_key(a_kn_array[i], a_kv_array[i], keyRole);
+		insertFunctionKey(keyRole, a_kn_array[i], a_kv_array[i]);
 	}
 }
 
 void NonStandardKeyboard::initializeChineseKeys()
 {
-	SimpleKey *a_key;
 	int a_key_role = SimpleKeyboard::KR_Chinese;
 	
 	QString a_multi_purpose_kv_array[] = {
@@ -229,12 +247,12 @@ void NonStandardKeyboard::initializeChineseKeys()
 
 	/* Multi-Purpose Keys */
 	for (unsigned int i = 0; i < sizeof(a_multi_purpose_kv_array)/sizeof(a_multi_purpose_kv_array[0]); i++) {
-		insert_multi_purpose_key(a_multi_purpose_kn_array[i], a_multi_purpose_kv_array[i], a_key_role);
+		insertMultiPurposeKey(a_key_role, a_multi_purpose_kn_array[i], a_multi_purpose_kv_array[i]);
 	}
 
 	/* Functional Keys */
 	for (unsigned int i = 0; i < sizeof(a_function_kv_array)/sizeof(a_function_kv_array[0]); i++) {
-		insert_function_key(a_function_kn_array[i], a_function_kv_array[i], a_key_role);
+		insertFunctionKey(a_key_role, a_function_kn_array[i], a_function_kv_array[i]);
 	}
 
 	initializeF1ToF10Keys(a_key_role);
@@ -242,8 +260,6 @@ void NonStandardKeyboard::initializeChineseKeys()
 
 void NonStandardKeyboard::initializeEnglishKey_(int a_key_role)
 {
-	SimpleKey *a_key;
-
 	QString a_multi_purpose_kv_array[] = {
 			multi_purpose_kv(2),
 			multi_purpose_kv(3),
@@ -268,10 +284,10 @@ void NonStandardKeyboard::initializeEnglishKey_(int a_key_role)
 	
 	/* Multi-Purpose Keys */
 	for (unsigned int i = 0; i < sizeof(a_multi_purpose_kv_array)/sizeof(a_multi_purpose_kv_array[0]); i++) {
-		insert_multi_purpose_key(a_multi_purpose_kn_array[i], a_multi_purpose_kv_array[i], a_key_role);
+		insertMultiPurposeKey(a_key_role, a_multi_purpose_kn_array[i], a_multi_purpose_kv_array[i]);
 	}
 
-    insert_function_key(function_kn(backspace), function_kv(backspace), a_key_role);
+    insertFunctionKey(a_key_role, function_kn(backspace), function_kv(backspace));
     
 	initializeF1ToF10Keys(a_key_role);
 }
@@ -288,7 +304,6 @@ void NonStandardKeyboard::initializeEnglishCapitalKeys()
 
 void NonStandardKeyboard::initializeDigitKeys()
 {
-	SimpleKey *a_key;
 	int a_key_role = SimpleKeyboard::KR_Digit;
 
 	QString a_multi_purpose_kv_array[] = {
@@ -318,17 +333,16 @@ void NonStandardKeyboard::initializeDigitKeys()
 		};
 
 	for (unsigned int i = 0; i < sizeof(a_multi_purpose_kv_array)/sizeof(a_multi_purpose_kv_array[0]); i++) {
-		insert_digit_key(a_multi_purpose_kn_array[i], a_multi_purpose_kv_array[i], a_key_role);
+		insertDigitKey(a_key_role, a_multi_purpose_kn_array[i], a_multi_purpose_kv_array[i]);
 	}
 
-    insert_function_key(function_kn(backspace), function_kv(backspace), a_key_role);
+    insertFunctionKey(a_key_role, function_kn(backspace), function_kv(backspace));
     
 	initializeF1ToF10Keys(a_key_role);
 }
 
 void NonStandardKeyboard::initializePunctuationKeys() 
 {
-    SimpleKey *a_key;
 	int a_key_role = SimpleKeyboard::KR_Punctuation;
     
     QString a_function_kv_array[] = {
@@ -351,7 +365,7 @@ void NonStandardKeyboard::initializePunctuationKeys()
 
     /* Functional Keys */
 	for (unsigned int i = 0; i < sizeof(a_function_kv_array)/sizeof(a_function_kv_array[0]); i++) {
-		insert_function_key(a_function_kn_array[i], a_function_kv_array[i], a_key_role);
+		insertFunctionKey(a_key_role, a_function_kn_array[i], a_function_kv_array[i]);
 	}
 
 	initializeF1ToF10Keys(a_key_role);

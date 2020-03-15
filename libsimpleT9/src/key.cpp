@@ -261,4 +261,20 @@ int FunctionKey::press()
     return 0;
 }
 
+SimpleKey *SimpleKeyFactory::getKey(int keyType, QString _name, QString _value, SimpleKeyboard *_keyboard)
+{
+    switch(keyType) {
+    case SimpleKeyboard::KT_MultiPurpose:
+        return new MultiPurposeKey(_name, _value, _keyboard);
+    
+    case SimpleKeyboard::KT_Function:
+        return new FunctionKey(_name, _value, _keyboard);
+    
+    case SimpleKeyboard::KT_Digit:
+        return new DigitKey(_name, _value, _keyboard);
+    
+    default: return nullptr;
+    }
+}
+
 }} /* namespace */
