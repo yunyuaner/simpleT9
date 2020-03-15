@@ -14,7 +14,7 @@
  *  GNU General Public License for more details.
  *   
  *  You should have received a copy of the GNU General Public License
- *  version 3 along with MediaTomb; if not, write to the Free Software
+ *  version 3 along with simpleT9; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
@@ -100,6 +100,26 @@ ImeWindow::~ImeWindow()
 	delete keyboard;
 	delete pinyinVocabulary_db;
     delete pager;
+}
+
+const SimpleKeyboard *ImeWindow::getKeyboard() 
+{ 
+    return keyboard; 
+}
+
+QString ImeWindow::getPinyinContent() const 
+{ 
+    return imePinyin->text(); 
+}
+
+void ImeWindow::setParentWidget(SimpleWidget *_parentWidget) 
+{ 
+    parentWidget = _parentWidget; 
+}
+
+SimpleWidget *ImeWindow::getParentWidget() 
+{ 
+    return parentWidget; 
 }
 
 void ImeWindow::showCandidateOnBoard(QString &inputText)

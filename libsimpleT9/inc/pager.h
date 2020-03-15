@@ -14,7 +14,7 @@
  *  GNU General Public License for more details.
  *   
  *  You should have received a copy of the GNU General Public License
- *  version 3 along with MediaTomb; if not, write to the Free Software
+ *  version 3 along with simpleT9; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
@@ -73,9 +73,9 @@ public:
 
 private:
     QVector<QString> &getPageContent();
-    int getCurrPage() const { return currPage; };
-    int getCurrPageNatual() const { return (currPage + 1); }
-    int getPageCount() const { return pageCount; };
+    int getCurrPage() const;
+    int getCurrPageNatual() const;
+    int getPageCount() const;
     int getCandidateCountOfCurrPage() const;
     void candidateLabelHighlight(QLabel *label, bool highlight = true);
     QLabel *labelAt(int pos);

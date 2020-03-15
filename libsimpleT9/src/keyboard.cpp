@@ -14,7 +14,7 @@
  *  GNU General Public License for more details.
  *   
  *  You should have received a copy of the GNU General Public License
- *  version 3 along with MediaTomb; if not, write to the Free Software
+ *  version 3 along with simpleT9; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <QDebug>
@@ -32,6 +32,37 @@ namespace libsimpleT9 {
 #define function_kn(_x) simpleT9glb::key_##_x##_name
 #define digit_kv_ex(_x) simpleT9glb::key_##_x##_value[a_key_role]
 #define digit_kn(_x) simpleT9glb::key_##_x##_name
+
+SimpleKeyboard::SimpleKeyboard() {};
+
+SimpleKeyboard::~SimpleKeyboard() {};
+
+QString SimpleKeyboard::handleKeyPress(int keyCode) 
+{ 
+	(void)keyCode; return displayBuffer; 
+}
+
+void SimpleKeyboard::initializeKeys() {}
+
+void SimpleKeyboard::setParentWindow(QDialog *parent) 
+{ 
+	parentWindow = parent; 
+}
+
+QDialog *SimpleKeyboard::getParentWindow() 
+{ 
+	return parentWindow; 
+}
+
+QString SimpleKeyboard::getDisplayBuffer() 
+{ 
+	return displayBuffer; 
+}
+
+SimpleKeyFactory &SimpleKeyboard::getKeyFactory() 
+{ 
+	return keyFactory; 
+}
 
 NonStandardKeyboard::NonStandardKeyboard() : 
 	keys(new QHash<QString, SimpleKey *>[simpleT9glb::input_method_count]),
@@ -369,6 +400,46 @@ void NonStandardKeyboard::initializeKeys()
 	initializeEnglishCapitalKeys();
 	initializeDigitKeys();
     initializePunctuationKeys();
+}
+
+int NonStandardKeyboard::getKeyRole() const 
+{ 
+	return keyRole; 
+}
+
+int NonStandardKeyboard::setKeyRole(int _kr) 
+{ 
+	keyRole = _kr; return keyRole; 
+}
+
+void NonStandardKeyboard::displayBufferStackPush(QString ch) 
+{ 
+	displayBufferStack.push(ch); 
+}
+
+QString NonStandardKeyboard::displayBufferStackPop() 
+{ 
+	return displayBufferStack.pop();       
+}
+
+void NonStandardKeyboard::displayBufferStackClear()       
+{ 
+	return displayBufferStack.clear(); 
+}
+
+bool NonStandardKeyboard::isDisplayBufferStackEmpty() 
+{ 
+	return displayBufferStack.isEmpty();
+}
+
+QStack<QString> &NonStandardKeyboard::getDisplayBufferStack() 
+{ 
+	return displayBufferStack; 
+}
+
+QHash<QString, SimpleKey *> &NonStandardKeyboard::getKeysPerKeyRole() 
+{ 
+	return keys[keyRole]; 
 }
 
 }} /* namespace */

@@ -14,7 +14,7 @@
  *  GNU General Public License for more details.
  *   
  *  You should have received a copy of the GNU General Public License
- *  version 3 along with MediaTomb; if not, write to the Free Software
+ *  version 3 along with simpleT9; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
@@ -37,6 +37,25 @@ SimpleKey::SimpleKey(QString _name, QString _value, int _type, SimpleKeyboard *_
     keyName(_name), keyValue(_value), keyType(_type), keyboard(_keyboard) 
 {
     
+}
+
+SimpleKey::~SimpleKey() {}
+
+void SimpleKey::reset() {}
+
+int SimpleKey::press() 
+{ 
+    return 0; 
+};
+
+const QString &SimpleKey::getKeyName() const 
+{ 
+    return keyName; 
+}
+
+const QString SimpleKey::getKeyValue() const 
+{ 
+    return keyValue; 
 }
 
 DigitKey::DigitKey(QString _name, QString _value, SimpleKeyboard * _keyboard) :
@@ -260,6 +279,10 @@ int FunctionKey::press()
 
     return 0;
 }
+
+SimpleKeyFactory::SimpleKeyFactory() {}
+
+SimpleKeyFactory::~SimpleKeyFactory() {}
 
 SimpleKey *SimpleKeyFactory::getKey(int keyType, QString _name, QString _value, SimpleKeyboard *_keyboard)
 {

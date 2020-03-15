@@ -14,7 +14,7 @@
  *  GNU General Public License for more details.
  *   
  *  You should have received a copy of the GNU General Public License
- *  version 3 along with MediaTomb; if not, write to the Free Software
+ *  version 3 along with simpleT9; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
@@ -48,13 +48,13 @@ public:
     SimpleKey(QString _name, int _type, SimpleKeyboard *_keyboard);
     SimpleKey(QString _name, QString _value, int _type, SimpleKeyboard *_keyboard);
     
-    virtual ~SimpleKey() {};
+    virtual ~SimpleKey();
 
-    virtual void reset() {};
-    virtual int press() { return 0; }; 
+    virtual void reset();
+    virtual int press(); 
     
-    virtual const QString &getKeyName() const { return keyName; };
-    virtual const QString getKeyValue() const { return keyValue; };
+    virtual const QString &getKeyName() const;
+    virtual const QString getKeyValue() const;
 
 protected:
     QString keyName;
@@ -111,8 +111,8 @@ private:
 class SimpleKeyFactory
 {
 public:
-    SimpleKeyFactory() {};
-    virtual ~SimpleKeyFactory() {};
+    SimpleKeyFactory();
+    virtual ~SimpleKeyFactory();
     SimpleKey *getKey(int keyType, QString _name, QString _value, SimpleKeyboard *_keyboard);
 };
 

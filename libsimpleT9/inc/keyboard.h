@@ -14,7 +14,7 @@
  *  GNU General Public License for more details.
  *   
  *  You should have received a copy of the GNU General Public License
- *  version 3 along with MediaTomb; if not, write to the Free Software
+ *  version 3 along with simpleT9; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
@@ -64,15 +64,15 @@ public:
         KT_Unknown
     };
 		
-    SimpleKeyboard() {};
-    virtual ~SimpleKeyboard() {};
+    SimpleKeyboard();
+    virtual ~SimpleKeyboard();
     
-    virtual QString handleKeyPress(int keyCode) { (void)keyCode; return displayBuffer; };
-    virtual void initializeKeys() {};
-    virtual void setParentWindow(QDialog *parent) { parentWindow = parent; };
-    QDialog *getParentWindow() { return parentWindow; };
-    virtual QString getDisplayBuffer() { return displayBuffer; };
-    SimpleKeyFactory &getKeyFactory() { return keyFactory; };
+    virtual QString handleKeyPress(int keyCode);
+    virtual void initializeKeys();
+    virtual void setParentWindow(QDialog *parent);
+    QDialog *getParentWindow();
+    virtual QString getDisplayBuffer();
+    SimpleKeyFactory &getKeyFactory();
 
 protected:
     QString displayBuffer;
@@ -105,20 +105,20 @@ public:
     
     virtual QString handleKeyPress(int keyCode);
 
-    int getKeyRole() const { return keyRole; };
-    int setKeyRole(int _kr) { keyRole = _kr; return keyRole; };
+    int getKeyRole() const;
+    int setKeyRole(int _kr);
     
     /* Do not manipulate @displayBufferStack directly, 
      * use the following auxillary helper functions instead */
-    void displayBufferStackPush(QString ch) { displayBufferStack.push(ch); };
-    QString displayBufferStackPop() { return displayBufferStack.pop();       };
-    void displayBufferStackClear()       { return displayBufferStack.clear(); };
-    bool isDisplayBufferStackEmpty() { return displayBufferStack.isEmpty();        };
-    QStack<QString> &getDisplayBufferStack() { return displayBufferStack; };
+    void displayBufferStackPush(QString ch);
+    QString displayBufferStackPop();
+    void displayBufferStackClear();
+    bool isDisplayBufferStackEmpty();
+    QStack<QString> &getDisplayBufferStack();
 
     virtual QString getDisplayBuffer();
 
-	QHash<QString, SimpleKey *> &getKeysPerKeyRole() { return keys[keyRole]; };
+	QHash<QString, SimpleKey *> &getKeysPerKeyRole();
     ImeWindow *getParentWindow();
 
 private:

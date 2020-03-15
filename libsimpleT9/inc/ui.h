@@ -14,7 +14,7 @@
  *  GNU General Public License for more details.
  *   
  *  You should have received a copy of the GNU General Public License
- *  version 3 along with MediaTomb; if not, write to the Free Software
+ *  version 3 along with simpleT9; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
@@ -53,12 +53,11 @@ public:
     explicit ImeWindow(QWidget *parent = nullptr);
     virtual ~ImeWindow();
     int refreshCandidate();
-    //QVector<QLabel *> &getChnChars() { return chnChars; };
-    const SimpleKeyboard *getKeyboard() { return keyboard; };
-    QString getPinyinContent() const { return imePinyin->text(); };
+    const SimpleKeyboard *getKeyboard();
+    QString getPinyinContent() const;
 
-    void setParentWidget(SimpleWidget *_parentWidget) { parentWidget = _parentWidget; };
-    SimpleWidget * getParentWidget() { return parentWidget; };
+    void setParentWidget(SimpleWidget *_parentWidget);
+    SimpleWidget * getParentWidget();
 
     void handleCandidateSelForward();
     void handleCandidateSelBackward();
@@ -74,6 +73,7 @@ public:
     void handleKeyPressEvent(int key);
 
     bool eventFilter(QObject *obj, QEvent *event);
+
 public:
     static int candidateCountPerPage;
     static const char *imeTitleStr;
@@ -81,12 +81,7 @@ public:
 private slots:
 
 private:
-    //void ChnCharLabelHighlight(QLabel *label, bool highlight);
     void showCandidateOnBoard(QString &inputText);
-
-protected:
-    void eventFilterForIMEWindow(QObject *obj, QEvent *event);
-    void eventFilterForMainWindow(QObject *obj, QEvent *event);
 
 private:
     QVector<QLabel *> candidateLabels;

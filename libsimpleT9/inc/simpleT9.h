@@ -14,7 +14,7 @@
  *  GNU General Public License for more details.
  *   
  *  You should have received a copy of the GNU General Public License
- *  version 3 along with MediaTomb; if not, write to the Free Software
+ *  version 3 along with simpleT9; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
@@ -77,11 +77,11 @@ private:
 class SimpleWidget
 {
 public:
-	SimpleWidget() {};
-	virtual ~SimpleWidget() {};
+	SimpleWidget();
+	virtual ~SimpleWidget();
 
-	virtual void __setText(const QString &_text) { (void)_text; };
-	virtual QString __text() const { return QString(""); };
+	virtual void __setText(const QString &_text);
+	virtual QString __text() const;
 };
 
 }} /* namespace */

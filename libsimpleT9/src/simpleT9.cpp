@@ -14,7 +14,7 @@
  *  GNU General Public License for more details.
  *   
  *  You should have received a copy of the GNU General Public License
- *  version 3 along with MediaTomb; if not, write to the Free Software
+ *  version 3 along with simpleT9; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
  */
  
@@ -67,6 +67,20 @@ bool SimpleT9::forwardEvent(QEvent *event)
 void SimpleT9::attachParentWidget(SimpleWidget *_parentWidget)
 {
     imeWindow->setParentWidget(_parentWidget);
+}
+
+SimpleWidget::SimpleWidget() {}
+
+SimpleWidget::~SimpleWidget() {}
+
+void SimpleWidget::__setText(const QString &_text) 
+{ 
+    (void)_text; 
+}
+
+QString SimpleWidget::__text() const 
+{ 
+    return QString(""); 
 }
 
 }} /* namespace */

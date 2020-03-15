@@ -14,7 +14,7 @@
  *  GNU General Public License for more details.
  *   
  *  You should have received a copy of the GNU General Public License
- *  version 3 along with MediaTomb; if not, write to the Free Software
+ *  version 3 along with simpleT9; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
@@ -322,6 +322,21 @@ void SimplePager::clearCurrHightlight()
     }
 
     candidateLabelHighlight(label, false);
+}
+
+int SimplePager::getCurrPage() const 
+{ 
+    return currPage; 
+}
+
+int SimplePager::getCurrPageNatual() const 
+{ 
+    return (currPage + 1);
+}
+
+int SimplePager::getPageCount() const 
+{ 
+    return pageCount; 
 }
 
 }} /* namespace */
