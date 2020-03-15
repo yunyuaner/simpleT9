@@ -49,6 +49,9 @@
 #include "ui.h"
 #include "globals.h"
 
+namespace hycx {
+namespace libsimpleT9 {
+
 class SimpleWidget;
 
 class SimpleT9 final
@@ -80,5 +83,7 @@ public:
 	virtual void __setText(const QString &_text) { (void)_text; };
 	virtual QString __text() const { return QString(""); };
 };
+
+}} /* namespace */
 
 #endif /* _SIMPLET9_H */

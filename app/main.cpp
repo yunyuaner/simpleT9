@@ -26,6 +26,8 @@
 #include "simpleT9.h"
 #include "MainWindow.h"
 
+using namespace hycx::simpleT9_sample_app;
+
 #if 0
 static void search_then_show(SimpleVocabulary &_vol, std::string to_search)
 {

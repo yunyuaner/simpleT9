@@ -24,6 +24,9 @@
 #include "ui.h"
 #include "globals.h"
 
+namespace hycx {
+namespace libsimpleT9 {
+
 SimpleKey::SimpleKey(QString _name, int _type, SimpleKeyboard *_keyboard) : 
     keyName(_name), keyType(_type), keyboard(_keyboard) 
 {
@@ -257,3 +260,5 @@ int FunctionKey::press()
 
     return 0;
 }
+
+}} /* namespace */

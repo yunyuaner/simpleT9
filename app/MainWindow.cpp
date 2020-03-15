@@ -7,6 +7,12 @@
 #include "simpleT9.h"
 #include "MainWindow.h"
 
+using hycx::libsimpleT9::SimpleT9;
+using hycx::libsimpleT9::SimpleWidget;
+
+namespace hycx {
+namespace simpleT9_sample_app {
+
 class MyLineEidt;
 
 MainWindow *MainWindow::_instance = nullptr;
@@ -86,3 +92,5 @@ QString MyLineEdit::__text() const
 {
 	return this->QLineEdit::text();
 }
+
+}} /* namespace */

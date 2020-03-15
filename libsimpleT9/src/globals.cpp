@@ -24,6 +24,9 @@
 #include "globals.h"
 #include "keyboard.h"
 
+namespace hycx {
+namespace libsimpleT9 {
+
 const QString simpleT9glb::key_0_name = "0";
 const QString simpleT9glb::key_1_name = "1";
 const QString simpleT9glb::key_2_name = "2";
@@ -206,3 +209,4 @@ const QHash<int, QString> simpleT9glb::a_key_code_to_key_name_map = {
 
 const int simpleT9glb::continuous_key_press_timeout = 1000;
 
+}} /* namespace */

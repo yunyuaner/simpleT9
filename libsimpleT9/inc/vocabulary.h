@@ -28,6 +28,9 @@
 #include <map>
 #include <set>
 
+namespace hycx {
+namespace libsimpleT9 {
+
 class SimpleVocabulary
 {
 public:
@@ -82,5 +85,7 @@ private:
 
     static char a_buf[8192];
 };
+
+}} /* namespace */
 
 #endif /* _VOCABULARY_ */

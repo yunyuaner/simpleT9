@@ -24,6 +24,9 @@
 #include <QString>
 #include <QHash>
 
+namespace hycx {
+namespace libsimpleT9 {
+
 class simpleT9glb 
 {
 public:
@@ -124,5 +127,7 @@ public:
 
 	static const QHash<int, QString> a_key_code_to_key_name_map;
 };
+
+}}  /* namespace */
 
 #endif /* _GLOBALS_H */

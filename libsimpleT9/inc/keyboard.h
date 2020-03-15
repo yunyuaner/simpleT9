@@ -40,6 +40,9 @@
 #include "globals.h"
 #include "ui.h"
 
+namespace hycx {
+namespace libsimpleT9 {
+
 class SimpleKeyboard
 {
 public:
@@ -133,5 +136,7 @@ private:
     QStack<QString> displayBufferStack;
     int keyRole;
 };
+
+}} /* namespace */
 
 #endif /* _KEYBOARD_H */

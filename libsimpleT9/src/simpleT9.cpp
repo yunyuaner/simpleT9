@@ -20,6 +20,9 @@
  
 #include "simpleT9.h"
 
+namespace hycx {
+namespace libsimpleT9 {
+
 SimpleT9::SimpleT9(): imeWindow(new ImeWindow)
 {
 }
@@ -65,3 +68,5 @@ void SimpleT9::attachParentWidget(SimpleWidget *_parentWidget)
 {
     imeWindow->setParentWidget(_parentWidget);
 }
+
+}} /* namespace */

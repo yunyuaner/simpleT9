@@ -47,6 +47,9 @@
 #include "globals.h"
 #include "simpleT9.h"
 
+namespace hycx {
+namespace libsimpleT9 {
+
 int ImeWindow::candidateCountPerPage = simpleT9glb::max_chinese_char_candidate_per_page;
 const char *ImeWindow::imeTitleStr = simpleT9glb::ime_title_string;
 
@@ -335,3 +338,4 @@ bool ImeWindow::eventFilter(QObject *obj, QEvent *event)
     return QObject::eventFilter(obj, event);
 }
 
+}} /* namespace */

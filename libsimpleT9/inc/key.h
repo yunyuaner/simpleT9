@@ -37,6 +37,9 @@
 #include <QException>
 #include <iostream>
 
+namespace hycx {
+namespace libsimpleT9 {
+
 class SimpleKeyboard;
 
 class SimpleKey
@@ -104,5 +107,7 @@ public:
 private:
     int keyCode;    /* Standard Key Code */
 };
+
+}} /* namespace */
 
 #endif /* _KEY_H */

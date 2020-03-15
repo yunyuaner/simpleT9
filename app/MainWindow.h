@@ -16,6 +16,12 @@
 #include "ui.h"
 #include "simpleT9.h"
 
+using hycx::libsimpleT9::SimpleT9;
+using hycx::libsimpleT9::SimpleWidget;
+
+namespace hycx {
+namespace simpleT9_sample_app {
+
 /**
  * Requirements on your 'Edit Box Control'
  * 
@@ -65,3 +71,5 @@ private:
 protected:
     bool eventFilter(QObject *obj, QEvent *event);
 };
+
+}} /* namespace */

@@ -37,6 +37,9 @@
 #include <QException>
 #include <iostream>
 
+namespace hycx {
+namespace libsimpleT9 {
+
 class SimplePager
 {
 public:
@@ -90,5 +93,7 @@ private:
     int lastPageCharCount;
     int currSelected;   /* Currently selected candidate */
 };
+
+}} /* namespace */
 
 #endif /* _PAGER_H */

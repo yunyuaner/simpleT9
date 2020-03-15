@@ -22,6 +22,9 @@
 #include "keyboard.h"
 #include "globals.h"
 
+namespace hycx {
+namespace libsimpleT9 {
+
 #define insert_multi_purpose_key(_key, _val, _keyRole) ({ a_key = new MultiPurposeKey(_key, _val, this);	\
 	keys[_keyRole].insert(a_key->getKeyName(), a_key);	})
 
@@ -363,3 +366,4 @@ void NonStandardKeyboard::initializeKeys()
     initializePunctuationKeys();
 }
 
+}} /* namespace */

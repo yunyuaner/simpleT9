@@ -47,6 +47,9 @@
 #include "ui.h"
 #include "globals.h"
 
+namespace hycx {
+namespace libsimpleT9 {
+
 SimplePager::SimplePager(QVector<QLabel *> &labels, QLabel *hintLabel) :
     candidateLabels(labels),
     pagerHintLabel(hintLabel),
@@ -320,3 +323,5 @@ void SimplePager::clearCurrHightlight()
 
     candidateLabelHighlight(label, false);
 }
+
+}} /* namespace */

@@ -32,6 +32,9 @@
 #include "utf8_string.hpp"
 #include "utf8_iterator.hpp"
 
+namespace hycx {
+namespace libsimpleT9 {
+
 bool is_big_endian(void)
 {
     union {
@@ -49,7 +52,7 @@ uint32_t cpu_to_big_endian(uint32_t rhs)
     if (is_big_endian()) {
         return rhs;
     } else {
-        return __builtin_bswap32(rhs);
+        return ::__builtin_bswap32(rhs);
     }
 }
 
@@ -58,7 +61,7 @@ uint32_t big_endian_to_cpu(uint32_t rhs)
     if (is_big_endian()) {
         return rhs;
     } else {
-        return __builtin_bswap32(rhs);
+        return ::__builtin_bswap32(rhs);
     }
 }
 
@@ -392,3 +395,4 @@ QVector<QString> *SimpleVocabulary::ambiguous_search(QString pinyin)
     return a_return_candidate_list->size() > 0 ? a_return_candidate_list : nullptr;
 }
 
+}} /* namespace */

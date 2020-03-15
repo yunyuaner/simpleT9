@@ -40,6 +40,9 @@
 #include "vocabulary.h"
 #include "keyboard.h"
 
+namespace hycx {
+namespace libsimpleT9 {
+
 class SimpleWidget;
 
 class ImeWindow : public QDialog
@@ -108,5 +111,7 @@ private:
 
     SimpleWidget *parentWidget;
 };
+
+}}  /* namespace */
 
 #endif /* _SIMPLE_H */
