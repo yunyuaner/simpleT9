@@ -92,15 +92,7 @@ private:
 
 class FunctionKey: public SimpleKey
 {
-public:
-    static void pressKeyBackspace(FunctionKey *_this);        /* Qt::Key_Backspace */
-    static void pressKeyLeft(FunctionKey *_this);      /* Qt::Key_Left */
-    static void pressKeyRight(FunctionKey *_this);      /* Qt::Key_Right */
-    static void pressKeyUp(FunctionKey *_this); /* Qt::Key_Up */
-    static void pressKeyDown(FunctionKey *_this);      /* Qt::Key_Down */
-    static void pressKeyIMEInputModeSwitch(FunctionKey *_this); /* Qt::Key_F10 */
-    static void pressKeyPinyinSegmentation(FunctionKey *_this); /* Qt::Key_1 */
-
+public:    
     FunctionKey(QString _name, SimpleKeyboard *_keyboard);
     FunctionKey(QString _name, QString _value, SimpleKeyboard *_keyboard);
 

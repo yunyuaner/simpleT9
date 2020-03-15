@@ -139,9 +139,8 @@ int MultiPurposeKey::press()
 
     if (!selectInProgress) {
         /* First press, mark the timestamp */
-        lastPressedStage = NonStandardKeyboard::Press_0;
+        lastPressedStage = NonStandardKeyboard::First_Press;
         selectInProgress = true;
-        //nsKeyboard->pinyinDisplay.push(this->getKeyValue());
         nsKeyboard->displayBufferStackPush(this->getKeyValue());
         lastPressedTime = QDateTime::currentDateTime();
     } else {
@@ -155,23 +154,18 @@ int MultiPurposeKey::press()
 			qDebug() << "Continuous press within 2 seconds";
             int count = this->getCandidateKeysCount();
             /* stage calculated from '0', so it should be 'count - 1' here */
-            int lastStage = std::min(static_cast<int>(count-1), static_cast<int>(NonStandardKeyboard::Press_4));
+            int lastStage = std::min(static_cast<int>(count-1), static_cast<int>(NonStandardKeyboard::Fifth_Press));
             if(lastPressedStage < lastStage) {
                 lastPressedStage++;
             } else {
-                lastPressedStage = NonStandardKeyboard::Press_0;   /* rollback */
+                lastPressedStage = NonStandardKeyboard::First_Press;   /* rollback */
 				qDebug() << "rollback";
             }
-
-            //if (!nsKeyboard->pinyinDisplay.isEmpty()) {
-            //    nsKeyboard->pinyinDisplay.pop();
-            //}
 
             if (!nsKeyboard->isDisplayBufferStackEmpty()) {
                 nsKeyboard->displayBufferStackPop();
             }
             
-            //nsKeyboard->pinyinDisplay.push(this->getKeyValue());
             nsKeyboard->displayBufferStackPush(this->getKeyValue());
             lastPressedTime = now;
         } else {
@@ -207,104 +201,56 @@ void FunctionKey::reset()
 
 }
 
-void FunctionKey::pressKeyBackspace(FunctionKey *_this)
+int FunctionKey::press()
 {
-    NonStandardKeyboard *nsKeyboard = dynamic_cast<NonStandardKeyboard *>(_this->keyboard);   
-
-    if (!nsKeyboard->isDisplayBufferStackEmpty()) {
-        nsKeyboard->displayBufferStackPop();
-    }
-}
-
-void FunctionKey::pressKeyLeft(FunctionKey *_this)
-{
-    (void)_this;
-    NonStandardKeyboard *nsKeyboard = dynamic_cast<NonStandardKeyboard *>(_this->keyboard);
-
+    NonStandardKeyboard *nsKeyboard = dynamic_cast<NonStandardKeyboard *>(keyboard);
     ImeWindow *imeWindow = nsKeyboard->getParentWindow();
-    imeWindow->handleCandidateSelBackward(); 
-}
-
-void FunctionKey::pressKeyRight(FunctionKey *_this)
-{
-    (void)_this;
-    NonStandardKeyboard *nsKeyboard = dynamic_cast<NonStandardKeyboard *>(_this->keyboard);
-
-    ImeWindow *imeWindow = nsKeyboard->getParentWindow();
-    imeWindow->handleCandidateSelForward(); 
-}
-
-void FunctionKey::pressKeyUp(FunctionKey *_this)
-{
-    (void)_this;
-    NonStandardKeyboard *nsKeyboard = dynamic_cast<NonStandardKeyboard *>(_this->keyboard);
-
-    ImeWindow *imeWindow = nsKeyboard->getParentWindow();
-    imeWindow->handleCandidateSelPageUp(); 
-}
-
-void FunctionKey::pressKeyDown(FunctionKey *_this)
-{
-    (void)_this;
-    NonStandardKeyboard *nsKeyboard = dynamic_cast<NonStandardKeyboard *>(_this->keyboard);
-
-    ImeWindow *imeWindow = nsKeyboard->getParentWindow();
-    imeWindow->handleCandidateSelPageDown(); 
-}
-
-void FunctionKey::pressKeyIMEInputModeSwitch(FunctionKey *_this)
-{
-	qDebug() << "press_Key_IME_Input_Mode_Switch";
-    NonStandardKeyboard *nsKeyboard = dynamic_cast<NonStandardKeyboard *>(_this->keyboard);
-    int keyRoles[] = { 
+    
+    if (keyName == simpleT9glb::key_backspace_name) {
+        /* Pinyin or Letter backspace */           
+        if (!nsKeyboard->isDisplayBufferStackEmpty()) {
+            nsKeyboard->displayBufferStackPop();
+        }
+    } else if (keyName == simpleT9glb::key_left_name) {
+        /* Candidate Backward */        
+        imeWindow->handleCandidateSelBackward(); 
+    } else if (keyName == simpleT9glb::key_right_name) {
+        /* Candidate Forward */
+        imeWindow->handleCandidateSelForward();
+    } else if (keyName == simpleT9glb::key_up_name) {
+        /* Candidate Page Up */
+        imeWindow->handleCandidateSelPageUp();
+    } else if (keyName == simpleT9glb::key_down_name) {
+        /* Candidate Page Down */
+        imeWindow->handleCandidateSelPageDown();
+    } else if (keyName == simpleT9glb::key_f10_name) {
+        /* IME input mode switch */
+        int keyRoles[] = { 
 						NonStandardKeyboard::KR_Chinese, 
                      	NonStandardKeyboard::KR_English, 
                      	NonStandardKeyboard::KR_English_Capital,
                      	NonStandardKeyboard::KR_Digit,
                      	NonStandardKeyboard::KR_Punctuation
                      };
-    int keyRolesLength = sizeof(keyRoles)/sizeof(keyRoles[0]);
+        int keyRolesLength = sizeof(keyRoles)/sizeof(keyRoles[0]);
 
-    for (int i = 0; i < keyRolesLength; i++) {
-        if (nsKeyboard->keyRole == keyRoles[i]) {
-            i++;
-            nsKeyboard->keyRole = keyRoles[i%keyRolesLength];
+        for (int i = 0; i < keyRolesLength; i++) {
+            if (nsKeyboard->keyRole == keyRoles[i]) {
+                i++;
+                nsKeyboard->keyRole = keyRoles[i%keyRolesLength];
+            }
         }
-    }
 
-	if (nsKeyboard->keyRole == NonStandardKeyboard::KR_English_Capital) {
-		nsKeyboard->capsLockPressed = true;
-	} else {
-		nsKeyboard->capsLockPressed = false;
-	}
+    	if (nsKeyboard->keyRole == NonStandardKeyboard::KR_English_Capital) {
+    		nsKeyboard->capsLockPressed = true;
+    	} else {
+    		nsKeyboard->capsLockPressed = false;
+    	}
 
-    ImeWindow *imeWindow = nsKeyboard->getParentWindow();
-    imeWindow->handleKeyRoleSwith();
-}
-
-void FunctionKey::pressKeyPinyinSegmentation(FunctionKey *_this)
-{
-	qDebug() << "press_Key_Pinyin_Segmentation";
-    NonStandardKeyboard *nsKeyboard = dynamic_cast<NonStandardKeyboard *>(_this->keyboard);
-    nsKeyboard->displayBufferStackPush(_this->getKeyValue());
-}
-
-int FunctionKey::press()
-{
-    if (keyName == simpleT9glb::key_backspace_name) {
-        FunctionKey::pressKeyBackspace(this);	/* Pinyin or Letter backspace */
-    } else if (keyName == simpleT9glb::key_left_name) {
-        FunctionKey::pressKeyLeft(this);	/* Candidate Backward */
-    } else if (keyName == simpleT9glb::key_right_name) {
-        FunctionKey::pressKeyRight(this);	/* Candidate Forward */
-    } else if (keyName == simpleT9glb::key_up_name) {
-        FunctionKey::pressKeyUp(this);	/* Candidate Page Up */
-    } else if (keyName == simpleT9glb::key_down_name) {
-        FunctionKey::pressKeyDown(this);	/* Candidate Page Down */
-    } else if (keyName == simpleT9glb::key_f10_name) {
-        FunctionKey::pressKeyIMEInputModeSwitch(this); /* IME input mode switch */
+        imeWindow->handleKeyRoleSwith();
     } else if (keyName == simpleT9glb::key_1_name) {
-        FunctionKey::pressKeyPinyinSegmentation(this); /* Pinyin segmentation */ 
+        /* Pinyin segmentation */ 
+        nsKeyboard->displayBufferStackPush(getKeyValue());
     } else if (keyName == simpleT9glb::key_space_name) {
         /* Confirm the selection, currently we have nothing to do here */
     }

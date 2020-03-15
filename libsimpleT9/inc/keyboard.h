@@ -85,11 +85,11 @@ friend class FunctionKey;
 
 public:
    	enum KeyPress_en {
-        Press_0 = 0, 
-        Press_1 = 1, 
-        Press_2 = 2, 
-        Press_3 = 3,
-        Press_4 = 4,
+        First_Press = 0, 
+        Second_Press = 1, 
+        Third_Press = 2, 
+        Forth_Press = 3,
+        Fifth_Press = 4,
         Press_Non = 0xff
    	};
 
