@@ -14,17 +14,20 @@
  *  GNU General Public License for more details.
  *   
  *  You should have received a copy of the GNU General Public License
- *  version 3 along with MediaTomb; if not, write to the Free Software
+ *  version 3 along with simpleT9; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+
 #include <QApplication>
 #include <QWidget>
 #include <QMainWindow>
 #include <QVector>
 #include <QString>
 #include <QDebug>
-#include "ui.h"
-#include "vocabulary.h"
+#include "simpleT9.h"
+#include "MainWindow.h"
+
+using namespace hycx::simpleT9_sample_app;
 
 #if 0
 static void search_then_show(SimpleVocabulary &_vol, std::string to_search)
@@ -43,27 +46,18 @@ static void search_then_show(SimpleVocabulary &_vol, std::string to_search)
 #endif
 
 int main(int argc, char *argv[]) {
-    std::cout << "Start of main" << std::endl;
-
     QApplication app(argc, argv);
-
-    std::cout << "app" << std::endl;
+    
     MainWindow *mainWindow = MainWindow::getInstance();
-    std::cout << "mainWindow" << std::endl;
-
-	qDebug() << "SimpleT9 starts";
-
     mainWindow->resize(400, 300);
-    mainWindow->setWindowTitle("Simple Text Input Demo");
     mainWindow->show();
-
     return app.exec();   
-
-#if 0
+#if 0    
     SimpleVocabulary vocabulary;
     vocabulary.init1();
     //vocabulary.show();
-    search_then_show(vocabulary, "guo");
-    search_then_show(vocabulary, "ma'ma");
+    //search_then_show(vocabulary, "guo");
+    //search_then_show(vocabulary, "ma'ma");
+    search_then_show(vocabulary, "zhou'jie'lu");
 #endif
 }
